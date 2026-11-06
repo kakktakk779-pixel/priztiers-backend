@@ -11,7 +11,6 @@ app.use(express.json());
 const CLIENT_ID = '1561648119584784444';
 const CLIENT_SECRET = 'NacJo3BKMzebTYrhn6sHFkHUzpl4cCP4';
 
-// Путь к файлу базы данных
 const DB_FILE = path.join(__dirname, 'database.json');
 
 function readDb() {
@@ -66,7 +65,6 @@ app.post('/api/auth/discord', async (req, res) => {
         const discordId = userData.id;
 
         const db = readDb();
-        
         if (!db.users[discordId]) {
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             db.users[discordId] = {
@@ -89,23 +87,20 @@ app.post('/api/auth/discord', async (req, res) => {
     }
 });
 
-// Сохранение и привязка ника
 app.post('/api/user/set-nick', (req, res) => {
     const { discord_id, nickname } = req.body;
     if (!discord_id || !nickname) return res.status(400).json({ error: 'Неверные данные' });
 
     const db = readDb();
     db.users[discord_id].username = nickname;
-    
     if (!db.players[nickname]) {
         db.players[nickname] = { beast: 0, mace: 0, carts: 0, pts: 0, title: '' };
     }
     writeDb(db);
-
     res.json({ success: true, username: nickname });
 });
 
-// Получение всей базы данных игроков и настроек для сайта
+// Получение базы данных
 app.get('/api/data/get', (req, res) => {
     const db = readDb();
     res.json({
@@ -116,15 +111,15 @@ app.get('/api/data/get', (req, res) => {
     });
 });
 
-// Синхронизация данных игрока (тиры, фоны, скины, очки)
+// Сохранение базы данных с клиента
 app.post('/api/data/save', (req, res) => {
     const { players, views, bgs, skins } = req.body;
     const db = readDb();
     
-    if (players) db.players = players;
-    if (views) db.views = views;
-    if (bgs) db.bgs = bgs;
-    if (skins) db.skins = skins;
+    if (players && Object.keys(players).length > 0) db.players = players;
+    if (views && Object.keys(views).length > 0) db.views = views;
+    if (bgs && Object.keys(bgs).length > 0) db.bgs = bgs;
+    if (skins && Object.keys(skins).length > 0) db.skins = skins;
 
     writeDb(db);
     res.json({ success: true });
