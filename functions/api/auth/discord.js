@@ -15,7 +15,14 @@ export async function onRequestPost(context) {
         const clientSecret = env.DISCORD_CLIENT_SECRET;
 
         if (!clientId || !clientSecret) {
-            return new Response(JSON.stringify({ error: 'Не настроены переменные окружения DISCORD_CLIENT_ID или DISCORD_CLIENT_SECRET в Cloudflare' }), {
+            return new Response(JSON.stringify({
+                error: 'Не настроены переменные окружения DISCORD_CLIENT_ID или DISCORD_CLIENT_SECRET в Cloudflare',
+                debug: {
+                    hasClientId: Boolean(clientId),
+                    hasClientSecret: Boolean(clientSecret),
+                    envKeys: Object.keys(env || {})
+                }
+            }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -78,3 +85,4 @@ export async function onRequestPost(context) {
         });
     }
 }
+```[cite: 18]
