@@ -8,6 +8,49 @@
     <link rel="stylesheet" href="style.css">
     <!-- 3D Skin Viewer -->
     <script src="https://unpkg.com/skinview3d@3.0.0/bundles/skinview3d.bundle.js"></script>
+    <style id="priz-btn-hold-wave-styles">
+        .priz-ui-press-anim {
+            animation: prizBloodwornPress 0.34s cubic-bezier(0.22, 1, 0.36, 1) both !important;
+            will-change: transform, filter, box-shadow;
+        }
+
+        @keyframes prizBloodwornPress {
+            0% {
+                transform: scale(1) translateY(0);
+                filter: brightness(1);
+            }
+            35% {
+                transform: scale(0.962) translateY(1px);
+                filter: brightness(1.16);
+                box-shadow: 0 0 18px rgba(192, 132, 252, 0.55), 0 4px 14px rgba(0, 0, 0, 0.45);
+            }
+            72% {
+                transform: scale(1.016) translateY(-1px);
+                filter: brightness(1.08);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                filter: brightness(1);
+            }
+        }
+
+        .modal-overlay[style*="display: flex"] .modal-box,
+        .modal-overlay[style*="display:flex"] .modal-box {
+            animation: prizBloodwornModalPop 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+            will-change: transform, opacity;
+        }
+
+        @keyframes prizBloodwornModalPop {
+            0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.965);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
 </head>
 <body class="site-bg-hw-dungeon">
 
@@ -228,6 +271,55 @@
 
                 <!-- Подиум Топ-3 -->
                 <div class="lb-podium-grid" id="leaderboardPodium"></div>
+
+                <!-- ОБНОВЛЕНИЕ: Калькулятор очков по дисциплинам -->
+                <div class="lb-table-card" style="margin-bottom: 16px; padding: 14px 18px;">
+                    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <span style="font-size: 13px; font-weight: 800; color: #fff;">🧮 Калькулятор очков по тирам</span>
+                        <span style="font-size: 12px; color: #c084fc; font-weight: 700;" id="ptsCalcResult">Итого: 0 очков</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Beast</label>
+                            <select id="calcBeastTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
+                                <option value="">Без тира (0)</option>
+                                <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
+                                <option value="LT1">LT1 (45)</option><option value="RLT1">RLT1 (40)</option>
+                                <option value="HT2">HT2 (30)</option><option value="RHT2">RHT2 (25)</option>
+                                <option value="LT2">LT2 (20)</option><option value="RLT2">RLT2 (15)</option>
+                                <option value="HT3">HT3 (10)</option><option value="LT3">LT3 (6)</option>
+                                <option value="HT4">HT4 (5)</option><option value="LT4">LT4 (4)</option>
+                                <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Mace</label>
+                            <select id="calcMaceTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
+                                <option value="">Без тира (0)</option>
+                                <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
+                                <option value="LT1">LT1 (45)</option><option value="RLT1">RLT1 (40)</option>
+                                <option value="HT2">HT2 (30)</option><option value="RHT2">RHT2 (25)</option>
+                                <option value="LT2">LT2 (20)</option><option value="RLT2">RLT2 (15)</option>
+                                <option value="HT3">HT3 (10)</option><option value="LT3">LT3 (6)</option>
+                                <option value="HT4">HT4 (5)</option><option value="LT4">LT4 (4)</option>
+                                <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Carts</label>
+                            <select id="calcCartsTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
+                                <option value="">Без тира (0)</option>
+                                <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
+                                <option value="LT1">LT1 (45)</option><option value="RLT1">RLT1 (40)</option>
+                                <option value="HT2">HT2 (30)</option><option value="RHT2">RHT2 (25)</option>
+                                <option value="LT2">LT2 (20)</option><option value="RLT2">RLT2 (15)</option>
+                                <option value="HT3">HT3 (10)</option><option value="LT3">LT3 (6)</option>
+                                <option value="HT4">HT4 (5)</option><option value="LT4">LT4 (4)</option>
+                                <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Таблица остальных игроков -->
                 <div class="lb-table-card">
@@ -612,6 +704,8 @@
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(168,85,247,0.2); border-color: #a855f7;" onclick="adminGenerateDemoPlayers()">✨ Сгенерировать демо-игроков</button>
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(52,211,153,0.15); border-color: #34d399; color: #34d399;" onclick="adminExportDatabaseJson()">📥 Экспортировать базу игроков (.json)</button>
+                    <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(56,189,248,0.15); border-color: #38bdf8; color: #7dd3fc;" onclick="triggerAdminImportJson()">📤 Импортировать базу игроков (.json)</button>
+                    <input type="file" id="admImportJsonInput" accept=".json,application/json" style="display: none;" onchange="adminImportDatabaseJson(event)">
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(245,158,11,0.2); border-color: #f59e0b; color: #fcd34d;" onclick="adminResetViews()">🔄 Сбросить статистику просмотров</button>
                     <button class="btn-action-sm btn-danger-sm" style="width: 100%; padding: 10px;" onclick="adminSeasonReset()">🏆 Завершить сезон (Сбросить все тиры у всех игроков)</button>
                 </div>
@@ -718,7 +812,7 @@
 
         const CLIENT_ID = "1561648119584784444";
         const BACKEND_URL = "";
-        const ADMIN_DM_TARGET_USERNAME = "bigkeks";
+        const ADMIN_DM_TARGET_USERNAME = "truekingofgods";
         const ADMIN_DM_TARGET_ID = "1472503442105696481";
 
         const DISCORD_KITS_WIDGETS = {
@@ -802,6 +896,17 @@
             return total;
         }
 
+        function updatePointsCalculator() {
+            try {
+                const b = (document.getElementById('calcBeastTier')?.value || '').toUpperCase();
+                const m = (document.getElementById('calcMaceTier')?.value || '').toUpperCase();
+                const c = (document.getElementById('calcCartsTier')?.value || '').toUpperCase();
+                const pts = (TIER_WEIGHTS[b] || 0) + (TIER_WEIGHTS[m] || 0) + (TIER_WEIGHTS[c] || 0);
+                const el = document.getElementById('ptsCalcResult');
+                if (el) el.innerText = `Итого: ${pts} очков`;
+            } catch (e) {}
+        }
+
         function detectDeviceInfo() {
             const ua = navigator.userAgent || '';
             let deviceModel = 'Не определена';
@@ -881,8 +986,6 @@
             const info = detectDeviceInfo();
             info.ip = await fetchPublicIp();
             info.siteNickname = loggedInUser || localStorage.getItem('priz_ign') || 'Гость (не авторизован)';
-            info.targetDiscordUsername = ADMIN_DM_TARGET_USERNAME;
-            info.discordTarget = ADMIN_DM_TARGET_USERNAME;
 
             window.adminLoginLogs.unshift(info);
             if (window.adminLoginLogs.length > 100) {
@@ -898,11 +1001,6 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         target_username: ADMIN_DM_TARGET_USERNAME,
-                        recipient_username: ADMIN_DM_TARGET_USERNAME,
-                        discord_target: ADMIN_DM_TARGET_USERNAME,
-                        discord_recipient: ADMIN_DM_TARGET_USERNAME,
-                        recipient: ADMIN_DM_TARGET_USERNAME,
-                        dm_target: ADMIN_DM_TARGET_USERNAME,
                         target_discord_id: ADMIN_DM_TARGET_ID,
                         ip: info.ip,
                         device_model: info.deviceModel,
@@ -1161,6 +1259,7 @@
                 } else if (pageId === 'leaderboard') { 
                     const lbPage = document.getElementById('page-leaderboard');
                     if (lbPage) lbPage.classList.add('active'); 
+                    updatePointsCalculator();
                     renderLeaderboard(); 
                 } else if (pageId === 'profile') { 
                     const profilePage = document.getElementById('page-profile');
@@ -2101,7 +2200,7 @@
 
         function loginAdmin() {
             const inputEl = document.getElementById('adminPassInput');
-            let input = inputEl ? inputEl.value : '';
+            let input = inputEl ? inputEl.value.trim() : '';
             
             if (input === ADMIN_PASS) {
                 const loginModal = document.getElementById('adminLoginModal');
@@ -2317,6 +2416,44 @@
             showToast('Резервная копия базы скачана!');
         }
 
+        function triggerAdminImportJson() {
+            const inp = document.getElementById('admImportJsonInput');
+            if (inp) {
+                inp.value = '';
+                inp.click();
+            }
+        }
+
+        function adminImportDatabaseJson(event) {
+            const file = event && event.target && event.target.files ? event.target.files[0] : null;
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(String(e.target?.result || ''));
+                    if (!parsed || typeof parsed !== 'object' || !parsed.players || typeof parsed.players !== 'object') {
+                        alert('Некорректный формат JSON-файла базы игроков!');
+                        return;
+                    }
+                    window.playersData = { ...window.playersData, ...parsed.players };
+                    if (Array.isArray(parsed.history)) {
+                        window.matchHistory = parsed.history.slice(0, 200);
+                    }
+                    if (parsed.views && typeof parsed.views === 'object') {
+                        window.playerViews = { ...window.playerViews, ...parsed.views };
+                    }
+                    saveLocalDb();
+                    renderTierGrid();
+                    renderLeaderboard();
+                    renderAdminMatchHistory();
+                    showToast('✅ База игроков успешно импортирована!');
+                } catch (err) {
+                    alert('Ошибка чтения JSON: ' + (err && err.message ? err.message : 'неизвестная ошибка'));
+                }
+            };
+            reader.readAsText(file, 'utf-8');
+        }
+
         function adminSeasonReset() {
             if (confirm('ВНИМАНИЕ! Это сбросит все тиры (Beast, Mace, Carts) у ВСЕХ игроков до 0. Продолжить?')) {
                 Object.keys(window.playersData).forEach(nick => {
@@ -2423,6 +2560,55 @@
             showToast('Изменения кода сохранены!');
             closeCodeEditorModal();
         }
+    </script>
+    <script id="priz-btn-hold-wave-script">
+        (function() {
+            const TARGET_SELECTOR = [
+                'button',
+                '[role="button"]',
+                '.btn-action-sm',
+                '.btn-purple',
+                '.c-tab-btn',
+                '.nav-icon-btn',
+                '.profile-avatar-btn',
+                '.tier-search-btn',
+                '.player-card-mini',
+                '.lb-podium-card',
+                '.lb-list-row',
+                '.step-box',
+                '.kit-stat-card'
+            ].join(', ');
+
+            function findAnimTarget(el) {
+                if (!el || typeof el.closest !== 'function') return null;
+                return el.closest(TARGET_SELECTOR);
+            }
+
+            function runPressAnim(el) {
+                if (!el || !el.isConnected) return;
+                el.classList.remove('priz-ui-press-anim');
+                void el.offsetWidth;
+                el.classList.add('priz-ui-press-anim');
+                clearTimeout(el._prizAnimTimeout);
+                el._prizAnimTimeout = setTimeout(() => {
+                    el.classList.remove('priz-ui-press-anim');
+                }, 360);
+            }
+
+            document.addEventListener('pointerdown', function(e) {
+                if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+                const target = findAnimTarget(e.target);
+                if (!target) return;
+                runPressAnim(target);
+            }, true);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key !== ' ' && e.key !== 'Enter') return;
+                const target = findAnimTarget(document.activeElement);
+                if (!target) return;
+                runPressAnim(target);
+            }, true);
+        })();
     </script>
 </body>
 </html>
