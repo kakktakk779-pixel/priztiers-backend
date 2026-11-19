@@ -1323,6 +1323,195 @@
         let botKitTiersData = null;
         let loggedInUser = localStorage.getItem('priz_ign') || null;
         let lastNickChange = localStorage.getItem('priz_last_nick_change') || 0;
+        // Привязка 1 ник = 1 Discord аккаунт (и обратная привязка Discord ID -> ник)
+        window.discordNickBindings = {};
+        try {
+            window.discordNickBindings = JSON.parse(localStorage.getItem('priz_discord_nick_bindings') || '{}');
+        } catch (e) {
+            window.discordNickBindings = {};
+        }
+
+        function normalizeNickKey(nick) {
+            return String(nick || '').trim().toLowerCase();
+        }
+
+        function normalizeDiscordId(discordId) {
+            if (discordId === null || discordId === undefined) return '';
+            return String(discordId).trim();
+        }
+
+        function persistDiscordBindings() {
+            try {
+                localStorage.setItem('priz_discord_nick_bindings', JSON.stringify(window.discordNickBindings || {}));
+            } catch (e) {}
+        }
+
+        function rebuildDiscordBindingsFromPlayers() {
+            const bindings = { ...(window.discordNickBindings || {}) };
+            if (window.playersData && typeof window.playersData === 'object') {
+                Object.keys(window.playersData).forEach(nick => {
+                    const p = window.playersData[nick];
+                    const dId = normalizeDiscordId(p && p.discord_id);
+                    const nKey = normalizeNickKey(nick);
+                    if (dId && nKey) {
+                        const currentBoundNick = bindings[nKey];
+                        if (!currentBoundNick || normalizeDiscordId(currentBoundNick.discord_id) === dId) {
+                            bindings[nKey] = {
+                                discord_id: dId,
+                                nickname: nick,
+                                bound_at: (currentBoundNick && currentBoundNick.bound_at) || new Date().toISOString()
+                            };
+                        }
+                    }
+                });
+            }
+            window.discordNickBindings = bindings;
+            persistDiscordBindings();
+        }
+
+        function getNickBindingInfo(nick) {
+            const nKey = normalizeNickKey(nick);
+            if (!nKey) return null;
+            if (window.discordNickBindings && window.discordNickBindings[nKey] && window.discordNickBindings[nKey].discord_id) {
+                return window.discordNickBindings[nKey];
+            }
+            const exact = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === nKey);
+            if (exact && window.playersData[exact] && normalizeDiscordId(window.playersData[exact].discord_id)) {
+                return {
+                    discord_id: normalizeDiscordId(window.playersData[exact].discord_id),
+                    nickname: exact,
+                    bound_at: new Date().toISOString()
+                };
+            }
+            return null;
+        }
+
+        function bindNickToDiscordAccount(nick, discordId) {
+            const cleanNick = String(nick || '').trim();
+            const nKey = normalizeNickKey(cleanNick);
+            const dId = normalizeDiscordId(discordId);
+            if (!cleanNick || !nKey || !dId) {
+                return { ok: false, error: 'Не указан никнейм или Discord аккаунт.' };
+            }
+
+            // Проверяем, не занят ли этот ник другим Discord аккаунтом
+            const existingBinding = getNickBindingInfo(cleanNick);
+            if (existingBinding && normalizeDiscordId(existingBinding.discord_id) !== dId) {
+                return {
+                    ok: false,
+                    error: 'Этот никнейм уже привязан к другому Discord аккаунту! Правило: 1 ник = 1 Discord аккаунт.'
+                };
+            }
+
+            // Отвязываем старые ники этого же Discord аккаунта при смене ника на сайте
+            Object.keys(window.discordNickBindings).forEach(key => {
+                if (normalizeDiscordId(window.discordNickBindings[key].discord_id) === dId && key !== nKey) {
+                    delete window.discordNickBindings[key];
+                }
+            });
+            Object.keys(window.playersData || {}).forEach(existingNick => {
+                if (normalizeNickKey(existingNick) !== nKey && normalizeDiscordId(window.playersData[existingNick].discord_id) === dId) {
+                    delete window.playersData[existingNick].discord_id;
+                }
+            });
+
+            window.discordNickBindings[nKey] = {
+                discord_id: dId,
+                nickname: cleanNick,
+                bound_at: (existingBinding && existingBinding.bound_at) || new Date().toISOString()
+            };
+
+            if (!window.playersData[cleanNick]) {
+                window.playersData[cleanNick] = {
+                    beast: '0',
+                    mace: '0',
+                    carts: '0',
+                    title: '',
+                    server: '',
+                    ping: '',
+                    discord_id: dId
+                };
+            } else {
+                window.playersData[cleanNick].discord_id = dId;
+            }
+
+            persistDiscordBindings();
+            return { ok: true, nickname: cleanNick, discord_id: dId };
+        }
+
+        // Объединяет всех участников из лидерборда, китов и бота, чтобы участники видели друг друга всегда (даже без регистрации)
+        function getAllLeaderboardParticipants() {
+            const combined = {};
+
+            const ensureEntry = (rawNick) => {
+                const nick = String(rawNick || '').trim();
+                if (!nick) return null;
+                const existingKey = Object.keys(combined).find(k => normalizeNickKey(k) === normalizeNickKey(nick));
+                const targetKey = existingKey || nick;
+                if (!combined[targetKey]) {
+                    combined[targetKey] = {
+                        beast: '0',
+                        mace: '0',
+                        carts: '0',
+                        title: '',
+                        server: '',
+                        ping: '',
+                        discord_id: ''
+                    };
+                }
+                return targetKey;
+            };
+
+            // 1. База игроков сайта (включая незарегистрированных / добавленных админом или ботом)
+            if (window.playersData && typeof window.playersData === 'object') {
+                Object.keys(window.playersData).forEach(nick => {
+                    const key = ensureEntry(nick);
+                    if (!key) return;
+                    const p = window.playersData[nick] || {};
+                    combined[key] = {
+                        ...combined[key],
+                        ...p,
+                        beast: (p.beast && p.beast !== '0') ? p.beast : (combined[key].beast || '0'),
+                        mace: (p.mace && p.mace !== '0') ? p.mace : (combined[key].mace || '0'),
+                        carts: (p.carts && p.carts !== '0') ? p.carts : (combined[key].carts || '0')
+                    };
+                });
+            }
+
+            // 2. Данные из бота по китам (если есть)
+            if (botKitTiersData && typeof botKitTiersData === 'object') {
+                Object.keys(botKitTiersData).forEach(nick => {
+                    const key = ensureEntry(nick);
+                    if (!key) return;
+                    const bp = botKitTiersData[nick] || {};
+                    ['beast', 'mace', 'carts'].forEach(k => {
+                        if (bp[k] && bp[k] !== '0') {
+                            combined[key][k] = bp[k];
+                        }
+                    });
+                    if (bp.title && !combined[key].title) combined[key].title = bp.title;
+                    if (bp.server && !combined[key].server) combined[key].server = bp.server;
+                    if (bp.ping && !combined[key].ping) combined[key].ping = bp.ping;
+                    if (bp.discord_id && !combined[key].discord_id) combined[key].discord_id = normalizeDiscordId(bp.discord_id);
+                });
+            }
+
+            // 3. Привязанные ники по Discord ID
+            if (window.discordNickBindings && typeof window.discordNickBindings === 'object') {
+                Object.keys(window.discordNickBindings).forEach(nKey => {
+                    const bInfo = window.discordNickBindings[nKey];
+                    if (!bInfo || !bInfo.nickname) return;
+                    const key = ensureEntry(bInfo.nickname);
+                    if (!key) return;
+                    if (!combined[key].discord_id && bInfo.discord_id) {
+                        combined[key].discord_id = normalizeDiscordId(bInfo.discord_id);
+                    }
+                });
+            }
+
+            return combined;
+        }
+
         let isAdminMode = localStorage.getItem('priz_admin_mode') === 'true';
 
         let sessionAccountId = localStorage.getItem('priz_account_id');
@@ -1362,8 +1551,8 @@
         function escapeJSArg(str) {
             if (str === null || str === undefined) return '';
             return String(str)
-                .replace(/\\/g, '\\\\')
-                .replace(/'/g, "\\'")
+                .replace(/\/g, '\\')
+                .replace(/'/g, "\'")
                 .replace(/"/g, '&quot;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
@@ -1685,9 +1874,19 @@
         });
 
         function findNickByDiscordId(discordId) {
-            if (!discordId || !window.playersData) return null;
+            const dId = normalizeDiscordId(discordId);
+            if (!dId) return null;
+            if (window.discordNickBindings && typeof window.discordNickBindings === 'object') {
+                for (const key of Object.keys(window.discordNickBindings)) {
+                    const b = window.discordNickBindings[key];
+                    if (b && normalizeDiscordId(b.discord_id) === dId && b.nickname) {
+                        return b.nickname;
+                    }
+                }
+            }
+            if (!window.playersData) return null;
             for (const nick of Object.keys(window.playersData)) {
-                if (window.playersData[nick].discord_id === String(discordId)) {
+                if (normalizeDiscordId(window.playersData[nick].discord_id) === dId) {
                     return nick;
                 }
             }
@@ -1749,10 +1948,12 @@
                         loggedInUser = data.nickname;
                         localStorage.setItem('priz_ign', loggedInUser);
 
-                        if (!window.playersData[loggedInUser]) {
-                            window.playersData[loggedInUser] = { beast: '0', mace: '0', carts: '0', title: '', discord_id: sessionAccountId };
-                            saveLocalDb();
+                        const bindRes = bindNickToDiscordAccount(loggedInUser, sessionAccountId);
+                        if (!bindRes.ok) {
+                            if (errEl) errEl.innerText = bindRes.error;
+                            return;
                         }
+                        saveLocalDb();
 
                         const label = document.getElementById('navBtnLabel');
                         if (label) label.innerText = loggedInUser;
@@ -1893,7 +2094,8 @@
 
             if (!query) return;
 
-            const matches = Object.keys(window.playersData).filter(nick => nick.toLowerCase().includes(query));
+            const visibleParticipants = getAllLeaderboardParticipants();
+            const matches = Object.keys(visibleParticipants).filter(nick => nick.toLowerCase().includes(query));
 
             if (matches.length === 0) {
                 container.innerHTML = `<div style="color: #94a3b8; font-size: 13px; text-align: center; padding: 12px;">Игроки не найдены</div>`;
@@ -1901,7 +2103,7 @@
             }
 
             matches.forEach(nick => {
-                const p = window.playersData[nick];
+                const p = visibleParticipants[nick];
                 const safeNick = escapeHTML(nick);
                 const jsNick = escapeJSArg(nick);
                 const score = calculatePlayerScore(p);
@@ -1956,9 +2158,9 @@
                 localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
             }
 
-            const existingOwner = Object.keys(window.playersData).find(k => k.toLowerCase() === chosenNick.toLowerCase());
-            if (existingOwner && window.playersData[existingOwner].discord_id && window.playersData[existingOwner].discord_id !== sessionAccountId) {
-                if (errEl) errEl.innerText = 'Этот никнейм уже занят другим игроком!';
+            const bindingCheck = getNickBindingInfo(chosenNick);
+            if (bindingCheck && normalizeDiscordId(bindingCheck.discord_id) !== normalizeDiscordId(sessionAccountId)) {
+                if (errEl) errEl.innerText = 'Этот никнейм уже привязан к другому Discord аккаунту! Один ник может быть закреплён только за одним Discord аккаунтом.';
                 return;
             }
 
@@ -1977,14 +2179,14 @@
                 console.warn('Сохранение ника локально (без внешнего API)');
             }
 
+            const bindResult = bindNickToDiscordAccount(chosenNick, sessionAccountId);
+            if (!bindResult.ok) {
+                if (errEl) errEl.innerText = bindResult.error;
+                return;
+            }
+
             loggedInUser = chosenNick;
             localStorage.setItem('priz_ign', chosenNick);
-
-            if (!window.playersData[chosenNick]) {
-                window.playersData[chosenNick] = { beast: '0', mace: '0', carts: '0', title: '', discord_id: sessionAccountId };
-            } else {
-                window.playersData[chosenNick].discord_id = sessionAccountId;
-            }
             saveLocalDb();
 
             const label = document.getElementById('navBtnLabel');
@@ -2042,6 +2244,11 @@
                             userSiteBgs = { ...serverData.user_site_bgs, ...userSiteBgs };
                             localStorage.setItem('priz_user_site_bgs', JSON.stringify(userSiteBgs));
                         }
+                        if (serverData.discord_nick_bindings && typeof serverData.discord_nick_bindings === 'object') {
+                            window.discordNickBindings = { ...serverData.discord_nick_bindings, ...window.discordNickBindings };
+                            persistDiscordBindings();
+                        }
+                        rebuildDiscordBindingsFromPlayers();
                         if (sessionAccountId && userSiteBgs[sessionAccountId]) {
                             currentCustomSiteBg = userSiteBgs[sessionAccountId];
                             document.body.className = 'site-bg-' + currentCustomSiteBg;
@@ -2120,7 +2327,8 @@
                         history: window.matchHistory,
                         admin_login_logs: window.adminLoginLogs,
                         user_created_dates: userCreatedDates,
-                        user_site_bgs: userSiteBgs
+                        user_site_bgs: userSiteBgs,
+                        discord_nick_bindings: window.discordNickBindings
                     })
                 });
             } catch (e) {}
@@ -2190,18 +2398,36 @@
                 return;
             }
 
-            if (window.playersData[newNick] && newNick !== loggedInUser) {
+            const bindingInfo = getNickBindingInfo(newNick);
+            const currentActorDiscordId = normalizeDiscordId(sessionAccountId) || (loggedInUser && window.playersData[loggedInUser] ? normalizeDiscordId(window.playersData[loggedInUser].discord_id) : '');
+
+            if (bindingInfo && normalizeDiscordId(bindingInfo.discord_id) !== currentActorDiscordId) {
                 const err = document.getElementById('nickErrorMsg');
-                if (err) err.innerText = 'Этот никнейм уже занят!';
+                if (err) err.innerText = 'Этот никнейм уже закреплён за другим Discord аккаунтом!';
                 return;
             }
 
+            if (window.playersData[newNick] && normalizeNickKey(newNick) !== normalizeNickKey(loggedInUser)) {
+                const existingOwnerDiscord = normalizeDiscordId(window.playersData[newNick].discord_id);
+                if (existingOwnerDiscord && existingOwnerDiscord !== currentActorDiscordId) {
+                    const err = document.getElementById('nickErrorMsg');
+                    if (err) err.innerText = 'Этот никнейм уже занят другим игроком!';
+                    return;
+                }
+            }
+
             renamePlayerRecords(loggedInUser, newNick);
+            if (currentActorDiscordId) {
+                bindNickToDiscordAccount(newNick, currentActorDiscordId);
+                sessionAccountId = currentActorDiscordId;
+                localStorage.setItem('priz_account_id', sessionAccountId);
+            }
 
             loggedInUser = newNick;
             lastNickChange = Date.now();
             localStorage.setItem('priz_ign', newNick);
             localStorage.setItem('priz_last_nick_change', lastNickChange);
+            saveLocalDb();
 
             const label = document.getElementById('navBtnLabel');
             if (label) label.innerText = newNick;
@@ -2246,6 +2472,22 @@
                     item.ign = newNick;
                 }
             });
+
+            const oldKey = normalizeNickKey(oldNick);
+            const newKey = normalizeNickKey(newNick);
+            if (window.discordNickBindings && window.discordNickBindings[oldKey]) {
+                const boundData = window.discordNickBindings[oldKey];
+                delete window.discordNickBindings[oldKey];
+                window.discordNickBindings[newKey] = {
+                    discord_id: boundData.discord_id,
+                    nickname: newNick,
+                    bound_at: boundData.bound_at || new Date().toISOString()
+                };
+                if (window.playersData[newNick] && boundData.discord_id) {
+                    window.playersData[newNick].discord_id = boundData.discord_id;
+                }
+                persistDiscordBindings();
+            }
 
             saveLocalDb();
         }
@@ -2341,25 +2583,30 @@
         function renderLeaderboard() {
             let tbody = document.getElementById('leaderboardTableBody');
             let podium = document.getElementById('leaderboardPodium');
-            if (!tbody || !podium || !window.playersData) return;
+            if (!tbody || !podium) return;
 
-            const allKeys = Object.keys(window.playersData);
+            const visibleParticipants = getAllLeaderboardParticipants();
+            const allKeys = Object.keys(visibleParticipants);
             const totalEl = document.getElementById('lbTotalPlayers');
             const beastEl = document.getElementById('lbTotalBeast');
             const maceEl = document.getElementById('lbTotalMace');
             const cartsEl = document.getElementById('lbTotalCarts');
 
             if (totalEl) totalEl.innerText = allKeys.length.toLocaleString('ru-RU');
-            if (beastEl) beastEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(window.playersData[k].beast || '').toUpperCase()]).length.toLocaleString('ru-RU');
-            if (maceEl) maceEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(window.playersData[k].mace || '').toUpperCase()]).length.toLocaleString('ru-RU');
-            if (cartsEl) cartsEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(window.playersData[k].carts || '').toUpperCase()]).length.toLocaleString('ru-RU');
+            if (beastEl) beastEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].beast || '').toUpperCase()]).length.toLocaleString('ru-RU');
+            if (maceEl) maceEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].mace || '').toUpperCase()]).length.toLocaleString('ru-RU');
+            if (cartsEl) cartsEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].carts || '').toUpperCase()]).length.toLocaleString('ru-RU');
 
             let searchInput = document.getElementById('lbSearchInput');
             let searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
             let sorted = allKeys
                 .filter(nick => nick.toLowerCase().includes(searchQuery))
-                .sort((a, b) => calculatePlayerScore(window.playersData[b]) - calculatePlayerScore(window.playersData[a]));
+                .sort((a, b) => {
+                    const scoreDiff = calculatePlayerScore(visibleParticipants[b]) - calculatePlayerScore(visibleParticipants[a]);
+                    if (scoreDiff !== 0) return scoreDiff;
+                    return a.localeCompare(b, 'ru');
+                });
 
             tbody.innerHTML = '';
             podium.innerHTML = '';
@@ -2386,7 +2633,7 @@
                         podium.innerHTML += `<div></div>`;
                         return;
                     }
-                    const p = window.playersData[nick];
+                    const p = visibleParticipants[nick];
                     const safeNick = escapeHTML(nick);
                     const jsNick = escapeJSArg(nick);
                     const score = calculatePlayerScore(p);
@@ -2421,7 +2668,7 @@
 
             restPlayers.forEach((nick, i) => {
                 const rank = listStartIndex + i + 1;
-                const p = window.playersData[nick];
+                const p = visibleParticipants[nick];
                 const safeNick = escapeHTML(nick);
                 const jsNick = escapeJSArg(nick);
                 const score = calculatePlayerScore(p);
@@ -2482,7 +2729,8 @@
 
         function openPlayerPopup(nick) {
             recordProfileView(nick);
-            let data = window.playersData[nick] || { beast: '0', mace: '0', carts: '0', title: '' };
+            const allVisible = getAllLeaderboardParticipants();
+            let data = window.playersData[nick] || allVisible[nick] || { beast: '0', mace: '0', carts: '0', title: '' };
             let views = window.playerViews[nick] || { day: 1, month: 1, total: 1 };
             let bgTheme = window.playerBgTheme[nick] || 'dark-default';
             const score = calculatePlayerScore(data);
@@ -2578,7 +2826,8 @@
         }
 
         function viewProfile(nick) {
-            let data = (window.playersData && window.playersData[nick]) || { beast: '0', mace: '0', carts: '0', title: '' };
+            const allVisibleProfile = getAllLeaderboardParticipants();
+            let data = (window.playersData && window.playersData[nick]) || allVisibleProfile[nick] || { beast: '0', mace: '0', carts: '0', title: '' };
             recordProfileView(nick);
             const score = calculatePlayerScore(data);
 
