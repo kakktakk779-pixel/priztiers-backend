@@ -8,6 +8,33 @@
     <link rel="stylesheet" href="style.css">
     <!-- 3D Skin Viewer -->
     <script src="https://unpkg.com/skinview3d@3.0.0/bundles/skinview3d.bundle.js"></script>
+    <style id="gta6-home-bg-styles">
+        body.site-bg-gta6-home {
+            background:
+                radial-gradient(circle at 14% 18%, rgba(255, 42, 168, 0.34), transparent 44%),
+                radial-gradient(circle at 84% 20%, rgba(0, 212, 255, 0.30), transparent 46%),
+                radial-gradient(circle at 52% 82%, rgba(255, 138, 0, 0.28), transparent 52%),
+                linear-gradient(135deg, #16072b 0%, #2a0c4e 36%, #13224a 72%, #2b1038 100%) !important;
+            background-attachment: fixed !important;
+        }
+
+        body.site-bg-gta6-home::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(circle at 22% 72%, rgba(168, 85, 247, 0.22), transparent 48%),
+                radial-gradient(circle at 78% 68%, rgba(244, 63, 94, 0.20), transparent 48%);
+        }
+
+        body.site-bg-gta6-home .page-overlay {
+            position: relative;
+            z-index: 1;
+            background: transparent !important;
+        }
+    </style>
     <style id="priz-btn-hold-wave-styles">
         .priz-ui-press-anim {
             animation: prizBloodwornPress 0.34s cubic-bezier(0.22, 1, 0.36, 1) both !important;
@@ -756,6 +783,61 @@
     </div>
 
     <script>
+        function safeStorageGet(key, fallback = null) {
+            try {
+                const val = window.localStorage.getItem(key);
+                return val !== null ? val : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        function safeStorageSet(key, value) {
+            try {
+                window.localStorage.setItem(key, String(value));
+                return true;
+            } catch (e) {
+                console.warn('localStorage set warning for key:', key, e);
+                return false;
+            }
+        }
+
+        function safeStorageRemove(key) {
+            try {
+                window.localStorage.removeItem(key);
+            } catch (e) {}
+        }
+
+        function safeStorageJsonGet(key, fallback) {
+            try {
+                const raw = window.localStorage.getItem(key);
+                if (!raw) return fallback;
+                const parsed = JSON.parse(raw);
+                return parsed !== null && parsed !== undefined ? parsed : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        function safeStorageJsonSet(key, value) {
+            try {
+                window.localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                console.warn('localStorage JSON save warning for key:', key, e);
+                return false;
+            }
+        }
+
+        (function restoreCustomSiteCodeFromStorage() {
+            const customHtml = safeStorageGet('priz_custom_site_code', null);
+            if (!customHtml || typeof customHtml !== 'string' || !customHtml.includes('<html')) return;
+            if (window.__prizCustomCodeApplied) return;
+            window.__prizCustomCodeApplied = true;
+            document.open();
+            document.write(customHtml);
+            document.close();
+        })();
         function hasActiveAdminBypass() {
             return Boolean(isAdminMode);
         }
@@ -1248,7 +1330,7 @@
             if (pageId === 'home') {
                 const homePage = document.getElementById('page-home');
                 if (homePage) homePage.classList.add('active');
-                document.body.className = 'site-bg-hw-dungeon';
+                document.body.className = 'site-bg-gta6-home';
             } else {
                 document.body.className = 'site-bg-' + currentCustomSiteBg;
 
@@ -1470,40 +1552,46 @@
         }
 
         function loadFromLocalStorage() {
-            try {
-                let localData = localStorage.getItem('priz_players_db');
-                window.playersData = localData ? JSON.parse(localData) : {
-                    "Prizrit": { beast: "HT1", mace: "HT1", carts: "LT2", title: "👑 Creator", server: "PriZriT", ping: "25ms" },
-                    "ShadowPvP": { beast: "LT2", mace: "HT1", carts: "LT3", title: "⚡ Legend", server: "PriZriT", ping: "40ms" },
-                    "BlockMaster": { beast: "LT3", mace: "LT2", carts: "HT1", title: "", server: "PriZriT", ping: "55ms" }
-                };
-                window.playerViews = JSON.parse(localStorage.getItem('priz_views_db') || '{}');
-                window.playerBgTheme = JSON.parse(localStorage.getItem('priz_player_bgs') || '{}');
-                window.playerSkins = JSON.parse(localStorage.getItem('priz_player_skins') || '{}');
-                window.playerPoses = JSON.parse(localStorage.getItem('priz_player_poses') || '{}');
-                window.matchHistory = JSON.parse(localStorage.getItem('priz_match_history') || '[]');
-                window.adminLoginLogs = JSON.parse(localStorage.getItem('priz_admin_login_logs') || '[]');
-            } catch (e) {
-                window.playersData = {};
-                window.playerViews = {};
-                window.playerBgTheme = {};
-                window.playerSkins = {};
-                window.playerPoses = {};
-                window.matchHistory = [];
-                window.adminLoginLogs = [];
-            }
+            const defaultPlayers = {
+                "Prizrit": { beast: "HT1", mace: "HT1", carts: "LT2", title: "👑 Creator", server: "PriZriT", ping: "25ms" },
+                "ShadowPvP": { beast: "LT2", mace: "HT1", carts: "LT3", title: "⚡ Legend", server: "PriZriT", ping: "40ms" },
+                "BlockMaster": { beast: "LT3", mace: "LT2", carts: "HT1", title: "", server: "PriZriT", ping: "55ms" }
+            };
+
+            const parsedPlayers = safeStorageJsonGet('priz_players_db', null);
+            window.playersData = (parsedPlayers && typeof parsedPlayers === 'object' && !Array.isArray(parsedPlayers))
+                ? parsedPlayers
+                : defaultPlayers;
+
+            const views = safeStorageJsonGet('priz_views_db', {});
+            window.playerViews = (views && typeof views === 'object') ? views : {};
+
+            const bgs = safeStorageJsonGet('priz_player_bgs', {});
+            window.playerBgTheme = (bgs && typeof bgs === 'object') ? bgs : {};
+
+            const skins = safeStorageJsonGet('priz_player_skins', {});
+            window.playerSkins = (skins && typeof skins === 'object') ? skins : {};
+
+            const poses = safeStorageJsonGet('priz_player_poses', {});
+            window.playerPoses = (poses && typeof poses === 'object') ? poses : {};
+
+            const history = safeStorageJsonGet('priz_match_history', []);
+            window.matchHistory = Array.isArray(history) ? history : [];
+
+            const logs = safeStorageJsonGet('priz_admin_login_logs', []);
+            window.adminLoginLogs = Array.isArray(logs) ? logs : [];
         }
 
         function saveLocalDb() {
-            localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
-            localStorage.setItem('priz_views_db', JSON.stringify(window.playerViews));
-            localStorage.setItem('priz_player_bgs', JSON.stringify(window.playerBgTheme));
-            localStorage.setItem('priz_player_skins', JSON.stringify(window.playerSkins));
-            localStorage.setItem('priz_player_poses', JSON.stringify(window.playerPoses));
-            localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
-            localStorage.setItem('priz_admin_login_logs', JSON.stringify(window.adminLoginLogs));
-            localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
-            localStorage.setItem('priz_user_site_bgs', JSON.stringify(userSiteBgs));
+            safeStorageJsonSet('priz_players_db', window.playersData);
+            safeStorageJsonSet('priz_views_db', window.playerViews);
+            safeStorageJsonSet('priz_player_bgs', window.playerBgTheme);
+            safeStorageJsonSet('priz_player_skins', window.playerSkins);
+            safeStorageJsonSet('priz_player_poses', window.playerPoses);
+            safeStorageJsonSet('priz_match_history', window.matchHistory);
+            safeStorageJsonSet('priz_admin_login_logs', window.adminLoginLogs);
+            safeStorageJsonSet('priz_user_created_dates', userCreatedDates);
+            safeStorageJsonSet('priz_user_site_bgs', userSiteBgs);
             syncWithServer();
         }
 
@@ -2556,8 +2644,12 @@
             const textarea = document.getElementById('siteCodeTextarea');
             if (!textarea) return;
             const newHtml = textarea.value;
-            localStorage.setItem('priz_custom_site_code', newHtml);
-            showToast('Изменения кода сохранены!');
+            const saved = safeStorageSet('priz_custom_site_code', newHtml);
+            if (!saved) {
+                showToast('⚠️ Не удалось сохранить код в localStorage (возможно, превышен лимит памяти)');
+                return;
+            }
+            showToast('Изменения кода сохранены в localStorage!');
             closeCodeEditorModal();
         }
     </script>
