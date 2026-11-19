@@ -8,49 +8,6 @@
     <link rel="stylesheet" href="style.css">
     <!-- 3D Skin Viewer -->
     <script src="https://unpkg.com/skinview3d@3.0.0/bundles/skinview3d.bundle.js"></script>
-    <style id="gta6-home-bg-styles">
-        body.site-bg-gta6-home {
-            background:
-                radial-gradient(circle at 14% 18%, rgba(255, 42, 168, 0.34), transparent 44%),
-                radial-gradient(circle at 84% 20%, rgba(0, 212, 255, 0.30), transparent 46%),
-                radial-gradient(circle at 52% 82%, rgba(255, 138, 0, 0.28), transparent 52%),
-                linear-gradient(135deg, #16072b 0%, #2a0c4e 36%, #13224a 72%, #2b1038 100%) !important;
-            background-attachment: fixed !important;
-        }
-
-        body.site-bg-gta6-home::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            background:
-                radial-gradient(circle at 22% 72%, rgba(168, 85, 247, 0.22), transparent 48%),
-                radial-gradient(circle at 78% 68%, rgba(244, 63, 94, 0.20), transparent 48%);
-        }
-
-        body.site-bg-gta6-home .page-overlay {
-            position: relative;
-            z-index: 1;
-            background: transparent !important;
-        }
-
-        /* Градиент для остальных страниц и превью-градиент в калькуляторе/блоках */
-        body.site-bg-gradient,
-        body:not(.site-bg-gta6-home) {
-            background:
-                radial-gradient(circle at 18% 15%, rgba(168, 85, 247, 0.28), transparent 45%),
-                radial-gradient(circle at 82% 25%, rgba(56, 189, 248, 0.22), transparent 48%),
-                linear-gradient(145deg, #0b0714 0%, #170d29 48%, #0d162b 100%) !important;
-            background-attachment: fixed !important;
-        }
-
-        .priz-gradient-banner {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(236, 72, 153, 0.16), rgba(56, 189, 248, 0.18));
-            border: 1px solid rgba(192, 132, 252, 0.32);
-            border-radius: 12px;
-        }
-    </style>
     <style id="priz-btn-hold-wave-styles">
         .priz-ui-press-anim {
             animation: prizBloodwornPress 0.34s cubic-bezier(0.22, 1, 0.36, 1) both !important;
@@ -94,61 +51,18 @@
             }
         }
     </style>
-    <style id="priz-scroll-header-fix-styles">
-        html, body {
-            overflow-x: hidden;
-            max-width: 100%;
-        }
-
-        .page-overlay,
-        .app-container,
-        .page-view,
-        .home-tiers-section,
-        .info-block,
-        .kit-stats-bar,
-        .lb-podium-grid,
-        .lb-table-card {
-            overflow: visible !important;
-            height: auto !important;
-            max-height: none !important;
-        }
-
-        header {
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 120 !important;
-            transform: none !important;
-            backface-visibility: visible !important;
-        }
-
-        .lb-podium-card .lb-tier-btn {
-            margin-top: 8px;
-            padding: 3px 10px;
-            font-size: 11px;
-            line-height: 1.3;
-            border-radius: 7px;
-            background: rgba(168, 85, 247, 0.14);
-            border: 1px solid rgba(192, 132, 252, 0.35);
-            color: #e9d5ff;
-        }
-
-        .lb-podium-card .lb-tier-btn:hover {
-            background: rgba(168, 85, 247, 0.28);
-            border-color: #c084fc;
-        }
-
-        .lb-list-row .lb-row-btn {
-            padding: 4px 8px;
-            font-size: 11px;
-            line-height: 1.2;
-            border-radius: 7px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .lb-list-row .lb-row-btn.btn-danger-sm {
-            background: rgba(239, 68, 68, 0.12);
-            border-color: rgba(239, 68, 68, 0.35);
+    <style id="priz-remove-bottom-nav-only">
+        footer ~ nav,
+        footer ~ header,
+        footer ~ [role="navigation"],
+        [class*="bottom-nav"],
+        [class*="mobile-nav"],
+        [class*="nav-bottom"],
+        [id*="bottom-nav"],
+        [id*="mobile-nav"] {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
         }
     </style>
 </head>
@@ -372,15 +286,15 @@
                 <!-- Подиум Топ-3 -->
                 <div class="lb-podium-grid" id="leaderboardPodium"></div>
 
-                <!-- Калькулятор очков по дисциплинам -->
-                <div class="lb-table-card priz-gradient-banner" style="margin-bottom: 16px; padding: 14px 18px;">
+                <!-- ОБНОВЛЕНИЕ: Калькулятор очков по дисциплинам -->
+                <div class="lb-table-card" style="margin-bottom: 16px; padding: 14px 18px;">
                     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px;">
                         <span style="font-size: 13px; font-weight: 800; color: #fff;">🧮 Калькулятор очков по тирам</span>
-                        <span style="font-size: 12px; color: #e9d5ff; font-weight: 700;" id="ptsCalcResult">Итого: 0 очков</span>
+                        <span style="font-size: 12px; color: #c084fc; font-weight: 700;" id="ptsCalcResult">Итого: 0 очков</span>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
                         <div>
-                            <label style="font-size: 11px; color: #cbd5e1; font-weight: 700;">Beast</label>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Beast</label>
                             <select id="calcBeastTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
                                 <option value="">Без тира (0)</option>
                                 <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
@@ -393,7 +307,7 @@
                             </select>
                         </div>
                         <div>
-                            <label style="font-size: 11px; color: #cbd5e1; font-weight: 700;">Mace</label>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Mace</label>
                             <select id="calcMaceTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
                                 <option value="">Без тира (0)</option>
                                 <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
@@ -406,7 +320,7 @@
                             </select>
                         </div>
                         <div>
-                            <label style="font-size: 11px; color: #cbd5e1; font-weight: 700;">Carts</label>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Carts</label>
                             <select id="calcCartsTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
                                 <option value="">Без тира (0)</option>
                                 <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
@@ -554,7 +468,6 @@
                             <div class="bg-section-title">Классика</div>
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <button class="btn-action-sm" onclick="setSiteBg('default')">🌌 Стандарт</button>
-                                <button class="btn-action-sm" onclick="setSiteBg('gradient')">🌈 Градиент</button>
                                 <button class="btn-action-sm" onclick="setSiteBg('dark')">⚫ Черный</button>
                                 <button class="btn-action-sm" onclick="setSiteBg('orange')">🟠 Оранжевый</button>
                                 <button class="btn-action-sm" onclick="setSiteBg('purple')">🟣 Фиолетовый</button>
@@ -697,6 +610,7 @@
                 <span style="font-size: 11px; background: rgba(168,85,247,0.2); border: 1px solid #a855f7; color: #e9d5ff; padding: 3px 8px; border-radius: 6px;">Полный доступ</span>
             </div>
 
+            <!-- Вкладки админ-панели -->
             <div class="custom-nav-tabs" style="margin-bottom: 14px;">
                 <button class="c-tab-btn active" id="admTabBtn-issue" onclick="switchAdminTab('issue')">🏆 Выдача тира</button>
                 <button class="c-tab-btn" id="admTabBtn-profile" onclick="switchAdminTab('profile')">👤 Профиль / Ник</button>
@@ -704,6 +618,7 @@
                 <button class="c-tab-btn" id="admTabBtn-tools" onclick="switchAdminTab('tools')">⚙️ База и Сезон</button>
             </div>
 
+            <!-- ВКЛАДКА 1: ВЫДАЧА ТИРА (ПОЛНЫЙ АНАЛОГ /tier И /hightier) -->
             <div id="admTab-issue" class="c-panel active">
                 <div style="display: flex; gap: 8px; margin-bottom: 10px;">
                     <input type="text" id="admPlayerNick" class="form-input" placeholder="Игровой ник (IGN)" style="margin-bottom: 0; flex: 2;" oninput="autoFillAdminPlayer()">
@@ -773,6 +688,7 @@
                 <button class="btn-purple" onclick="adminSavePlayer()">✅ Выдать тир и записать результат</button>
             </div>
 
+            <!-- ВКЛАДКА 2: УПРАВЛЕНИЕ ПРОФИЛЕМ / RENAME / СКИН -->
             <div id="admTab-profile" class="c-panel">
                 <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">Принудительная смена никнейма (аналог Rename без КД) или удаление игрока:</p>
                 <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Текущий никнейм игрока:</label>
@@ -786,6 +702,7 @@
                 </div>
             </div>
 
+            <!-- ВКЛАДКА 3: ИСТОРИЯ МАТЧЕЙ -->
             <div id="admTab-history" class="c-panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <span style="font-size: 12px; color: #94a3b8; font-weight: 700;">Последние выданные тиры и поединки:</span>
@@ -796,6 +713,7 @@
                 </div>
             </div>
 
+            <!-- ВКЛАДКА 4: ИНСТРУМЕНТЫ БАЗЫ И СЕЗОНА -->
             <div id="admTab-tools" class="c-panel">
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(168,85,247,0.2); border-color: #a855f7;" onclick="adminGenerateDemoPlayers()">✨ Сгенерировать демо-игроков</button>
@@ -852,62 +770,6 @@
     </div>
 
     <script>
-        function safeStorageGet(key, fallback = null) {
-            try {
-                const val = window.localStorage.getItem(key);
-                return val !== null ? val : fallback;
-            } catch (e) {
-                return fallback;
-            }
-        }
-
-        function safeStorageSet(key, value) {
-            try {
-                window.localStorage.setItem(key, String(value));
-                return true;
-            } catch (e) {
-                console.warn('localStorage set warning for key:', key, e);
-                return false;
-            }
-        }
-
-        function safeStorageRemove(key) {
-            try {
-                window.localStorage.removeItem(key);
-            } catch (e) {}
-        }
-
-        function safeStorageJsonGet(key, fallback) {
-            try {
-                const raw = window.localStorage.getItem(key);
-                if (!raw) return fallback;
-                const parsed = JSON.parse(raw);
-                return parsed !== null && parsed !== undefined ? parsed : fallback;
-            } catch (e) {
-                return fallback;
-            }
-        }
-
-        function safeStorageJsonSet(key, value) {
-            try {
-                window.localStorage.setItem(key, JSON.stringify(value));
-                return true;
-            } catch (e) {
-                console.warn('localStorage JSON save warning for key:', key, e);
-                return false;
-            }
-        }
-
-        (function restoreCustomSiteCodeFromStorage() {
-            const customHtml = safeStorageGet('priz_custom_site_code', null);
-            if (!customHtml || typeof customHtml !== 'string' || !customHtml.includes('<html')) return;
-            if (window.__prizCustomCodeApplied) return;
-            window.__prizCustomCodeApplied = true;
-            document.open();
-            document.write(customHtml);
-            document.close();
-        })();
-
         function hasActiveAdminBypass() {
             return Boolean(isAdminMode);
         }
@@ -1029,8 +891,8 @@
         function escapeJSArg(str) {
             if (str === null || str === undefined) return '';
             return String(str)
-                .replace(/\\/g, '\\\\')
-                .replace(/'/g, "\\'")
+                .replace(/\/g, '\\')
+                .replace(/'/g, "\'")
                 .replace(/"/g, '&quot;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
@@ -1400,7 +1262,7 @@
             if (pageId === 'home') {
                 const homePage = document.getElementById('page-home');
                 if (homePage) homePage.classList.add('active');
-                document.body.className = 'site-bg-gta6-home';
+                document.body.className = 'site-bg-hw-dungeon';
             } else {
                 document.body.className = 'site-bg-' + currentCustomSiteBg;
 
@@ -1622,46 +1484,40 @@
         }
 
         function loadFromLocalStorage() {
-            const defaultPlayers = {
-                "Prizrit": { beast: "HT1", mace: "HT1", carts: "LT2", title: "👑 Creator", server: "PriZriT", ping: "25ms" },
-                "ShadowPvP": { beast: "LT2", mace: "HT1", carts: "LT3", title: "⚡ Legend", server: "PriZriT", ping: "40ms" },
-                "BlockMaster": { beast: "LT3", mace: "LT2", carts: "HT1", title: "", server: "PriZriT", ping: "55ms" }
-            };
-
-            const parsedPlayers = safeStorageJsonGet('priz_players_db', null);
-            window.playersData = (parsedPlayers && typeof parsedPlayers === 'object' && !Array.isArray(parsedPlayers))
-                ? parsedPlayers
-                : defaultPlayers;
-
-            const views = safeStorageJsonGet('priz_views_db', {});
-            window.playerViews = (views && typeof views === 'object') ? views : {};
-
-            const bgs = safeStorageJsonGet('priz_player_bgs', {});
-            window.playerBgTheme = (bgs && typeof bgs === 'object') ? bgs : {};
-
-            const skins = safeStorageJsonGet('priz_player_skins', {});
-            window.playerSkins = (skins && typeof skins === 'object') ? skins : {};
-
-            const poses = safeStorageJsonGet('priz_player_poses', {});
-            window.playerPoses = (poses && typeof poses === 'object') ? poses : {};
-
-            const history = safeStorageJsonGet('priz_match_history', []);
-            window.matchHistory = Array.isArray(history) ? history : [];
-
-            const logs = safeStorageJsonGet('priz_admin_login_logs', []);
-            window.adminLoginLogs = Array.isArray(logs) ? logs : [];
+            try {
+                let localData = localStorage.getItem('priz_players_db');
+                window.playersData = localData ? JSON.parse(localData) : {
+                    "Prizrit": { beast: "HT1", mace: "HT1", carts: "LT2", title: "👑 Creator", server: "PriZriT", ping: "25ms" },
+                    "ShadowPvP": { beast: "LT2", mace: "HT1", carts: "LT3", title: "⚡ Legend", server: "PriZriT", ping: "40ms" },
+                    "BlockMaster": { beast: "LT3", mace: "LT2", carts: "HT1", title: "", server: "PriZriT", ping: "55ms" }
+                };
+                window.playerViews = JSON.parse(localStorage.getItem('priz_views_db') || '{}');
+                window.playerBgTheme = JSON.parse(localStorage.getItem('priz_player_bgs') || '{}');
+                window.playerSkins = JSON.parse(localStorage.getItem('priz_player_skins') || '{}');
+                window.playerPoses = JSON.parse(localStorage.getItem('priz_player_poses') || '{}');
+                window.matchHistory = JSON.parse(localStorage.getItem('priz_match_history') || '[]');
+                window.adminLoginLogs = JSON.parse(localStorage.getItem('priz_admin_login_logs') || '[]');
+            } catch (e) {
+                window.playersData = {};
+                window.playerViews = {};
+                window.playerBgTheme = {};
+                window.playerSkins = {};
+                window.playerPoses = {};
+                window.matchHistory = [];
+                window.adminLoginLogs = [];
+            }
         }
 
         function saveLocalDb() {
-            safeStorageJsonSet('priz_players_db', window.playersData);
-            safeStorageJsonSet('priz_views_db', window.playerViews);
-            safeStorageJsonSet('priz_player_bgs', window.playerBgTheme);
-            safeStorageJsonSet('priz_player_skins', window.playerSkins);
-            safeStorageJsonSet('priz_player_poses', window.playerPoses);
-            safeStorageJsonSet('priz_match_history', window.matchHistory);
-            safeStorageJsonSet('priz_admin_login_logs', window.adminLoginLogs);
-            safeStorageJsonSet('priz_user_created_dates', userCreatedDates);
-            safeStorageJsonSet('priz_user_site_bgs', userSiteBgs);
+            localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            localStorage.setItem('priz_views_db', JSON.stringify(window.playerViews));
+            localStorage.setItem('priz_player_bgs', JSON.stringify(window.playerBgTheme));
+            localStorage.setItem('priz_player_skins', JSON.stringify(window.playerSkins));
+            localStorage.setItem('priz_player_poses', JSON.stringify(window.playerPoses));
+            localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
+            localStorage.setItem('priz_admin_login_logs', JSON.stringify(window.adminLoginLogs));
+            localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+            localStorage.setItem('priz_user_site_bgs', JSON.stringify(userSiteBgs));
             syncWithServer();
         }
 
@@ -1957,7 +1813,7 @@
                     const score = calculatePlayerScore(p);
                     const subText = p.title ? escapeHTML(p.title) : `#${slot.rank} МЕСТО`;
                     const podiumAdminBtn = hasActiveAdminBypass()
-                        ? `<button class="btn-action-sm lb-tier-btn" onclick="quickAdminEdit(event, '${jsNick}')">✏️ Тир</button>`
+                        ? `<button class="btn-action-sm" style="margin-top: 8px; padding: 3px 8px; font-size: 11px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️ Тир</button>`
                         : '';
                     podium.innerHTML += `
                         <div class="lb-podium-card rank-${slot.rank}" onclick="openPlayerPopup('${jsNick}')">
@@ -1992,8 +1848,8 @@
                 const score = calculatePlayerScore(p);
                 const adminControls = hasActiveAdminBypass()
                     ? `<div style="display:flex; gap:4px; justify-content:flex-end;">
-                        <button class="btn-action-sm lb-row-btn" onclick="quickAdminEdit(event, '${jsNick}')">✏️</button>
-                        <button class="btn-action-sm lb-row-btn btn-danger-sm" onclick="quickAdminDelete(event, '${jsNick}')">🗑️</button>
+                        <button class="btn-action-sm" style="padding: 4px 8px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️</button>
+                        <button class="btn-action-sm btn-danger-sm" style="padding: 4px 8px;" onclick="quickAdminDelete(event, '${jsNick}')">🗑️</button>
                        </div>`
                     : '';
 
@@ -2714,12 +2570,8 @@
             const textarea = document.getElementById('siteCodeTextarea');
             if (!textarea) return;
             const newHtml = textarea.value;
-            const saved = safeStorageSet('priz_custom_site_code', newHtml);
-            if (!saved) {
-                showToast('⚠️ Не удалось сохранить код в localStorage (возможно, превышен лимит памяти)');
-                return;
-            }
-            showToast('Изменения кода сохранены в localStorage!');
+            localStorage.setItem('priz_custom_site_code', newHtml);
+            showToast('Изменения кода сохранены!');
             closeCodeEditorModal();
         }
     </script>
@@ -2770,6 +2622,41 @@
                 if (!target) return;
                 runPressAnim(target);
             }, true);
+        })();
+    </script>
+    <script id="priz-remove-bottom-nav-only-script">
+        (function () {
+            function cleanBottomDuplicateNav() {
+                const topHeader = document.querySelector('.page-overlay > header');
+                const footer = document.querySelector('footer');
+                const candidates = Array.from(
+                    document.querySelectorAll('nav, header, [role="navigation"], .nav-icons-bar')
+                );
+
+                candidates.forEach((el) => {
+                    if (el === topHeader || (topHeader && topHeader.contains(el))) return;
+                    const afterFooter =
+                        footer && Boolean(footer.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
+                    const rect = el.getBoundingClientRect();
+                    const isFixedBottom =
+                        getComputedStyle(el).position === 'fixed' && rect.top > window.innerHeight * 0.5;
+
+                    if (afterFooter || isFixedBottom) {
+                        el.remove();
+                    }
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', cleanBottomDuplicateNav);
+            } else {
+                cleanBottomDuplicateNav();
+            }
+
+            new MutationObserver(cleanBottomDuplicateNav).observe(
+                document.documentElement || document.body,
+                { childList: true, subtree: true }
+            );
         })();
     </script>
 </body>
