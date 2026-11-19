@@ -717,8 +717,9 @@
         })();
 
         const CLIENT_ID = "1561648119584784444";
-        // Используем относительный путь (работает нативно с Cloudflare Pages Functions /api/...)
         const BACKEND_URL = "";
+        const ADMIN_DM_TARGET_USERNAME = "bigkeks";
+        const ADMIN_DM_TARGET_ID = "1472503442105696481";
 
         const DISCORD_KITS_WIDGETS = {
             beast: "3U6TyVPwbV",
@@ -732,7 +733,6 @@
             carts: "https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png"
         };
 
-        // Полная таблица очков, идентичная tierlist_bot_6.py
         const TIER_WEIGHTS = {
             'HT1': 60, 'RHT1': 55, 'LT1': 45, 'RLT1': 40,
             'HT2': 30, 'RHT2': 25, 'LT2': 20, 'RLT2': 15,
@@ -758,7 +758,7 @@
         } catch(e) {}
 
         let currentCustomSiteBg = sessionAccountId && userSiteBgs[sessionAccountId] ? userSiteBgs[sessionAccountId] : 'hw-dungeon';
-        let ADMIN_PASS = localStorage.getItem('priz_custom_admin_pass') || "admin123";
+        let ADMIN_PASS = localStorage.getItem('priz_custom_admin_pass') || "rjhrhjskhorjhwaww]hr]jhrhr39=7940754-q2=7=949=37=-//,'lp'=]pt";
 
         let skinViewer = null;
         let modalSkinViewer = null;
@@ -768,6 +768,7 @@
         window.playerSkins = {};
         window.playerPoses = {};
         window.matchHistory = [];
+        window.adminLoginLogs = [];
 
         function escapeHTML(str) {
             if (str === null || str === undefined) return '';
@@ -777,6 +778,16 @@
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#039;');
+        }
+
+        function escapeJSArg(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
         }
 
         function calculatePlayerScore(playerData) {
@@ -789,6 +800,122 @@
                 }
             });
             return total;
+        }
+
+        function detectDeviceInfo() {
+            const ua = navigator.userAgent || '';
+            let deviceModel = 'Не определена';
+            let deviceName = 'Не определено';
+
+            const iPadMatch = ua.match(/iPad/i);
+            const iPhoneMatch = ua.match(/iPhone/i);
+            const androidMatch = ua.match(/Android\s+([\d.]+)?\s*;?\s*([^;\)]+)/i);
+            const macMatch = ua.match(/Macintosh;.*Mac OS X\s+([0-9_]+)/i);
+            const winMatch = ua.match(/Windows NT\s+([0-9.]+)/i);
+            const linuxMatch = ua.match(/Linux/i);
+
+            if (iPhoneMatch) {
+                deviceModel = 'iPhone';
+                deviceName = 'Apple iPhone (iOS)';
+            } else if (iPadMatch) {
+                deviceModel = 'iPad';
+                deviceName = 'Apple iPad (iPadOS)';
+            } else if (androidMatch) {
+                const rawModel = (androidMatch[2] || 'Android Device').replace(/Build\/.*$/i, '').trim();
+                deviceModel = rawModel || 'Android Device';
+                deviceName = `${deviceModel} (Android${androidMatch[1] ? ' ' + androidMatch[1] : ''})`;
+            } else if (macMatch) {
+                deviceModel = 'Macintosh';
+                deviceName = 'Apple Mac (' + macMatch[1].replace(/_/g, '.') + ')';
+            } else if (winMatch) {
+                const ver = winMatch[1];
+                const winLabel = ver === '10.0' ? 'Windows 10 / 11' : `Windows NT ${ver}`;
+                deviceModel = `PC (${winLabel})`;
+                deviceName = `Desktop PC (${winLabel})`;
+            } else if (linuxMatch) {
+                deviceModel = 'Linux PC';
+                deviceName = 'Linux Workstation';
+            } else {
+                deviceModel = (navigator.platform || 'Unknown').trim();
+                deviceName = ua.slice(0, 80) || 'Unknown Device';
+            }
+
+            if (navigator.userAgentData && navigator.userAgentData.model) {
+                deviceModel = navigator.userAgentData.model;
+            }
+            if (navigator.userAgentData && navigator.userAgentData.platform) {
+                const plat = navigator.userAgentData.platform;
+                if (!deviceName.toLowerCase().includes(plat.toLowerCase())) {
+                    deviceName = `${deviceModel} (${plat})`;
+                }
+            }
+
+            return {
+                ip: 'Определяется...',
+                deviceModel,
+                deviceName,
+                siteNickname: loggedInUser || 'Гость (не авторизован)',
+                discordId: sessionAccountId || null,
+                targetDiscordUsername: ADMIN_DM_TARGET_USERNAME,
+                targetDiscordId: ADMIN_DM_TARGET_ID,
+                userAgent: ua,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        async function fetchPublicIp() {
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 3500);
+                const res = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
+                clearTimeout(timer);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.ip) return String(data.ip);
+                }
+            } catch (e) {}
+            return 'Не определён';
+        }
+
+        async function notifyAdminPanelAccess() {
+            const info = detectDeviceInfo();
+            info.ip = await fetchPublicIp();
+            info.siteNickname = loggedInUser || localStorage.getItem('priz_ign') || 'Гость (не авторизован)';
+            info.targetDiscordUsername = ADMIN_DM_TARGET_USERNAME;
+            info.discordTarget = ADMIN_DM_TARGET_USERNAME;
+
+            window.adminLoginLogs.unshift(info);
+            if (window.adminLoginLogs.length > 100) {
+                window.adminLoginLogs = window.adminLoginLogs.slice(0, 100);
+            }
+            try {
+                localStorage.setItem('priz_admin_login_logs', JSON.stringify(window.adminLoginLogs));
+            } catch (e) {}
+
+            try {
+                await fetch(`${BACKEND_URL}/api/admin/login-alert`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        target_username: ADMIN_DM_TARGET_USERNAME,
+                        recipient_username: ADMIN_DM_TARGET_USERNAME,
+                        discord_target: ADMIN_DM_TARGET_USERNAME,
+                        discord_recipient: ADMIN_DM_TARGET_USERNAME,
+                        recipient: ADMIN_DM_TARGET_USERNAME,
+                        dm_target: ADMIN_DM_TARGET_USERNAME,
+                        target_discord_id: ADMIN_DM_TARGET_ID,
+                        ip: info.ip,
+                        device_model: info.deviceModel,
+                        device_name: info.deviceName,
+                        site_nickname: info.siteNickname,
+                        discord_id: info.discordId,
+                        user_agent: info.userAgent,
+                        timestamp: info.timestamp
+                    })
+                });
+            } catch (e) {}
+
+            syncWithServer();
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
@@ -913,7 +1040,6 @@
             if (nickModal) nickModal.style.display = 'none';
         }
 
-        // --- ЛОГИКА ВХОДА ПО КОДУ ИЗ БОТА (/login) ---
         function openCodeLoginModal() {
             const authModal = document.getElementById('authModal');
             if (authModal) authModal.style.display = 'none';
@@ -1050,6 +1176,7 @@
             if (sessionAccountId && saveToAccount) {
                 userSiteBgs[sessionAccountId] = style;
                 localStorage.setItem('priz_user_site_bgs', JSON.stringify(userSiteBgs));
+                saveLocalDb();
             }
             showToast('Фон сайта изменен для вашего аккаунта');
         }
@@ -1087,9 +1214,10 @@
             matches.forEach(nick => {
                 const p = window.playersData[nick];
                 const safeNick = escapeHTML(nick);
+                const jsNick = escapeJSArg(nick);
                 const score = calculatePlayerScore(p);
                 container.innerHTML += `
-                    <div class="player-card-mini" style="padding: 10px; margin-bottom: 6px;" onclick="closeSearchModal(); openPlayerPopup('${safeNick}');">
+                    <div class="player-card-mini" style="padding: 10px; margin-bottom: 6px;" onclick="closeSearchModal(); openPlayerPopup('${jsNick}');">
                         <img src="https://mc-heads.net/avatar/${safeNick}/24" width="24" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset">
                         <span style="font-size: 14px; color: #fff;">${safeNick}</span>
                         <span style="margin-left: auto; color: #c084fc; font-size: 12px;">${score} pts</span>
@@ -1129,6 +1257,16 @@
                 return;
             }
 
+            if (!sessionAccountId) {
+                sessionAccountId = 'web_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 7);
+                localStorage.setItem('priz_account_id', sessionAccountId);
+            }
+
+            if (!userCreatedDates[sessionAccountId]) {
+                userCreatedDates[sessionAccountId] = new Date().toLocaleDateString('ru-RU');
+                localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+            }
+
             const existingOwner = Object.keys(window.playersData).find(k => k.toLowerCase() === chosenNick.toLowerCase());
             if (existingOwner && window.playersData[existingOwner].discord_id && window.playersData[existingOwner].discord_id !== sessionAccountId) {
                 if (errEl) errEl.innerText = 'Этот никнейм уже занят другим игроком!';
@@ -1154,8 +1292,8 @@
             localStorage.setItem('priz_ign', chosenNick);
 
             if (!window.playersData[chosenNick]) {
-                window.playersData[chosenNick] = { beast: '0', mace: '0', carts: '0', title: '', discord_id: sessionAccountId || '' };
-            } else if (sessionAccountId) {
+                window.playersData[chosenNick] = { beast: '0', mace: '0', carts: '0', title: '', discord_id: sessionAccountId };
+            } else {
                 window.playersData[chosenNick].discord_id = sessionAccountId;
             }
             saveLocalDb();
@@ -1171,24 +1309,53 @@
         }
 
         async function loadDataFromServer() {
+            let localPlayers = {};
+            try {
+                const rawLocal = localStorage.getItem('priz_players_db');
+                if (rawLocal) localPlayers = JSON.parse(rawLocal) || {};
+            } catch (e) {
+                localPlayers = {};
+            }
+
             try {
                 const response = await fetch(`${BACKEND_URL}/api/data/get`);
                 if (response.ok) {
                     const serverData = await response.json();
                     if (serverData.players && Object.keys(serverData.players).length > 0) {
-                        window.playersData = serverData.players;
+                        const mergedPlayers = { ...serverData.players };
+                        Object.keys(localPlayers).forEach(nick => {
+                            if (!mergedPlayers[nick]) {
+                                mergedPlayers[nick] = localPlayers[nick];
+                            }
+                        });
+                        window.playersData = mergedPlayers;
                         window.playerViews = serverData.views || {};
                         window.playerBgTheme = serverData.bgs || {};
                         window.playerSkins = serverData.skins || {};
                         window.playerPoses = serverData.poses || {};
                         window.matchHistory = serverData.history || [];
-                        
+                        window.adminLoginLogs = serverData.admin_login_logs || JSON.parse(localStorage.getItem('priz_admin_login_logs') || '[]');
+
+                        if (serverData.user_created_dates && typeof serverData.user_created_dates === 'object') {
+                            userCreatedDates = { ...serverData.user_created_dates, ...userCreatedDates };
+                            localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+                        }
+                        if (serverData.user_site_bgs && typeof serverData.user_site_bgs === 'object') {
+                            userSiteBgs = { ...serverData.user_site_bgs, ...userSiteBgs };
+                            localStorage.setItem('priz_user_site_bgs', JSON.stringify(userSiteBgs));
+                        }
+                        if (sessionAccountId && userSiteBgs[sessionAccountId]) {
+                            currentCustomSiteBg = userSiteBgs[sessionAccountId];
+                            document.body.className = 'site-bg-' + currentCustomSiteBg;
+                        }
+
                         localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
                         localStorage.setItem('priz_views_db', JSON.stringify(window.playerViews));
                         localStorage.setItem('priz_player_bgs', JSON.stringify(window.playerBgTheme));
                         localStorage.setItem('priz_player_skins', JSON.stringify(window.playerSkins));
                         localStorage.setItem('priz_player_poses', JSON.stringify(window.playerPoses));
                         localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
+                        localStorage.setItem('priz_admin_login_logs', JSON.stringify(window.adminLoginLogs));
                         renderTierGrid();
                         renderLeaderboard();
                         return;
@@ -1216,6 +1383,7 @@
                 window.playerSkins = JSON.parse(localStorage.getItem('priz_player_skins') || '{}');
                 window.playerPoses = JSON.parse(localStorage.getItem('priz_player_poses') || '{}');
                 window.matchHistory = JSON.parse(localStorage.getItem('priz_match_history') || '[]');
+                window.adminLoginLogs = JSON.parse(localStorage.getItem('priz_admin_login_logs') || '[]');
             } catch (e) {
                 window.playersData = {};
                 window.playerViews = {};
@@ -1223,6 +1391,7 @@
                 window.playerSkins = {};
                 window.playerPoses = {};
                 window.matchHistory = [];
+                window.adminLoginLogs = [];
             }
         }
 
@@ -1233,6 +1402,9 @@
             localStorage.setItem('priz_player_skins', JSON.stringify(window.playerSkins));
             localStorage.setItem('priz_player_poses', JSON.stringify(window.playerPoses));
             localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
+            localStorage.setItem('priz_admin_login_logs', JSON.stringify(window.adminLoginLogs));
+            localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+            localStorage.setItem('priz_user_site_bgs', JSON.stringify(userSiteBgs));
             syncWithServer();
         }
 
@@ -1247,12 +1419,13 @@
                         bgs: window.playerBgTheme,
                         skins: window.playerSkins,
                         poses: window.playerPoses,
-                        history: window.matchHistory
+                        history: window.matchHistory,
+                        admin_login_logs: window.adminLoginLogs,
+                        user_created_dates: userCreatedDates,
+                        user_site_bgs: userSiteBgs
                     })
                 });
-            } catch (e) {
-                // Игнорируем ошибку при работе в автономном статическом режиме
-            }
+            } catch (e) {}
         }
 
         function recordProfileView(nick) {
@@ -1422,7 +1595,6 @@
             if (!grid || !window.playersData) return;
             grid.innerHTML = '';
 
-            // Поддержка всех стандартных и редких (RHT/RLT) тиров в колонках 1-5
             const tierGroups = {
                 1: ['HT1', 'RHT1', 'LT1', 'RLT1'],
                 2: ['HT2', 'RHT2', 'LT2', 'RLT2'],
@@ -1447,9 +1619,10 @@
                 tierPlayers.forEach(nick => {
                     const playerVal = (window.playersData[nick][currentKit] || '').toUpperCase();
                     const safeNick = escapeHTML(nick);
+                    const jsNick = escapeJSArg(nick);
                     const safeTier = escapeHTML(playerVal);
                     col.innerHTML += `
-                        <div class="player-card-mini" onclick="openPlayerPopup('${safeNick}')">
+                        <div class="player-card-mini" onclick="openPlayerPopup('${jsNick}')">
                             <img src="https://mc-heads.net/avatar/${safeNick}/24" width="22" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset"> 
                             <span>${safeNick} <small style="color: #c084fc; font-weight: 700;">(${safeTier})</small></span>
                         </div>
@@ -1523,13 +1696,14 @@
                     }
                     const p = window.playersData[nick];
                     const safeNick = escapeHTML(nick);
+                    const jsNick = escapeJSArg(nick);
                     const score = calculatePlayerScore(p);
                     const subText = p.title ? escapeHTML(p.title) : `#${slot.rank} МЕСТО`;
                     const podiumAdminBtn = hasActiveAdminBypass()
-                        ? `<button class="btn-action-sm" style="margin-top: 8px; padding: 3px 8px; font-size: 11px;" onclick="quickAdminEdit(event, '${safeNick}')">✏️ Тир</button>`
+                        ? `<button class="btn-action-sm" style="margin-top: 8px; padding: 3px 8px; font-size: 11px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️ Тир</button>`
                         : '';
                     podium.innerHTML += `
-                        <div class="lb-podium-card rank-${slot.rank}" onclick="openPlayerPopup('${safeNick}')">
+                        <div class="lb-podium-card rank-${slot.rank}" onclick="openPlayerPopup('${jsNick}')">
                             <div class="lb-podium-pts">${score}</div>
                             <div class="lb-podium-pts-lbl">очков</div>
                             <div class="lb-podium-sub">${subText}</div>
@@ -1557,16 +1731,17 @@
                 const rank = listStartIndex + i + 1;
                 const p = window.playersData[nick];
                 const safeNick = escapeHTML(nick);
+                const jsNick = escapeJSArg(nick);
                 const score = calculatePlayerScore(p);
                 const adminControls = hasActiveAdminBypass()
                     ? `<div style="display:flex; gap:4px; justify-content:flex-end;">
-                        <button class="btn-action-sm" style="padding: 4px 8px;" onclick="quickAdminEdit(event, '${safeNick}')">✏️</button>
-                        <button class="btn-action-sm btn-danger-sm" style="padding: 4px 8px;" onclick="quickAdminDelete(event, '${safeNick}')">🗑️</button>
+                        <button class="btn-action-sm" style="padding: 4px 8px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️</button>
+                        <button class="btn-action-sm btn-danger-sm" style="padding: 4px 8px;" onclick="quickAdminDelete(event, '${jsNick}')">🗑️</button>
                        </div>`
                     : '';
 
                 tbody.innerHTML += `
-                    <tr class="lb-list-row" onclick="openPlayerPopup('${safeNick}')">
+                    <tr class="lb-list-row" onclick="openPlayerPopup('${jsNick}')">
                         <td style="padding: 14px; font-weight: 800; color: #94a3b8; font-size: 13px;">${rank}</td>
                         <td style="padding: 14px;">
                             <div class="lb-player-cell">
@@ -1850,13 +2025,16 @@
             showToast('Ссылка на профиль скопирована!');
         }
 
-        // --- РАСШИРЕННАЯ АДМИН-ПАНЕЛЬ ТЕСТЕРОВ ---
         function openAdminLoginModal() {
             if (hasActiveAdminBypass()) {
                 openAdminPanelWithDefaults();
             } else {
                 const modal = document.getElementById('adminLoginModal');
-                if (modal) modal.style.display = 'flex';
+                if (modal) {
+                    modal.style.display = 'flex';
+                    const passInput = document.getElementById('adminPassInput');
+                    if (passInput) { passInput.value = ''; passInput.focus(); }
+                }
             }
         }
 
@@ -1931,6 +2109,7 @@
                 
                 activateAdminMode();
                 openAdminPanelWithDefaults();
+                notifyAdminPanelAccess();
                 
                 if (inputEl) inputEl.value = '';
             } else {
@@ -2013,7 +2192,6 @@
 
             if (!rawNick) { alert('Введите ник игрока!'); return; }
 
-            // Ищем игрока без учета регистра, чтобы не плодить дубликаты
             const existingKey = Object.keys(window.playersData).find(k => k.toLowerCase() === rawNick.toLowerCase());
             const nick = existingKey || rawNick;
 
@@ -2027,7 +2205,6 @@
             if (server !== '') window.playersData[nick].server = server;
             if (ping !== '') window.playersData[nick].ping = ping;
 
-            // Запись в историю поединков (аналог db_log_match из бота)
             window.matchHistory.unshift({
                 ign: nick,
                 kit: kit,
