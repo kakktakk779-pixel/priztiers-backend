@@ -89,7 +89,9 @@
         .page-view,
         .home-tiers-section,
         .info-block,
-        .kit-stats-bar {
+        .kit-stats-bar,
+        .lb-podium-grid,
+        .lb-table-card {
             overflow: visible !important;
             height: auto !important;
             max-height: none !important;
@@ -101,6 +103,37 @@
             z-index: 120 !important;
             transform: none !important;
             backface-visibility: visible !important;
+        }
+
+        /* Отдельный компактный стиль кнопок действий в лидерборде, чтобы не дублировать стиль верхних/профильных кнопок */
+        .lb-podium-card .lb-tier-btn {
+            margin-top: 8px;
+            padding: 3px 10px;
+            font-size: 11px;
+            line-height: 1.3;
+            border-radius: 7px;
+            background: rgba(168, 85, 247, 0.14);
+            border: 1px solid rgba(192, 132, 252, 0.35);
+            color: #e9d5ff;
+        }
+
+        .lb-podium-card .lb-tier-btn:hover {
+            background: rgba(168, 85, 247, 0.28);
+            border-color: #c084fc;
+        }
+
+        .lb-list-row .lb-row-btn {
+            padding: 4px 8px;
+            font-size: 11px;
+            line-height: 1.2;
+            border-radius: 7px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .lb-list-row .lb-row-btn.btn-danger-sm {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.35);
         }
     </style>
 </head>
@@ -984,8 +1017,8 @@
         function escapeJSArg(str) {
             if (str === null || str === undefined) return '';
             return String(str)
-                .replace(/\\/g, '\\\\')
-                .replace(/'/g, "\\'")
+                .replace(/\/g, '\\')
+                .replace(/'/g, "\'")
                 .replace(/"/g, '&quot;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
@@ -1912,7 +1945,7 @@
                     const score = calculatePlayerScore(p);
                     const subText = p.title ? escapeHTML(p.title) : `#${slot.rank} МЕСТО`;
                     const podiumAdminBtn = hasActiveAdminBypass()
-                        ? `<button class="btn-action-sm" style="margin-top: 8px; padding: 3px 8px; font-size: 11px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️ Тир</button>`
+                        ? `<button class="btn-action-sm lb-tier-btn" onclick="quickAdminEdit(event, '${jsNick}')">✏️ Тир</button>`
                         : '';
                     podium.innerHTML += `
                         <div class="lb-podium-card rank-${slot.rank}" onclick="openPlayerPopup('${jsNick}')">
@@ -1947,8 +1980,8 @@
                 const score = calculatePlayerScore(p);
                 const adminControls = hasActiveAdminBypass()
                     ? `<div style="display:flex; gap:4px; justify-content:flex-end;">
-                        <button class="btn-action-sm" style="padding: 4px 8px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️</button>
-                        <button class="btn-action-sm btn-danger-sm" style="padding: 4px 8px;" onclick="quickAdminDelete(event, '${jsNick}')">🗑️</button>
+                        <button class="btn-action-sm lb-row-btn" onclick="quickAdminEdit(event, '${jsNick}')">✏️</button>
+                        <button class="btn-action-sm lb-row-btn btn-danger-sm" onclick="quickAdminDelete(event, '${jsNick}')">🗑️</button>
                        </div>`
                     : '';
 
