@@ -78,6 +78,31 @@
             }
         }
     </style>
+    <style id="priz-scroll-header-fix-styles">
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+
+        .page-overlay,
+        .app-container,
+        .page-view,
+        .home-tiers-section,
+        .info-block,
+        .kit-stats-bar {
+            overflow: visible !important;
+            height: auto !important;
+            max-height: none !important;
+        }
+
+        header {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 120 !important;
+            transform: none !important;
+            backface-visibility: visible !important;
+        }
+    </style>
 </head>
 <body class="site-bg-hw-dungeon">
 
