@@ -2,7 +2,7 @@ export async function onRequestPost(context) {
     try {
         const { request, env } = context;
         const body = await request.json();
-        const { code, redirect_uri } = body;
+        const { code, redirect_uri } = body || {};
 
         if (!code) {
             return new Response(JSON.stringify({ error: 'Не передан код авторизации (code)' }), {
@@ -11,8 +11,8 @@ export async function onRequestPost(context) {
             });
         }
 
-        const clientId = env.DISCORD_CLIENT_ID;
-        const clientSecret = env.DISCORD_CLIENT_SECRET;
+        const clientId = (env.DISCORD_CLIENT_ID || '').trim();
+        const clientSecret = (env.DISCORD_CLIENT_SECRET || '').trim();
 
         if (!clientId || !clientSecret) {
             return new Response(JSON.stringify({
@@ -28,7 +28,6 @@ export async function onRequestPost(context) {
             });
         }
 
-        // Обмениваем code на access_token у Discord
         const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
             method: 'POST',
             headers: {
@@ -46,13 +45,15 @@ export async function onRequestPost(context) {
         const tokenData = await tokenResponse.json();
 
         if (!tokenResponse.ok || !tokenData.access_token) {
-            return new Response(JSON.stringify({ error: 'Не удалось получить токен от Discord', details: tokenData }), {
+            return new Response(JSON.stringify({
+                error: 'Не удалось получить токен от Discord',
+                details: tokenData
+            }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        // Запрашиваем информацию о пользователе
         const userResponse = await fetch('https://discord.com/api/users/@me', {
             headers: {
                 Authorization: `Bearer ${tokenData.access_token}`,
@@ -62,13 +63,15 @@ export async function onRequestPost(context) {
         const userData = await userResponse.json();
 
         if (!userResponse.ok || !userData.id) {
-            return new Response(JSON.stringify({ error: 'Не удалось получить профиль пользователя Discord', details: userData }), {
+            return new Response(JSON.stringify({
+                error: 'Не удалось получить профиль пользователя Discord',
+                details: userData
+            }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        // Возвращаем на сайт ID пользователя и дату регистрации (если Discord ее отдает, либо текущую)
         return new Response(JSON.stringify({
             discord_id: userData.id,
             username: userData.username,
@@ -79,12 +82,12 @@ export async function onRequestPost(context) {
         });
 
     } catch (err) {
-        return new Response(JSON.stringify({ error: 'Внутренняя ошибка сервера Cloudflare', message: err.message }), {
+        return new Response(JSON.stringify({
+            error: 'Внутренняя ошибка сервера Cloudflare',
+            message: err.message
+        }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });
     }
 }
-```[cite: 18]
-
-После обновления файла на GitHub дождись нового деплоя на Cloudflare Pages, зайди на сайт, повтори вход через Discord и скинь сюда поле `debug` из ответа запроса `discord` в Network.
