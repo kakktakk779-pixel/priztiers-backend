@@ -662,25 +662,34 @@
     </div>
 
     <script>
+        function hasActiveAdminBypass() {
+            return Boolean(isAdminMode);
+        }
+
         document.addEventListener('contextmenu', function(e) {
+            if (hasActiveAdminBypass()) return;
             e.preventDefault();
             showToast('⚠️ Контекстное меню заблокировано!');
         });
 
         document.addEventListener('copy', function(e) {
+            if (hasActiveAdminBypass()) return;
             e.preventDefault();
             showToast('🛡️ Копирование данных запрещено!');
         });
 
         document.addEventListener('cut', function(e) {
+            if (hasActiveAdminBypass()) return;
             e.preventDefault();
         });
 
         document.addEventListener('dragstart', function(e) {
+            if (hasActiveAdminBypass()) return;
             e.preventDefault();
         });
 
         document.addEventListener('keydown', function(e) {
+            if (hasActiveAdminBypass()) return;
             if (
                 e.keyCode === 123 || 
                 (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
@@ -1287,7 +1296,7 @@
             const cooldown = 15 * 24 * 60 * 60 * 1000;
             const timePassed = now - parseInt(lastNickChange || 0);
 
-            if (!isAdminMode && timePassed < cooldown) {
+            if (!hasActiveAdminBypass() && timePassed < cooldown) {
                 const daysLeft = Math.ceil((cooldown - timePassed) / (1000 * 60 * 60 * 24));
                 alert(`Вы сможете сменить никнейм только через ${daysLeft} дн.!`);
                 return;
@@ -1516,7 +1525,7 @@
                     const safeNick = escapeHTML(nick);
                     const score = calculatePlayerScore(p);
                     const subText = p.title ? escapeHTML(p.title) : `#${slot.rank} МЕСТО`;
-                    const podiumAdminBtn = isAdminMode
+                    const podiumAdminBtn = hasActiveAdminBypass()
                         ? `<button class="btn-action-sm" style="margin-top: 8px; padding: 3px 8px; font-size: 11px;" onclick="quickAdminEdit(event, '${safeNick}')">✏️ Тир</button>`
                         : '';
                     podium.innerHTML += `
@@ -1549,7 +1558,7 @@
                 const p = window.playersData[nick];
                 const safeNick = escapeHTML(nick);
                 const score = calculatePlayerScore(p);
-                const adminControls = isAdminMode
+                const adminControls = hasActiveAdminBypass()
                     ? `<div style="display:flex; gap:4px; justify-content:flex-end;">
                         <button class="btn-action-sm" style="padding: 4px 8px;" onclick="quickAdminEdit(event, '${safeNick}')">✏️</button>
                         <button class="btn-action-sm btn-danger-sm" style="padding: 4px 8px;" onclick="quickAdminDelete(event, '${safeNick}')">🗑️</button>
@@ -1735,7 +1744,7 @@
         }
 
         function checkAuthAndOpenProfile() {
-            if (!loggedInUser && !isAdminMode) {
+            if (!loggedInUser && !hasActiveAdminBypass()) {
                 const modal = document.getElementById('authModal');
                 if (modal) modal.style.display = 'flex';
             } else {
@@ -1843,7 +1852,7 @@
 
         // --- РАСШИРЕННАЯ АДМИН-ПАНЕЛЬ ТЕСТЕРОВ ---
         function openAdminLoginModal() {
-            if (isAdminMode) {
+            if (hasActiveAdminBypass()) {
                 openAdminPanelWithDefaults();
             } else {
                 const modal = document.getElementById('adminLoginModal');
@@ -1934,7 +1943,7 @@
             localStorage.setItem('priz_admin_mode', 'true');
             applyAdminUI(true);
             renderLeaderboard();
-            showToast('Режим Тестера / Администратора активирован!');
+            showToast('Режим Тестера / Администратора активирован! Ограничения сняты.');
         }
 
         function deactivateAdminMode() {
