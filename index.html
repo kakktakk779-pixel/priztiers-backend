@@ -484,7 +484,21 @@
             transition: transform 0.1s ease, filter 0.1s ease, box-shadow 0.1s ease !important;
         }
 
-
+    </style>
+    <style id="priz-remove-bottom-nav-only">
+        footer ~ nav,
+        footer ~ header,
+        footer ~ [role="navigation"],
+        [class*="bottom-nav"],
+        [class*="mobile-nav"],
+        [class*="nav-bottom"],
+        [id*="bottom-nav"],
+        [id*="mobile-nav"] {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+    </style>
         #page-tier .tier-table-wrapper,
         #page-tier .tier-header-bar,
         #page-tier .tier-grid,
@@ -499,20 +513,6 @@
         }
         #page-links .links-grid {
             margin-top: 10px !important;
-        }
-    </style>
-    <style id="priz-remove-bottom-nav-only">
-        footer ~ nav,
-        footer ~ header,
-        footer ~ [role="navigation"],
-        [class*="bottom-nav"],
-        [class*="mobile-nav"],
-        [class*="nav-bottom"],
-        [id*="bottom-nav"],
-        [id*="mobile-nav"] {
-            display: none !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
         }
     </style>
     <style id="priz-kit-highlight-themes">
@@ -564,60 +564,48 @@
 
         /* Carts: кровавый (#b91c1c) */
         .btn-carts.active, .btn-carts:hover {
-            border-color: #dc2626 !important;
+            border-color: #ef4444 !important;
             box-shadow: 0 0 18px rgba(185, 28, 28, 0.52), inset 0 0 10px rgba(185, 28, 28, 0.24) !important;
         }
         .tier-table-wrapper.theme-carts {
-            border-color: rgba(185, 28, 28, 0.62) !important;
-            box-shadow: 0 12px 36px rgba(185, 28, 28, 0.2), 0 0 0 1px rgba(220, 38, 38, 0.26) !important;
+            border-color: rgba(220, 38, 38, 0.58) !important;
+            box-shadow: 0 12px 36px rgba(153, 27, 27, 0.24), 0 0 0 1px rgba(220, 38, 38, 0.25) !important;
         }
         .tier-table-wrapper.theme-carts #kitTitle,
         .tier-table-wrapper.theme-carts .tier-pill-badge {
             color: #f87171 !important;
-            text-shadow: 0 0 14px rgba(220, 38, 38, 0.5);
+            text-shadow: 0 0 14px rgba(185, 28, 28, 0.52);
         }
         .tier-table-wrapper.theme-carts .tier-col {
-            border-color: rgba(185, 28, 28, 0.35) !important;
+            border-color: rgba(220, 38, 38, 0.34) !important;
         }
         .tier-table-wrapper.theme-carts .tier-col-header {
-            background: linear-gradient(90deg, rgba(185, 28, 28, 0.3), rgba(127, 29, 29, 0.1)) !important;
+            background: linear-gradient(90deg, rgba(185, 28, 28, 0.28), rgba(127, 29, 29, 0.1)) !important;
             border-bottom: 1px solid rgba(220, 38, 38, 0.38) !important;
             color: #fca5a5 !important;
         }
 
-        /* Axe: ярко-бирюзовый (#06f5d6) */
+        /* Axe: неоново-бирюзовый (#06f5d6) */
         .btn-axe.active, .btn-axe:hover {
             border-color: #06f5d6 !important;
-            box-shadow: 0 0 18px rgba(6, 245, 214, 0.48), inset 0 0 10px rgba(6, 245, 214, 0.2) !important;
+            box-shadow: 0 0 18px rgba(6, 245, 214, 0.5), inset 0 0 10px rgba(6, 245, 214, 0.22) !important;
         }
         .tier-table-wrapper.theme-axe {
             border-color: rgba(6, 245, 214, 0.58) !important;
-            box-shadow: 0 12px 36px rgba(6, 245, 214, 0.17), 0 0 0 1px rgba(6, 245, 214, 0.24) !important;
+            box-shadow: 0 12px 36px rgba(6, 245, 214, 0.18), 0 0 0 1px rgba(6, 245, 214, 0.24) !important;
         }
         .tier-table-wrapper.theme-axe #kitTitle,
         .tier-table-wrapper.theme-axe .tier-pill-badge {
-            color: #2dd4bf !important;
-            text-shadow: 0 0 14px rgba(6, 245, 214, 0.48);
+            color: #06f5d6 !important;
+            text-shadow: 0 0 14px rgba(6, 245, 214, 0.5);
         }
         .tier-table-wrapper.theme-axe .tier-col {
-            border-color: rgba(6, 245, 214, 0.32) !important;
+            border-color: rgba(6, 245, 214, 0.34) !important;
         }
         .tier-table-wrapper.theme-axe .tier-col-header {
-            background: linear-gradient(90deg, rgba(6, 245, 214, 0.25), rgba(13, 148, 136, 0.08)) !important;
+            background: linear-gradient(90deg, rgba(6, 245, 214, 0.24), rgba(13, 148, 136, 0.08)) !important;
             border-bottom: 1px solid rgba(6, 245, 214, 0.36) !important;
             color: #99f6e4 !important;
-        }
-
-        /* HIGH / LOW 2-column layout inside #tierGridContent */
-        #page-tier #tierGridContent.tier-grid {
-            display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 14px !important;
-        }
-        @media (max-width: 720px) {
-            #page-tier #tierGridContent.tier-grid {
-                grid-template-columns: 1fr !important;
-            }
         }
     </style>
 </head>
@@ -720,11 +708,32 @@
                         </div>
                     </div>
                 </div>
+
+                    <div class="kit-stat-card">
+                        <div class="kit-stat-info">
+                            <div class="kit-stat-title">
+                                <img src="https://minecraft.wiki/images/Mace_JE1_BE1.png" width="16" height="16" alt="" class="protected-asset"> MACE DISCIPLINE
+                            </div>
+                            <div class="kit-stat-count" id="statCountMace">... участников</div>
+                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordMaceOnline">...</span> в сети</div>
+                        </div>
+                    </div>
+
+                    <div class="kit-stat-card">
+                        <div class="kit-stat-info">
+                            <div class="kit-stat-title">
+                                <img src="https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png" width="16" height="16" alt="" class="protected-asset"> CARTS DISCIPLINE
+                            </div>
+                            <div class="kit-stat-count" id="statCountCarts">... участников</div>
+                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordCartsOnline">...</span> в сети</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- СТРАНИЦЫ ТИРОВ ПО КИТАМ -->
             <div id="page-tier" class="page-view">
-                <div class="tier-table-wrapper theme-beast" id="tierWrapper" style="margin-top: 10px;">
+                <div class="tier-table-wrapper theme-beast" id="tierWrapper" style="margin-top: 32px;">
                     <div class="tier-header-bar">
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                             <div style="font-size: 20px; font-weight: 900; letter-spacing: 0.5px;" id="kitTitle">BEAST TIER LIST</div>
@@ -1701,28 +1710,10 @@
         const SOON_KITS = ["smp", "uhc", "op", "spearmace"];
         const ALL_KITS = [...ACTIVE_KITS, ...SOON_KITS];
 
-        const DEFAULT_DISCORD_KITS_WIDGETS = {
-            beast: "BzTswYkGpt",
-            mace: "KndDbTt8Yd",
-            carts: "n7jufy32Vm",
-            axe: ""
-        };
-        function extractDiscordInviteCode(raw) {
-            if (!raw) return "";
-            const str = String(raw).trim();
-            const m = str.match(/(?:discord\.gg\/|discord\.com\/invite\/|discordapp\.com\/invite\/)([A-Za-z0-9-]+)/i);
-            if (m && m[1]) return m[1];
-            return /^[A-Za-z0-9-]{2,32}$/.test(str) ? str : "";
-        }
-        function getSavedAxeInviteUrl() {
-            try {
-                const v = localStorage.getItem('priz_axe_discord_invite') || '';
-                return v.trim();
-            } catch (e) { return ''; }
-        }
         const DISCORD_KITS_WIDGETS = {
-            ...DEFAULT_DISCORD_KITS_WIDGETS,
-            axe: extractDiscordInviteCode(getSavedAxeInviteUrl())
+            beast: "3U6TyVPwbV",
+            mace: "auxRZMsrM",
+            carts: "bdYVMwW5a"
         };
 
         const KIT_ICONS = {
@@ -2263,14 +2254,9 @@
             try {
                 const controller = new AbortController();
                 const timer = setTimeout(() => controller.abort(), 3000);
-                let res = await fetch(`${BACKEND_URL}/api/kit-tiers?kit=${encodeURIComponent(currentKit)}`, {
+                const res = await fetch(`${BACKEND_URL}/api/bot/kit-tiers?kit=${encodeURIComponent(currentKit)}`, {
                     signal: controller.signal
-                }).catch(() => null);
-                if (!res || !res.ok) {
-                    res = await fetch(`${BACKEND_URL}/api/bot/kit-tiers?kit=${encodeURIComponent(currentKit)}`, {
-                        signal: controller.signal
-                    });
-                }
+                });
                 clearTimeout(timer);
 
                 if (res.ok) {
@@ -2344,7 +2330,7 @@
         }
 
         async function syncTierIssueToBackendAndBot(payload) {
-            const endpoints = ['/api/admin/set-tier', '/api/bot/set-tier', '/api/admin/issue-tier'];
+            const endpoints = ['/api/bot/set-tier', '/api/admin/issue-tier'];
             for (const ep of endpoints) {
                 try {
                     const controller = new AbortController();
@@ -2709,77 +2695,11 @@
             }
         }
 
-        function syncAxeDiscordUI() {
-            const saved = getSavedAxeInviteUrl();
-            const code = extractDiscordInviteCode(saved);
-            DISCORD_KITS_WIDGETS.axe = code;
-            const fullUrl = code ? `https://discord.gg/${code}` : '';
-
-            const siteInp = document.getElementById('siteAxeDiscordInput');
-            const admInp = document.getElementById('admAxeDiscordInput');
-            if (siteInp && document.activeElement !== siteInp) siteInp.value = fullUrl;
-            if (admInp && document.activeElement !== admInp) admInp.value = fullUrl;
-
-            const hubBtn = document.getElementById('socialHubAxeBtn');
-            if (hubBtn) {
-                if (fullUrl) {
-                    hubBtn.href = fullUrl;
-                    hubBtn.target = '_blank';
-                    hubBtn.onclick = null;
-                    hubBtn.innerText = 'Открыть Discord Axe';
-                } else {
-                    hubBtn.href = 'javascript:void(0)';
-                    hubBtn.removeAttribute('target');
-                    hubBtn.onclick = function() { showToast('Укажите ссылку на Discord Axe в поле выше'); return false; };
-                    hubBtn.innerText = 'Ссылка не указана';
-                }
-            }
-
-            const guideWrap = document.getElementById('guideAxeDiscordWrap');
-            const guideLink = document.getElementById('guideAxeDiscordLink');
-            if (guideWrap && guideLink) {
-                if (fullUrl) {
-                    guideLink.href = fullUrl;
-                    guideWrap.style.display = 'inline';
-                } else {
-                    guideWrap.style.display = 'none';
-                }
-            }
-        }
-
-        function saveAxeDiscordInviteFromSite(inputId) {
-            const inp = document.getElementById(inputId);
-            if (!inp) return;
-            const raw = (inp.value || '').trim();
-            if (!raw) {
-                localStorage.removeItem('priz_axe_discord_invite');
-                syncAxeDiscordUI();
-                showToast('Ссылка на Discord Axe очищена');
-                return;
-            }
-            const code = extractDiscordInviteCode(raw);
-            if (!code) {
-                showToast('Некорректная ссылка Discord (пример: https://discord.gg/xxxxxx)');
-                return;
-            }
-            const cleanUrl = `https://discord.gg/${code}`;
-            localStorage.setItem('priz_axe_discord_invite', cleanUrl);
-            syncAxeDiscordUI();
-            fetchDiscordStats();
-            showToast('Ссылка на Discord Axe сохранена!');
-        }
-
         function applyDiscordStatsToUI(kit, memberCount, onlineCount) {
-            const map = {
-                beast: ['statCountBeast', 'statDiscordBeastOnline'],
-                mace: ['statCountMace', 'statDiscordMaceOnline'],
-                carts: ['statCountCarts', 'statDiscordCartsOnline'],
-                axe: ['statCountAxe', 'statDiscordAxeOnline']
-            };
-            const pair = map[kit];
-            if (!pair) return;
-            const countEl = document.getElementById(pair[0]);
-            const onlineEl = document.getElementById(pair[1]);
+            const countId = kit === 'beast' ? 'statCountBeast' : (kit === 'mace' ? 'statCountMace' : 'statCountCarts');
+            const onlineId = kit === 'beast' ? 'statDiscordBeastOnline' : (kit === 'mace' ? 'statDiscordMaceOnline' : 'statDiscordCartsOnline');
+            const countEl = document.getElementById(countId);
+            const onlineEl = document.getElementById(onlineId);
 
             if (countEl && memberCount !== undefined && memberCount !== null) {
                 countEl.innerText = `${memberCount} участников`;
@@ -2790,8 +2710,6 @@
         }
 
         async function fetchDiscordStats() {
-            syncAxeDiscordUI();
-            const kitsToFetch = ['beast', 'mace', 'carts', 'axe'];
             try {
                 const controller = new AbortController();
                 const timer = setTimeout(() => controller.abort(), 2500);
@@ -2802,19 +2720,19 @@
                 if (liveRes.ok) {
                     const liveData = await liveRes.json();
                     if (liveData && liveData.kits && typeof liveData.kits === 'object') {
-                        kitsToFetch.forEach(kit => {
+                        ['beast', 'mace', 'carts'].forEach(kit => {
                             const kData = liveData.kits[kit];
                             if (kData) {
                                 applyDiscordStatsToUI(kit, kData.members ?? kData.approximate_member_count, kData.online ?? kData.approximate_presence_count);
                             }
                         });
+                        return;
                     }
                 }
             } catch (e) {}
 
-            kitsToFetch.forEach(async (kit) => {
+            ['beast', 'mace', 'carts'].forEach(async (kit) => {
                 const code = DISCORD_KITS_WIDGETS[kit];
-                if (!code) return;
                 try {
                     const res = await fetch(`https://discord.com/api/v9/invites/${code}?with_counts=true&_t=${Date.now()}`);
                     if (!res.ok) return;
@@ -3034,10 +2952,7 @@
             }
 
             try {
-                let response = await fetch(`${BACKEND_URL}/api/site-data`).catch(() => null);
-                if (!response || !response.ok) {
-                    response = await fetch(`${BACKEND_URL}/api/data/get`);
-                }
+                const response = await fetch(`${BACKEND_URL}/api/data/get`);
                 if (response.ok) {
                     const serverData = await response.json();
                     if (serverData.players && Object.keys(serverData.players).length > 0) {
@@ -3272,11 +3187,16 @@
         function renamePlayerRecords(oldNick, newNick) {
             if (!oldNick || !newNick || oldNick === newNick) return;
             if (!window.playersData[oldNick]) {
-                window.playersData[newNick] = { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0', title: '', server: '', ping: '' };
+                window.playersData[newNick] = {
+                    beast: "0", mace: "0", carts: "0",
+                    smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0",
+                    title: ''
+                };
             } else {
-                window.playersData[newNick] = window.playersData[oldNick];
+                window.playersData[newNick] = { ...window.playersData[oldNick] };
                 delete window.playersData[oldNick];
             }
+
             if (window.playerViews[oldNick]) {
                 window.playerViews[newNick] = window.playerViews[oldNick];
                 delete window.playerViews[oldNick];
@@ -3293,149 +3213,1149 @@
                 window.playerPoses[newNick] = window.playerPoses[oldNick];
                 delete window.playerPoses[oldNick];
             }
+
+            window.matchHistory.forEach(item => {
+                if (item.ign && item.ign.toLowerCase() === oldNick.toLowerCase()) {
+                    item.ign = newNick;
+                }
+            });
+
             const oldKey = normalizeNickKey(oldNick);
             const newKey = normalizeNickKey(newNick);
             if (window.discordNickBindings && window.discordNickBindings[oldKey]) {
-                const b = window.discordNickBindings[oldKey];
+                const boundData = window.discordNickBindings[oldKey];
                 delete window.discordNickBindings[oldKey];
-                window.discordNickBindings[newKey] = { ...b, nickname: newNick };
+                window.discordNickBindings[newKey] = {
+                    discord_id: boundData.discord_id,
+                    nickname: newNick,
+                    bound_at: boundData.bound_at || new Date().toISOString()
+                };
+                if (window.playersData[newNick] && boundData.discord_id) {
+                    window.playersData[newNick].discord_id = boundData.discord_id;
+                }
                 persistDiscordBindings();
             }
-            if (Array.isArray(window.matchHistory)) {
-                window.matchHistory.forEach(item => {
-                    if (item.player === oldNick) item.player = newNick;
+
+            saveLocalDb();
+        }
+
+        function closeModalOnBg(event, modalId) {
+            if (event.target.id === modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) modal.style.display = 'none';
+            }
+        }
+
+        function isSoonKit(kit) {
+            return SOON_KITS.includes(String(kit || '').toLowerCase());
+        }
+
+        function switchKit(kit) {
+            currentKit = String(kit || 'beast').toLowerCase();
+            openPage('tier');
+
+            document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
+            const btn = document.getElementById(`btn-${currentKit}`);
+            if (btn) btn.classList.add('active');
+
+            const wrapper = document.getElementById('tierWrapper');
+            let title = document.getElementById('kitTitle');
+            if (wrapper) wrapper.className = 'tier-table-wrapper';
+
+            if (currentKit === 'beast') {
+                if (wrapper) wrapper.classList.add('theme-beast');
+                if (title) title.innerText = 'BEAST TIER LIST';
+            } else if (currentKit === 'mace') {
+                if (wrapper) wrapper.classList.add('theme-mace');
+                if (title) title.innerText = 'MACE TIER LIST';
+            } else if (currentKit === 'carts') {
+                if (wrapper) wrapper.classList.add('theme-carts');
+                if (title) title.innerText = 'CARTS TIER LIST';
+            } else if (currentKit === 'axe') {
+                if (wrapper) wrapper.classList.add('theme-beast');
+                if (title) title.innerText = 'AXE TIER LIST';
+            } else {
+                if (wrapper) wrapper.classList.add('theme-beast');
+                if (title) title.innerText = `${currentKit.toUpperCase()} TIER LIST`;
+            }
+
+            renderTierGrid();
+            refreshBotKitTiersStatus();
+        }
+
+        function renderTierGrid() {
+            let grid = document.getElementById('tierGridContent');
+            const soonBox = document.getElementById('kitSoonContainer');
+            const soonBadge = document.getElementById('kitSoonBadge');
+            const soonDesc = document.getElementById('kitSoonDesc');
+            const searchBtn = document.getElementById('tierSearchBtn');
+            if (!grid) return;
+
+            if (isSoonKit(currentKit)) {
+                grid.style.display = 'none';
+                grid.innerHTML = '';
+                if (searchBtn) searchBtn.style.display = 'none';
+                if (soonBox) soonBox.style.display = 'block';
+                if (soonBadge) soonBadge.innerText = `${currentKit.toUpperCase()} PVP • SOON`;
+                if (soonDesc) {
+                    soonDesc.innerText = `Дисциплина ${currentKit.toUpperCase()} находится в разработке и скоро откроется для тестирований и тиров в PrizTiers.`;
+                }
+                return;
+            }
+
+            grid.style.display = '';
+            if (searchBtn) searchBtn.style.display = '';
+            if (soonBox) soonBox.style.display = 'none';
+
+            const sourcePlayers = getAllLeaderboardParticipants();
+
+            grid.innerHTML = '';
+
+            const tierGroups = {
+                1: ['HT1', 'RHT1', 'LT1', 'RLT1'],
+                2: ['HT2', 'RHT2', 'LT2', 'RLT2'],
+                3: ['HT3', 'LT3'],
+                4: ['HT4', 'LT4'],
+                5: ['HT5', 'LT5']
+            };
+
+            for (let t = 1; t <= 5; t++) {
+                let col = document.createElement('div');
+                col.className = 'tier-col';
+                col.innerHTML = `<div class="tier-badge-head tier-${t}">TIER ${t}</div>`;
+
+                const tierPlayers = Object.keys(sourcePlayers)
+                    .filter(nick => tierGroups[t].includes(((sourcePlayers[nick] && sourcePlayers[nick][currentKit]) || '').toUpperCase()))
+                    .sort((a, b) => {
+                        const tA = ((sourcePlayers[a] && sourcePlayers[a][currentKit]) || '').toUpperCase();
+                        const tB = ((sourcePlayers[b] && sourcePlayers[b][currentKit]) || '').toUpperCase();
+                        return (TIER_WEIGHTS[tB] || 0) - (TIER_WEIGHTS[tA] || 0);
+                    });
+
+                tierPlayers.forEach(nick => {
+                    const playerVal = ((sourcePlayers[nick] && sourcePlayers[nick][currentKit]) || '').toUpperCase();
+                    const safeNick = escapeHTML(nick);
+                    const jsNick = escapeJSArg(nick);
+                    const safeTier = escapeHTML(playerVal);
+                    col.innerHTML += `
+                        <div class="player-card-mini" onclick="openPlayerPopup('${jsNick}')">
+                            <img src="https://mc-heads.net/avatar/${safeNick}/24" width="22" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset"> 
+                            <span>${safeNick} <small style="color: #c084fc; font-weight: 700;">(${safeTier})</small></span>
+                        </div>
+                    `;
+                });
+                grid.appendChild(col);
+            }
+        }
+
+        function buildKitPillsHtml(p) {
+            let html = '';
+            ALL_KITS.forEach(k => {
+                const tierVal = (p[k] || '').toUpperCase();
+                if (tierVal && TIER_WEIGHTS[tierVal]) {
+                    let tierNum = tierVal.replace(/[^0-9]/g, '') || '1';
+                    const safeTier = escapeHTML(tierVal);
+                    const iconHtml = KIT_ICONS[k] ? `<img src="${KIT_ICONS[k]}" alt="" class="protected-asset">` : `<span>${k.toUpperCase()}:</span>`;
+                    html += `<span class="lb-kit-pill tier-${tierNum}">${iconHtml}${safeTier}</span>`;
+                }
+            });
+            return html || `<span style="font-size: 11px; color: #64748b;">—</span>`;
+        }
+
+        function renderLeaderboard() {
+            let tbody = document.getElementById('leaderboardTableBody');
+            let podium = document.getElementById('leaderboardPodium');
+            if (!tbody || !podium) return;
+
+            const visibleParticipants = getAllLeaderboardParticipants();
+            const allKeys = Object.keys(visibleParticipants);
+            const totalEl = document.getElementById('lbTotalPlayers');
+            const beastEl = document.getElementById('lbTotalBeast');
+            const maceEl = document.getElementById('lbTotalMace');
+            const cartsEl = document.getElementById('lbTotalCarts');
+
+            if (totalEl) totalEl.innerText = allKeys.length.toLocaleString('ru-RU');
+            if (beastEl) beastEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].beast || '').toUpperCase()]).length.toLocaleString('ru-RU');
+            if (maceEl) maceEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].mace || '').toUpperCase()]).length.toLocaleString('ru-RU');
+            const axeEl = document.getElementById('lbTotalAxe');
+            if (cartsEl) cartsEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].carts || '').toUpperCase()]).length.toLocaleString('ru-RU');
+            if (axeEl) axeEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].axe || '').toUpperCase()]).length.toLocaleString('ru-RU');
+
+            let searchInput = document.getElementById('lbSearchInput');
+            let searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+            let sorted = allKeys
+                .filter(nick => nick.toLowerCase().includes(searchQuery))
+                .sort((a, b) => {
+                    const scoreDiff = calculatePlayerScore(visibleParticipants[b]) - calculatePlayerScore(visibleParticipants[a]);
+                    if (scoreDiff !== 0) return scoreDiff;
+                    return a.localeCompare(b, 'ru');
+                });
+
+            tbody.innerHTML = '';
+            podium.innerHTML = '';
+
+            if (sorted.length === 0) {
+                podium.style.display = 'none';
+                tbody.innerHTML = `<tr><td colspan="5" style="padding: 24px; text-align: center; color: #94a3b8;">Игроки не найдены</td></tr>`;
+                return;
+            }
+
+            let listStartIndex = 0;
+            if (!searchQuery && sorted.length > 0) {
+                podium.style.display = 'grid';
+                const top3 = sorted.slice(0, 3);
+                const podiumOrder = [
+                    { idx: 1, rank: 2 },
+                    { idx: 0, rank: 1 },
+                    { idx: 2, rank: 3 }
+                ];
+
+                podiumOrder.forEach(slot => {
+                    const nick = top3[slot.idx];
+                    if (!nick) {
+                        podium.innerHTML += `<div></div>`;
+                        return;
+                    }
+                    const p = visibleParticipants[nick];
+                    const safeNick = escapeHTML(nick);
+                    const jsNick = escapeJSArg(nick);
+                    const score = calculatePlayerScore(p);
+                    const subText = p.title ? escapeHTML(p.title) : `#${slot.rank} МЕСТО`;
+                    const podiumAdminBtn = hasActiveAdminBypass()
+                        ? `<button class="btn-action-sm" style="margin-top: 8px; padding: 3px 8px; font-size: 11px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️ Тир</button>`
+                        : '';
+                    podium.innerHTML += `
+                        <div class="lb-podium-card rank-${slot.rank}" onclick="openPlayerPopup('${jsNick}')">
+                            <div class="lb-podium-pts">${score}</div>
+                            <div class="lb-podium-pts-lbl">очков</div>
+                            <div class="lb-podium-sub">${subText}</div>
+                            <div class="lb-podium-avatar">
+                                <img src="https://mc-heads.net/avatar/${safeNick}/80" alt="${safeNick}" onerror="this.src='https://minotar.net/avatar/Steve/80'" class="protected-asset">
+                            </div>
+                            <div class="lb-podium-name">${safeNick}</div>
+                            <div class="lb-podium-tiers">${buildKitPillsHtml(p)}</div>
+                            ${podiumAdminBtn}
+                        </div>
+                    `;
+                });
+                listStartIndex = 3;
+            } else {
+                podium.style.display = 'none';
+            }
+
+            const restPlayers = sorted.slice(listStartIndex);
+            if (restPlayers.length === 0 && listStartIndex > 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="padding: 18px; text-align: center; color: #64748b; font-size: 13px;">Все участники представлены на подиуме выше</td></tr>`;
+                return;
+            }
+
+            restPlayers.forEach((nick, i) => {
+                const rank = listStartIndex + i + 1;
+                const p = visibleParticipants[nick];
+                const safeNick = escapeHTML(nick);
+                const jsNick = escapeJSArg(nick);
+                const score = calculatePlayerScore(p);
+                const adminControls = hasActiveAdminBypass()
+                    ? `<div style="display:flex; gap:4px; justify-content:flex-end;">
+                        <button class="btn-action-sm" style="padding: 4px 8px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️</button>
+                        <button class="btn-action-sm btn-danger-sm" style="padding: 4px 8px;" onclick="quickAdminDelete(event, '${jsNick}')">🗑️</button>
+                       </div>`
+                    : '';
+
+                tbody.innerHTML += `
+                    <tr class="lb-list-row" onclick="openPlayerPopup('${jsNick}')">
+                        <td style="padding: 14px; font-weight: 800; color: #94a3b8; font-size: 13px;">${rank}</td>
+                        <td style="padding: 14px;">
+                            <div class="lb-player-cell">
+                                <img src="https://mc-heads.net/avatar/${safeNick}/32" alt="" onerror="this.src='https://minotar.net/avatar/Steve/32'" class="protected-asset">
+                                <div class="lb-player-meta">
+                                    <span class="lb-player-nick">${safeNick}</span>
+                                    ${p.title ? `<span class="lb-player-tag">${escapeHTML(p.title)}</span>` : ''}
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 14px;">
+                            <div class="lb-tiers-cell">${buildKitPillsHtml(p)}</div>
+                        </td>
+                        <td style="padding: 14px;" class="lb-pts-cell">
+                            <div class="lb-pts-num">${score}</div>
+                            <div class="lb-pts-unit">очков</div>
+                        </td>
+                        <td style="padding: 14px; text-align: right;">${adminControls}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function buildPlayerHistoryHtml(nick) {
+            if (!window.matchHistory || !window.matchHistory.length) {
+                return 'Тестов пока нет';
+            }
+            const list = window.matchHistory
+                .filter(h => h.ign && h.ign.toLowerCase() === nick.toLowerCase())
+                .slice(0, 10);
+
+            if (!list.length) return 'Тестов пока нет';
+
+            return list.map(h => {
+                const k = escapeHTML((h.kit || '').toUpperCase());
+                const oldT = escapeHTML(h.old_tier || 'None');
+                const newT = escapeHTML(h.new_tier || 'None');
+                const sc = escapeHTML(h.score || '3-0');
+                const tester = escapeHTML(h.tester || 'Admin');
+                const dt = escapeHTML(h.date || '');
+                return `<div style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">
+                    <strong style="color:#c084fc;">[${k}]</strong> <code>${oldT}</code> ➔ <code>${newT}</code> (${sc}) • <span style="color:#cbd5e1;">${tester}</span> <span style="float:right; color:#64748b;">${dt}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function openPlayerPopup(nick) {
+            recordProfileView(nick);
+            const allVisible = getAllLeaderboardParticipants();
+            let data = window.playersData[nick] || allVisible[nick] || { beast: '0', mace: '0', carts: '0', title: '' };
+            let views = window.playerViews[nick] || { day: 1, month: 1, total: 1 };
+            let bgTheme = window.playerBgTheme[nick] || 'dark-default';
+            const score = calculatePlayerScore(data);
+
+            const ignEl = document.getElementById('modalPlayerIgn');
+            const ptsEl = document.getElementById('modalPlayerPts');
+            const metaEl = document.getElementById('modalPlayerMeta');
+            const dayEl = document.getElementById('modalViewsDay');
+            const monthEl = document.getElementById('modalViewsMonth');
+            const totalEl = document.getElementById('modalViewsTotal');
+            const histEl = document.getElementById('modalPlayerHistoryList');
+
+            if (ignEl) ignEl.innerText = nick;
+            if (ptsEl) ptsEl.innerText = `${score} очков`;
+            if (metaEl) {
+                const rankLabel = data.title || getCombatTitleByScore(score);
+                const srv = data.server ? `🌐 ${escapeHTML(data.server)}` : '';
+                const png = data.ping ? `📶 ${escapeHTML(data.ping)}` : '';
+                metaEl.innerText = [`🏅 ${escapeHTML(rankLabel)}`, srv, png].filter(Boolean).join('  •  ');
+            }
+            if (dayEl) dayEl.innerText = views.day;
+            if (monthEl) monthEl.innerText = views.month;
+            if (totalEl) totalEl.innerText = views.total;
+            if (histEl) histEl.innerHTML = buildPlayerHistoryHtml(nick);
+
+            let modalBox = document.getElementById('modalProfileBox');
+            if (modalBox) modalBox.className = "modal-box bg-" + bgTheme;
+
+            if (modalSkinViewer) {
+                try {
+                    let baseSkin = window.playerSkins[nick] || `https://minotar.net/skin/${nick}`;
+                    let skinUrl = baseSkin.includes('?') ? `${baseSkin}&t=${Date.now()}` : `${baseSkin}?t=${Date.now()}`;
+                    modalSkinViewer.loadSkin(skinUrl).then(() => {
+                        let modalPose = window.playerPoses[nick] || 'default';
+                        applyPoseToViewer(modalSkinViewer, modalPose);
+                    }).catch(() => {
+                        let modalPose = window.playerPoses[nick] || 'default';
+                        applyPoseToViewer(modalSkinViewer, modalPose);
+                    });
+                } catch (e) {}
+            }
+
+            let badgesContainer = document.getElementById('modalTierBadges');
+            if (badgesContainer) {
+                badgesContainer.innerHTML = '';
+                ALL_KITS.forEach(k => {
+                    const tierVal = (data[k] || '').toUpperCase();
+                    if (tierVal && TIER_WEIGHTS[tierVal]) {
+                        let tierNum = tierVal.replace(/[^0-9]/g, '') || '1';
+                        badgesContainer.innerHTML += `<span class="badge-item tier-${tierNum}">${k.toUpperCase()}: ${escapeHTML(tierVal)}</span>`;
+                    }
                 });
             }
+
+            const playerModal = document.getElementById('playerModal');
+            if (playerModal) playerModal.style.display = 'flex';
+            renderLeaderboard();
+        }
+
+        function closePlayerModal() {
+            const playerModal = document.getElementById('playerModal');
+            if (playerModal) playerModal.style.display = 'none';
         }
 
         function checkAuthAndOpenProfile() {
-            if (loggedInUser) {
-                viewProfile(loggedInUser);
-                openPage('profile');
+            if (!loggedInUser) {
+                const authModal = document.getElementById('authModal');
+                if (authModal) authModal.style.display = 'flex';
             } else {
-                const modal = document.getElementById('authModal');
-                if (modal) modal.style.display = 'flex';
+                viewProfile(loggedInUser);
             }
         }
 
-        function viewProfile(username) {
-            const safeUser = String(username || 'Игрок');
-            const ignTxt = document.getElementById('userIgnTxt');
-            if (ignTxt) ignTxt.innerText = safeUser;
-
-            const userData = window.playersData[safeUser] || {
-                beast: '0', mace: '0', carts: '0',
-                smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
-                title: '', server: '', ping: ''
-            };
-
+        function viewProfile(nick) {
+            recordProfileView(nick);
+            openPage('profile');
+            const allVisible = getAllLeaderboardParticipants();
+            const userData = window.playersData[nick] || allVisible[nick] || { beast: "0", mace: "0", carts: "0", title: '' };
             const score = calculatePlayerScore(userData);
+
+            const ignTxt = document.getElementById('userIgnTxt');
             const ptsTxt = document.getElementById('userPtsTxt');
+            if (ignTxt) ignTxt.innerText = nick;
             if (ptsTxt) ptsTxt.innerText = `${score} очков`;
 
-            const createdTxt = document.getElementById('accountCreatedDateTxt');
-            if (createdTxt) {
-                createdTxt.innerText = (sessionAccountId && userCreatedDates[sessionAccountId])
-                    ? userCreatedDates[sessionAccountId]
-                    : new Date().toLocaleDateString('ru-RU');
-            }
-
-            const allParticipants = getAllLeaderboardParticipants();
-            const sortedNicks = Object.keys(allParticipants).sort((a, b) => calculatePlayerScore(allParticipants[b]) - calculatePlayerScore(allParticipants[a]));
-            const posIndex = sortedNicks.findIndex(n => normalizeNickKey(n) === normalizeNickKey(safeUser));
             const rankTitleEl = document.getElementById('profileRankTitle');
-            if (rankTitleEl) {
-                const rankBadge = getCombatTitleByScore(score);
-                const posText = posIndex >= 0 ? `#${posIndex + 1}` : '#—';
-                rankTitleEl.innerText = `${rankBadge} • ${posText}`;
-            }
-
             const metaInfoEl = document.getElementById('profileMetaInfo');
+            if (rankTitleEl) {
+                const sortedNicks = Object.keys(allVisible).sort((a, b) => calculatePlayerScore(allVisible[b]) - calculatePlayerScore(allVisible[a]));
+                const pos = sortedNicks.findIndex(n => n.toLowerCase() === nick.toLowerCase());
+                const rankPosStr = pos >= 0 ? `#${pos + 1}` : '#—';
+                const customOrAutoRank = userData.title || getCombatTitleByScore(score);
+                rankTitleEl.innerText = `${customOrAutoRank} • ${rankPosStr}`;
+            }
             if (metaInfoEl) {
-                const srv = userData.server || 'Не указан';
-                const png = userData.ping || '—';
-                metaInfoEl.innerText = `${srv} • ${png}`;
+                const parts = [];
+                if (userData.server) parts.push(userData.server);
+                if (userData.ping) parts.push(userData.ping);
+                metaInfoEl.innerText = parts.length ? parts.join(' • ') : 'Не указано';
             }
 
             const slotsGrid = document.getElementById('profileKitSlotsGrid');
             if (slotsGrid) {
-                const slotKits = [
-                    { key: 'beast', name: 'Beast' },
-                    { key: 'mace', name: 'Mace' },
-                    { key: 'carts', name: 'Carts' },
-                    { key: 'axe', name: 'Axe' }
+                const mainKits = [
+                    { key: 'beast', label: 'BEAST' },
+                    { key: 'mace', label: 'MACE' },
+                    { key: 'carts', label: 'CARTS' }
                 ];
-                slotsGrid.innerHTML = slotKits.map(k => {
-                    const tVal = (userData[k.key] && userData[k.key] !== '0') ? userData[k.key] : 'Unranked';
-                    const tColor = tVal !== 'Unranked' ? '#c084fc' : '#64748b';
+                slotsGrid.innerHTML = mainKits.map(mk => {
+                    const tVal = (userData[mk.key] || '').toUpperCase();
+                    const hasT = Boolean(tVal && TIER_WEIGHTS[tVal]);
+                    const tNum = hasT ? (tVal.replace(/[^0-9]/g, '') || '1') : '';
                     return `
                         <div class="profile-kit-slot">
-                            <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:#e2e8f0;">
-                                <img src="${KIT_ICONS[k.key]}" width="16" height="16" alt="" class="protected-asset"> ${k.name}
-                            </span>
-                            <span style="font-size:12px;font-weight:900;color:${tColor};">${escapeHTML(tVal)}</span>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <img src="${KIT_ICONS[mk.key]}" width="20" height="20" alt="" class="protected-asset">
+                                <span style="font-size:12px; font-weight:800; color:#e2e8f0;">${mk.label}</span>
+                            </div>
+                            ${hasT
+                                ? `<span class="badge-item tier-${tNum}" style="margin:0;">${escapeHTML(tVal)}</span>`
+                                : `<span style="font-size:11px; color:#64748b; font-weight:700;">Нет тира</span>`
+                            }
                         </div>
                     `;
                 }).join('');
             }
 
-            const badgesEl = document.getElementById('profileTierBadges');
-            if (badgesEl) {
-                const activeBadges = [];
-                ALL_KITS.forEach(kit => {
-                    const t = userData[kit];
-                    if (t && t !== '0') {
-                        activeBadges.push(`<span class="tier-badge-pill">${kit.toUpperCase()}: ${escapeHTML(t)}</span>`);
-                    }
-                });
-                badgesEl.innerHTML = activeBadges.length > 0
-                    ? activeBadges.join('')
-                    : `<span style="font-size: 13px; color: #94a3b8;">У вас пока нет присвоенных тиров. Пройдите тестирование в Discord!</span>`;
+            const dateEl = document.getElementById('accountCreatedDateTxt');
+            if (dateEl) {
+                if (sessionAccountId && !userCreatedDates[sessionAccountId]) {
+                    userCreatedDates[sessionAccountId] = new Date().toLocaleDateString('ru-RU');
+                    localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+                }
+                const createdStr = (sessionAccountId && userCreatedDates[sessionAccountId]) || 'сегодня';
+                dateEl.innerText = createdStr;
             }
-
-            const views = window.playerViews[safeUser] || { day: 0, month: 0, total: 0 };
-            if (document.getElementById('viewsDay')) document.getElementById('viewsDay').innerText = views.day || 0;
-            if (document.getElementById('viewsMonth')) document.getElementById('viewsMonth').innerText = views.month || 0;
-            if (document.getElementById('viewsTotal')) document.getElementById('viewsTotal').innerText = views.total || 0;
 
             const histEl = document.getElementById('profileHistoryList');
             if (histEl) {
-                const userMatches = (window.matchHistory || []).filter(m => normalizeNickKey(m.player) === normalizeNickKey(safeUser));
-                if (userMatches.length === 0) {
-                    histEl.innerText = 'Тестов пока нет';
-                } else {
-                    histEl.innerHTML = userMatches.slice(0, 10).map(m =>
-                        `<div style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">
-                            <strong style="color:#fff;">${escapeHTML((m.kit || '').toUpperCase())}</strong> → <span style="color:#c084fc;">${escapeHTML(m.tier || '0')}</span>
-                            <span style="float:right;color:#64748b;font-size:11px;">${escapeHTML(m.date || '')}</span>
-                        </div>`
-                    ).join('');
-                }
+                histEl.innerHTML = buildPlayerHistoryHtml(nick);
             }
 
-            const savedBg = window.playerBgTheme[safeUser] || 'default';
-            const cardBox = document.getElementById('profileCardBox');
-            if (cardBox) cardBox.className = 'left-profile-card bg-' + savedBg;
+            let views = window.playerViews[nick] || { day: 0, month: 0, total: 0 };
+            const vDay = document.getElementById('viewsDay');
+            const vMonth = document.getElementById('viewsMonth');
+            const vTotal = document.getElementById('viewsTotal');
+            if (vDay) vDay.innerText = views.day;
+            if (vMonth) vMonth.innerText = views.month;
+            if (vTotal) vTotal.innerText = views.total;
 
-            const savedSkin = window.playerSkins[safeUser] || `https://minotar.net/skin/${safeUser}`;
-            const skinInput = document.getElementById('skinUrlInput');
-            if (skinInput) skinInput.value = savedSkin;
+            let bgTheme = window.playerBgTheme[nick] || 'dark-default';
+            let cardBox = document.getElementById('profileCardBox');
+            if (cardBox) cardBox.className = "left-profile-card bg-" + bgTheme;
 
-            const savedPose = window.playerPoses[safeUser] || 'default';
             if (skinViewer) {
-                skinViewer.loadSkin(savedSkin).catch(() => {
-                    skinViewer.loadSkin("https://minotar.net/skin/Steve");
+                try {
+                    let baseSkin = window.playerSkins[nick] || `https://minotar.net/skin/${nick}`;
+                    let skinUrl = baseSkin.includes('?') ? `${baseSkin}&t=${Date.now()}` : `${baseSkin}?t=${Date.now()}`;
+                    skinViewer.loadSkin(skinUrl).then(() => {
+                        let currentPose = window.playerPoses[nick] || 'default';
+                        applyPoseToViewer(skinViewer, currentPose);
+                    }).catch(() => {
+                        let currentPose = window.playerPoses[nick] || 'default';
+                        applyPoseToViewer(skinViewer, currentPose);
+                    });
+                } catch(e) {}
+            }
+
+            let badgesContainer = document.getElementById('profileTierBadges');
+            if (badgesContainer) {
+                badgesContainer.innerHTML = '';
+                let hasTiers = false;
+                ALL_KITS.forEach(k => {
+                    const tierVal = (userData[k] || '').toUpperCase();
+                    if (tierVal && TIER_WEIGHTS[tierVal]) {
+                        let tierNum = tierVal.replace(/[^0-9]/g, '') || '1';
+                        badgesContainer.innerHTML += `<span class="badge-item tier-${tierNum}">${k.toUpperCase()}: ${escapeHTML(tierVal)}</span>`;
+                        hasTiers = true;
+                    }
                 });
-                applyPoseToViewer(skinViewer, savedPose);
+                if (!hasTiers) {
+                    badgesContainer.innerHTML = `<span style="font-size: 13px; color: #94a3b8;">У вас пока нет присвоенных тиров. Пройдите тестирование в Discord!</span>`;
+                }
             }
         }
 
-        function switchCustomTab(e, tabName) {
-            document.querySelectorAll('.c-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.c-panel').forEach(panel => panel.classList.remove('active'));
-            if (e && e.target) e.target.classList.add('active');
-            const targetPanel = document.getElementById(`cp-${tabName}`);
-            if (targetPanel) targetPanel.classList.add('active');
+        function copyProfileLink() {
+            const url = window.location.origin + window.location.pathname + `?player=${encodeURIComponent(loggedInUser || '')}`;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('Ссылка на профиль скопирована!');
+            }).catch(() => {
+                showToast('Ссылка скопирована!');
+            });
+        }
+
+        function switchCustomTab(event, tab) {
+            document.querySelectorAll('.c-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.c-panel').forEach(p => p.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+            const panel = document.getElementById(`cp-${tab}`);
+            if (panel) panel.classList.add('active');
+        }
+
+        function applySkinUrl() {
+            const input = document.getElementById('skinUrlInput');
+            let rawInput = input ? input.value.trim() : '';
+            if (!rawInput) return;
+
+            let finalSkinUrl = rawInput;
+            if (!rawInput.startsWith('http://') && !rawInput.startsWith('https://')) {
+                finalSkinUrl = `https://minotar.net/skin/${encodeURIComponent(rawInput)}`;
+            }
+
+            let targetNick = loggedInUser || "Guest";
+            window.playerSkins[targetNick] = finalSkinUrl;
+            saveLocalDb();
+
+            if (skinViewer) {
+                skinViewer.loadSkin(finalSkinUrl).then(() => {
+                    showToast('Скин успешно применен!');
+                }).catch(() => {
+                    showToast('Ошибка загрузки текстуры скина. Проверьте ник или ссылку .png');
+                });
+            }
+        }
+
+        function applyPoseToViewer(viewer, pose) {
+            if (!viewer || !viewer.playerObject) return;
+            const arms = viewer.playerObject.skin;
+            if (!arms) return;
+
+            arms.leftArm.rotation.x = 0;
+            arms.leftArm.rotation.z = 0;
+            arms.rightArm.rotation.x = 0;
+            arms.rightArm.rotation.z = 0;
+            arms.head.rotation.x = 0;
+            arms.head.rotation.z = 0;
+            arms.head.rotation.y = 0;
+            viewer.playerObject.rotation.x = 0;
+            viewer.playerObject.rotation.z = 0;
+
+            if (pose === 'battle') {
+                arms.rightArm.rotation.x = -1.2;
+                arms.rightArm.rotation.z = 0.2;
+                arms.leftArm.rotation.x = -0.8;
+                arms.leftArm.rotation.z = -0.2;
+            } else if (pose === 'tilt') {
+                viewer.playerObject.rotation.z = 0.15;
+                arms.head.rotation.z = -0.2;
+            } else if (pose === 'aura') {
+                arms.leftArm.rotation.x = -2.5;
+                arms.leftArm.rotation.z = -0.35;
+                arms.rightArm.rotation.x = -2.5;
+                arms.rightArm.rotation.z = 0.35;
+                arms.head.rotation.x = -0.25;
+            } else if (pose === 'facepalm') {
+                arms.rightArm.rotation.x = -2.1;
+                arms.rightArm.rotation.z = 0.45;
+                arms.head.rotation.x = 0.35;
+                arms.head.rotation.y = 0.15;
+            } else if (pose === 'wave') {
+                arms.rightArm.rotation.x = -2.7;
+                arms.rightArm.rotation.z = -0.35;
+                arms.head.rotation.z = 0.12;
+            } else if (pose === 'victory') {
+                arms.leftArm.rotation.x = -2.85;
+                arms.leftArm.rotation.z = -0.25;
+                arms.rightArm.rotation.x = -2.85;
+                arms.rightArm.rotation.z = 0.25;
+                arms.head.rotation.x = -0.15;
+            } else if (pose === 'sword-ready') {
+                arms.rightArm.rotation.x = -1.45;
+                arms.rightArm.rotation.y = -0.35;
+                arms.leftArm.rotation.x = -0.65;
+                arms.leftArm.rotation.z = -0.25;
+                arms.head.rotation.y = -0.18;
+            } else if (pose === 'thinker') {
+                arms.rightArm.rotation.x = -1.65;
+                arms.rightArm.rotation.z = 0.38;
+                arms.head.rotation.x = 0.15;
+                arms.head.rotation.z = -0.15;
+            }
+        }
+
+        function setPose(pose) {
+            if (skinViewer) {
+                applyPoseToViewer(skinViewer, pose);
+                if (loggedInUser) {
+                    window.playerPoses[loggedInUser] = pose;
+                    saveLocalDb();
+                }
+                showToast('Поза изменена!');
+            }
+        }
+
+        function setBg(style) {
+            if (loggedInUser) {
+                window.playerBgTheme[loggedInUser] = style;
+                saveLocalDb();
+            }
+            let cardBox = document.getElementById('profileCardBox');
+            if (cardBox) cardBox.className = "left-profile-card bg-" + style;
+            showToast('Фон персонажа изменен!');
+        }
+
+        function openAdminLoginModal() {
+            const passInput = document.getElementById('adminPassInput');
+            if (passInput) passInput.value = '';
+            const modal = document.getElementById('adminLoginModal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        async function loginAdmin() {
+            const passInput = document.getElementById('adminPassInput');
+            let inputPass = passInput ? passInput.value : '';
+            if (inputPass === ADMIN_PASS) {
+                const backendCheck = await verifyAdminOnBackend(inputPass);
+                if (backendCheck.checked && !backendCheck.authorized) {
+                    showToast('⛔ Доступ запрещён сервером!');
+                    return;
+                }
+                isAdminMode = true;
+                localStorage.setItem('priz_admin_mode', 'true');
+                const loginModal = document.getElementById('adminLoginModal');
+                if (loginModal) loginModal.style.display = 'none';
+                applyAdminUI(true);
+                notifyAdminPanelAccess();
+                openAdminPanel();
+                showToast('🔓 Панель Администратора активирована!');
+            } else {
+                showToast('⛔ Неверный мастер-пароль!');
+            }
+        }
+
+        function applyAdminUI(active) {
+            const devDot = document.getElementById('devTriggerDot');
+            if (devDot) devDot.style.display = active ? 'inline-block' : 'none';
+
+            document.querySelectorAll('.admin-only-item').forEach(el => {
+                el.style.display = active ? (el.classList.contains('bg-section-title') ? 'block' : 'inline-block') : 'none';
+            });
+
+            renderLeaderboard();
+            renderTierGrid();
+        }
+
+        function deactivateAdminMode() {
+            isAdminMode = false;
+            localStorage.setItem('priz_admin_mode', 'false');
+            applyAdminUI(false);
+            enforceAdminOnlyDevPanel();
+            syncAxeDiscordUI();
+            closeAdminPanel();
+            showToast('Режим администратора отключен');
+        }
+
+        function switchAdminTab(tabName) {
+            const tabs = ['issue', 'profile', 'history', 'tools'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`admTabBtn-${t}`);
+                const panel = document.getElementById(`admTab-${t}`);
+                if (btn) btn.classList.toggle('active', t === tabName);
+                if (panel) panel.classList.toggle('active', t === tabName);
+            });
+            if (tabName === 'history') {
+                renderAdminMatchHistory();
+            }
+        }
+
+        function openAdminPanel() {
+            switchAdminTab('issue');
+            const nickInput = document.getElementById('admPlayerNick');
+            if (nickInput && !nickInput.value.trim() && loggedInUser) {
+                nickInput.value = loggedInUser;
+            }
+            autoFillAdminPlayer();
+            renderAdminMatchHistory();
+            refreshBotKitTiersStatus();
+            const panel = document.getElementById('adminPanelModal');
+            if (panel) panel.style.display = 'flex';
+        }
+
+        function closeAdminPanel() {
+            const panel = document.getElementById('adminPanelModal');
+            if (panel) panel.style.display = 'none';
+        }
+
+        function autoFillAdminPlayer() {
+            const nickInput = document.getElementById('admPlayerNick');
+            const kitSelect = document.getElementById('admKitSelect');
+            if (!nickInput || !kitSelect) return;
+
+            const rawNick = nickInput.value.trim();
+            if (!rawNick) return;
+
+            const allVisible = getAllLeaderboardParticipants();
+            const foundKey = Object.keys(allVisible).find(k => k.toLowerCase() === rawNick.toLowerCase());
+            const p = foundKey ? allVisible[foundKey] : null;
+            if (!p) return;
+
+            const kit = kitSelect.value;
+            const tierSelect = document.getElementById('admTierSelect');
+            if (tierSelect) {
+                const curTier = (p[kit] || '0').toUpperCase();
+                const hasOpt = Array.from(tierSelect.options).some(o => o.value.toUpperCase() === curTier);
+                tierSelect.value = hasOpt ? curTier : '0';
+            }
+
+            const titleInput = document.getElementById('admTitleInput');
+            if (titleInput && p.title) titleInput.value = p.title;
+
+            const srvInput = document.getElementById('admPlayerServer');
+            if (srvInput && p.server) srvInput.value = p.server;
+
+            const pingInput = document.getElementById('admPlayerPing');
+            if (pingInput && p.ping) pingInput.value = p.ping;
+
+            const discInput = document.getElementById('admPlayerDiscordId');
+            if (discInput && p.discord_id) discInput.value = p.discord_id;
+        }
+
+        function quickAdminEdit(event, nick) {
+            if (event) event.stopPropagation();
+            if (!hasActiveAdminBypass()) return;
+            openAdminPanel();
+            const nickInput = document.getElementById('admPlayerNick');
+            const kitSelect = document.getElementById('admKitSelect');
+            if (nickInput) nickInput.value = nick;
+            if (kitSelect && ACTIVE_KITS.includes(currentKit)) kitSelect.value = currentKit;
+            autoFillAdminPlayer();
+        }
+
+        function quickAdminDelete(event, nick) {
+            if (event) event.stopPropagation();
+            if (!hasActiveAdminBypass()) return;
+            if (!confirm(`Удалить игрока "${nick}" из базы?`)) return;
+            delete window.playersData[nick];
+            if (botKitTiersData && botKitTiersData[nick]) delete botKitTiersData[nick];
+            saveLocalDb();
+            renderLeaderboard();
+            renderTierGrid();
+            showToast(`Игрок ${escapeHTML(nick)} удалён`);
+        }
+
+        async function adminSavePlayer() {
+            if (!hasActiveAdminBypass()) {
+                showToast('⛔ Требуется вход в панель администратора!');
+                return;
+            }
+            const nickInput = document.getElementById('admPlayerNick');
+            const kitSelect = document.getElementById('admKitSelect');
+            const tierSelect = document.getElementById('admTierSelect');
+            const scoreInput = document.getElementById('admMatchScore');
+            const testerInput = document.getElementById('admTesterNick');
+            const srvInput = document.getElementById('admPlayerServer');
+            const pingInput = document.getElementById('admPlayerPing');
+            const discInput = document.getElementById('admPlayerDiscordId');
+            const titleInput = document.getElementById('admTitleInput');
+
+            let nick = nickInput ? nickInput.value.trim() : '';
+            if (!nick) {
+                showToast('Введите никнейм игрока!');
+                return;
+            }
+
+            const existingKey = Object.keys(window.playersData || {}).find(k => k.toLowerCase() === nick.toLowerCase());
+            if (existingKey) nick = existingKey;
+
+            const kit = kitSelect ? kitSelect.value : 'beast';
+            const newTier = tierSelect ? tierSelect.value : '0';
+            const scoreStr = scoreInput ? (scoreInput.value.trim() || '3-0') : '3-0';
+            const testerStr = testerInput ? (testerInput.value.trim() || (loggedInUser || 'Admin')) : (loggedInUser || 'Admin');
+            const serverStr = srvInput ? srvInput.value.trim() : '';
+            const pingStr = pingInput ? pingInput.value.trim() : '';
+            const discIdStr = discInput ? normalizeDiscordId(discInput.value) : '';
+            const titleStr = titleInput ? titleInput.value.trim() : '';
+
+            if (!window.playersData[nick]) {
+                window.playersData[nick] = {
+                    beast: "0", mace: "0", carts: "0",
+                    smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0",
+                    title: '', server: '', ping: '', discord_id: ''
+                };
+            }
+
+            const oldTier = window.playersData[nick][kit] || '0';
+            window.playersData[nick][kit] = newTier;
+            if (titleStr) window.playersData[nick].title = titleStr;
+            if (serverStr) window.playersData[nick].server = serverStr;
+            if (pingStr) window.playersData[nick].ping = pingStr;
+            if (discIdStr) {
+                const bindRes = bindNickToDiscordAccount(nick, discIdStr);
+                if (!bindRes.ok) {
+                    showToast(`⚠️ ${bindRes.error}`);
+                    return;
+                }
+            }
+
+            if (!botKitTiersData || typeof botKitTiersData !== 'object') {
+                botKitTiersData = {};
+            }
+            if (!botKitTiersData[nick]) {
+                botKitTiersData[nick] = { ...window.playersData[nick] };
+            }
+            botKitTiersData[nick][kit] = newTier;
+            if (titleStr) botKitTiersData[nick].title = titleStr;
+            if (serverStr) botKitTiersData[nick].server = serverStr;
+            if (pingStr) botKitTiersData[nick].ping = pingStr;
+            if (discIdStr) botKitTiersData[nick].discord_id = discIdStr;
+
+            const historyEntry = {
+                ign: nick,
+                kit: kit,
+                old_tier: oldTier === '0' ? 'None' : oldTier,
+                new_tier: newTier === '0' ? 'None' : newTier,
+                score: scoreStr,
+                tester: testerStr,
+                date: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+            };
+            window.matchHistory.unshift(historyEntry);
+            if (window.matchHistory.length > 200) {
+                window.matchHistory = window.matchHistory.slice(0, 200);
+            }
+
+            saveLocalDb();
+            renderLeaderboard();
+            renderTierGrid();
+            renderAdminMatchHistory();
+            if (loggedInUser && loggedInUser.toLowerCase() === nick.toLowerCase()) {
+                viewProfile(loggedInUser);
+            }
+
+            await syncTierIssueToBackendAndBot({
+                ign: nick,
+                nickname: nick,
+                kit: kit,
+                old_tier: oldTier,
+                tier: newTier,
+                new_tier: newTier,
+                score: scoreStr,
+                tester: testerStr,
+                server: serverStr,
+                ping: pingStr,
+                discord_id: discIdStr || window.playersData[nick].discord_id || '',
+                title: titleStr,
+                players: window.playersData
+            });
+
+            showToast(`✅ Тир ${newTier === '0' ? 'снят' : newTier} для ${escapeHTML(nick)} (${kit.toUpperCase()}) сохранён!`);
+        }
+
+        function adminForceRename() {
+            if (!hasActiveAdminBypass()) return;
+            const oldInput = document.getElementById('admRenameOldNick');
+            const newInput = document.getElementById('admRenameNewNick');
+            const oldNick = oldInput ? oldInput.value.trim() : '';
+            const newNick = newInput ? newInput.value.trim() : '';
+
+            if (!oldNick || !newNick) {
+                showToast('Укажите старый и новый никнейм!');
+                return;
+            }
+            if (oldNick.toLowerCase() === newNick.toLowerCase() && oldNick === newNick) {
+                showToast('Ники совпадают!');
+                return;
+            }
+
+            const existingKey = Object.keys(window.playersData).find(k => k.toLowerCase() === oldNick.toLowerCase()) || oldNick;
+            renamePlayerRecords(existingKey, newNick);
+
+            if (loggedInUser && loggedInUser.toLowerCase() === existingKey.toLowerCase()) {
+                loggedInUser = newNick;
+                localStorage.setItem('priz_ign', newNick);
+                const label = document.getElementById('navBtnLabel');
+                if (label) label.innerText = newNick;
+            }
+
+            renderLeaderboard();
+            renderTierGrid();
+            renderAdminMatchHistory();
+            showToast(`✏️ Ник изменён: ${escapeHTML(existingKey)} ➔ ${escapeHTML(newNick)}`);
+        }
+
+        function adminDeletePlayer() {
+            if (!hasActiveAdminBypass()) return;
+            const nickInput = document.getElementById('admPlayerNick');
+            const rawNick = nickInput ? nickInput.value.trim() : '';
+            if (!rawNick) {
+                showToast('Введите ник игрока на первой вкладке для удаления!');
+                return;
+            }
+            const foundKey = Object.keys(window.playersData).find(k => k.toLowerCase() === rawNick.toLowerCase());
+            if (!foundKey) {
+                showToast('Игрок не найден в базе!');
+                return;
+            }
+            if (!confirm(`Удалить игрока "${foundKey}" и все его тиры?`)) return;
+
+            delete window.playersData[foundKey];
+            delete window.playerViews[foundKey];
+            delete window.playerBgTheme[foundKey];
+            delete window.playerSkins[foundKey];
+            delete window.playerPoses[foundKey];
+            if (botKitTiersData && botKitTiersData[foundKey]) delete botKitTiersData[foundKey];
+            saveLocalDb();
+            renderLeaderboard();
+            renderTierGrid();
+            showToast(`🗑️ Игрок ${escapeHTML(foundKey)} удалён из базы`);
+        }
+
+        function renderAdminMatchHistory() {
+            const container = document.getElementById('adminMatchHistoryContainer');
+            if (!container) return;
+            if (!window.matchHistory || !window.matchHistory.length) {
+                container.innerHTML = 'История пуста.';
+                return;
+            }
+            container.innerHTML = window.matchHistory.slice(0, 50).map(h => `
+                <div style="padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                    <div>
+                        <strong style="color:#fff;">${escapeHTML(h.ign)}</strong>
+                        <span style="color:#c084fc; font-weight:700;">[${escapeHTML((h.kit || '').toUpperCase())}]</span>
+                        <span>${escapeHTML(h.old_tier || 'None')} ➔ <strong>${escapeHTML(h.new_tier || 'None')}</strong></span>
+                        <span style="color:#94a3b8;">(${escapeHTML(h.score || '3-0')})</span>
+                    </div>
+                    <div style="font-size:11px; color:#94a3b8;">
+                        Тестер: <span style="color:#e2e8f0;">${escapeHTML(h.tester || 'Admin')}</span> • ${escapeHTML(h.date || '')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function adminClearHistory() {
+            if (!hasActiveAdminBypass()) return;
+            window.matchHistory = [];
+            saveLocalDb();
+            renderAdminMatchHistory();
+            showToast('История матчей очищена');
+        }
+
+        async function adminSyncFromBotDatabase() {
+            if (!hasActiveAdminBypass()) return;
+            showToast('🔄 Синхронизация с базой Discord-бота...');
+            await refreshBotKitTiersStatus();
+            await loadDataFromServer();
+            showToast('✅ Данные синхронизированы с БД бота!');
+        }
+
+        function adminGenerateDemoPlayers() {
+            if (!hasActiveAdminBypass()) return;
+            const demo = {
+                "VortexBlade": { beast: "HT1", mace: "LT1", carts: "HT2", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "⚔️ Duelist", server: "PriZriT", ping: "32ms" },
+                "KiraMace": { beast: "LT2", mace: "HT1", carts: "LT2", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "🔨 Smasher", server: "PriZriT", ping: "28ms" },
+                "TNT_Cart": { beast: "LT3", mace: "LT3", carts: "HT1", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "💣 Bomber", server: "PriZriT", ping: "44ms" },
+                "NyxPvP": { beast: "LT1", mace: "HT2", carts: "LT1", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "", server: "PriZriT", ping: "39ms" }
+            };
+            window.playersData = { ...window.playersData, ...demo };
+            saveLocalDb();
+            renderLeaderboard();
+            renderTierGrid();
+            showToast('✨ Демо-игроки добавлены в базу!');
+        }
+
+        function adminExportDatabaseJson() {
+            if (!hasActiveAdminBypass()) return;
+            const payload = {
+                exported_at: new Date().toISOString(),
+                players: window.playersData,
+                bot_kit_tiers: botKitTiersData,
+                views: window.playerViews,
+                bgs: window.playerBgTheme,
+                skins: window.playerSkins,
+                poses: window.playerPoses,
+                history: window.matchHistory,
+                discord_nick_bindings: window.discordNickBindings
+            };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `priztiers-database-${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📥 База игроков экспортирована (.json)');
+        }
+
+        function triggerAdminImportJson() {
+            if (!hasActiveAdminBypass()) return;
+            const inp = document.getElementById('admImportJsonInput');
+            if (inp) {
+                inp.value = '';
+                inp.click();
+            }
+        }
+
+        function adminImportDatabaseJson(event) {
+            if (!hasActiveAdminBypass()) return;
+            const file = event && event.target && event.target.files ? event.target.files[0] : null;
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    const incomingPlayers = parsed.players || (typeof parsed === 'object' ? parsed : null);
+                    if (!incomingPlayers || typeof incomingPlayers !== 'object') {
+                        showToast('⛔ Некорректный формат JSON!');
+                        return;
+                    }
+                    window.playersData = { ...window.playersData, ...incomingPlayers };
+                    if (parsed.bot_kit_tiers && typeof parsed.bot_kit_tiers === 'object') {
+                        mergeBotPlayersIntoStore(parsed.bot_kit_tiers);
+                    }
+                    if (parsed.views) window.playerViews = { ...window.playerViews, ...parsed.views };
+                    if (parsed.bgs) window.playerBgTheme = { ...window.playerBgTheme, ...parsed.bgs };
+                    if (parsed.skins) window.playerSkins = { ...window.playerSkins, ...parsed.skins };
+                    if (parsed.poses) window.playerPoses = { ...window.playerPoses, ...parsed.poses };
+                    if (Array.isArray(parsed.history)) window.matchHistory = [...parsed.history, ...window.matchHistory];
+                    if (parsed.discord_nick_bindings) {
+                        window.discordNickBindings = { ...window.discordNickBindings, ...parsed.discord_nick_bindings };
+                        persistDiscordBindings();
+                    }
+                    saveLocalDb();
+                    renderLeaderboard();
+                    renderTierGrid();
+                    renderAdminMatchHistory();
+                    showToast('📤 База игроков успешно импортирована!');
+                } catch (err) {
+                    showToast('⛔ Ошибка чтения JSON файла!');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function adminResetViews() {
+            if (!hasActiveAdminBypass()) return;
+            if (!confirm('Сбросить всю статистику просмотров профилей?')) return;
+            window.playerViews = {};
+            saveLocalDb();
+            if (loggedInUser) viewProfile(loggedInUser);
+            showToast('🔄 Статистика просмотров сброшена');
+        }
+
+        function adminSeasonReset() {
+            if (!hasActiveAdminBypass()) return;
+            if (!confirm('ВНИМАНИЕ! Сбросить все тиры у всех игроков для начала нового сезона?')) return;
+            Object.keys(window.playersData).forEach(nick => {
+                ALL_KITS.forEach(k => {
+                    window.playersData[nick][k] = '0';
+                });
+            });
+            if (botKitTiersData && typeof botKitTiersData === 'object') {
+                Object.keys(botKitTiersData).forEach(nick => {
+                    ALL_KITS.forEach(k => {
+                        botKitTiersData[nick][k] = '0';
+                    });
+                });
+            }
+            saveLocalDb();
+            renderLeaderboard();
+            renderTierGrid();
+            if (loggedInUser) viewProfile(loggedInUser);
+            showToast('🏆 Сезон сброшен! Все тиры обнулены.');
+        }
+
+
+        function extractDiscordInviteCode(raw) {
+            if (!raw) return "";
+            const str = String(raw).trim();
+            const m = str.match(/(?:discord\.gg\/|discord\.com\/invite\/|discordapp\.com\/invite\/)([A-Za-z0-9-]+)/i);
+            if (m && m[1]) return m[1];
+            return /^[A-Za-z0-9-]{2,32}$/.test(str) ? str : "";
+        }
+
+        function getSavedAxeInviteUrl() {
+            try {
+                const v = localStorage.getItem('priz_axe_discord_invite') || '';
+                return v.trim();
+            } catch (e) { return ''; }
+        }
+
+        function syncAxeDiscordUI() {
+            const saved = getSavedAxeInviteUrl();
+            const code = extractDiscordInviteCode(saved);
+            if (typeof DISCORD_KITS_WIDGETS === 'object' && DISCORD_KITS_WIDGETS) {
+                DISCORD_KITS_WIDGETS.axe = code;
+            }
+            const fullUrl = code ? `https://discord.gg/${code}` : '';
+
+            const siteInp = document.getElementById('siteAxeDiscordInput');
+            const admInp = document.getElementById('admAxeDiscordInput');
+            if (siteInp && document.activeElement !== siteInp) siteInp.value = fullUrl;
+            if (admInp && document.activeElement !== admInp) admInp.value = fullUrl;
+
+            const hubBtn = document.getElementById('socialHubAxeBtn');
+            if (hubBtn) {
+                if (fullUrl) {
+                    hubBtn.href = fullUrl;
+                    hubBtn.target = '_blank';
+                    hubBtn.onclick = null;
+                    hubBtn.innerText = 'Открыть Discord Axe';
+                } else {
+                    hubBtn.href = 'javascript:void(0)';
+                    hubBtn.removeAttribute('target');
+                    hubBtn.onclick = function() { if (typeof showToast === 'function') showToast('Укажите ссылку на Discord Axe в поле выше'); return false; };
+                    hubBtn.innerText = 'Ссылка не указана';
+                }
+            }
+
+            const guideWrap = document.getElementById('guideAxeDiscordWrap');
+            const guideLink = document.getElementById('guideAxeDiscordLink');
+            if (guideWrap && guideLink) {
+                if (fullUrl) {
+                    guideLink.href = fullUrl;
+                    guideWrap.style.display = 'inline';
+                } else {
+                    guideWrap.style.display = 'none';
+                }
+            }
+        }
+
+        function saveAxeDiscordInviteFromSite(inputId) {
+            const inp = document.getElementById(inputId);
+            if (!inp) return;
+            const raw = (inp.value || '').trim();
+            if (!raw) {
+                localStorage.removeItem('priz_axe_discord_invite');
+                syncAxeDiscordUI();
+                if (typeof showToast === 'function') showToast('Ссылка на Discord Axe очищена');
+                return;
+            }
+            const code = extractDiscordInviteCode(raw);
+            if (!code) {
+                if (typeof showToast === 'function') showToast('Некорректная ссылка Discord (пример: https://discord.gg/xxxxxx)');
+                return;
+            }
+            const cleanUrl = `https://discord.gg/${code}`;
+            localStorage.setItem('priz_axe_discord_invite', cleanUrl);
+            syncAxeDiscordUI();
+            if (typeof fetchDiscordStats === 'function') fetchDiscordStats();
+            if (typeof showToast === 'function') showToast('Ссылка на Discord Axe сохранена!');
         }
 
         function resolveSkinInputToUrl(rawVal) {
@@ -3449,679 +4369,35 @@
             return `https://minotar.net/skin/${encodeURIComponent(cleanIgn)}`;
         }
 
-        function applySkinUrl() {
-            if (!loggedInUser) { showToast('Сначала войдите в аккаунт!'); return; }
-            const input = document.getElementById('skinUrlInput');
-            const rawVal = input ? input.value.trim() : '';
-            if (!rawVal) { showToast('Введите Minecraft-ник или ссылку на скин!'); return; }
-
-            const finalUrl = resolveSkinInputToUrl(rawVal);
-            window.playerSkins[loggedInUser] = finalUrl;
-            saveLocalDb();
-
-            if (skinViewer) {
-                skinViewer.loadSkin(finalUrl).then(() => {
-                    showToast('✅ Скин успешно применён!');
-                }).catch(() => {
-                    skinViewer.loadSkin("https://minotar.net/skin/Steve");
-                    showToast('⚠️ Скин не загрузился, установлен скин по умолчанию');
-                });
-            }
+        function isStrictlyAdmin() {
+            return Boolean(typeof isAdminMode !== 'undefined' && isAdminMode === true);
         }
 
-        function applyPoseToViewer(viewer, pose) {
-            if (!viewer || !viewer.playerObject) return;
-            const p = viewer.playerObject.skin;
-            p.leftArm.rotation.set(0, 0, 0);
-            p.rightArm.rotation.set(0, 0, 0);
-            p.leftLeg.rotation.set(0, 0, 0);
-            p.rightLeg.rotation.set(0, 0, 0);
-            p.head.rotation.set(0, 0, 0);
-            p.body.rotation.set(0, 0, 0);
-
-            switch (pose) {
-                case 'battle':
-                    p.rightArm.rotation.x = -1.1;
-                    p.leftArm.rotation.x = -0.5;
-                    p.rightLeg.rotation.x = -0.35;
-                    p.leftLeg.rotation.x = 0.35;
-                    break;
-                case 'tilt':
-                    p.head.rotation.z = 0.25;
-                    p.body.rotation.z = -0.1;
-                    break;
-                case 'aura':
-                    p.leftArm.rotation.x = -2.2;
-                    p.rightArm.rotation.x = -2.2;
-                    p.head.rotation.x = -0.2;
-                    break;
-                case 'facepalm':
-                    p.rightArm.rotation.x = -2.1;
-                    p.rightArm.rotation.z = -0.45;
-                    p.head.rotation.x = 0.3;
-                    break;
-                case 'wave':
-                    p.rightArm.rotation.x = -2.4;
-                    p.rightArm.rotation.z = -0.35;
-                    break;
-                case 'victory':
-                    p.leftArm.rotation.x = -2.65;
-                    p.leftArm.rotation.z = 0.25;
-                    p.rightArm.rotation.x = -2.65;
-                    p.rightArm.rotation.z = -0.25;
-                    p.head.rotation.x = -0.15;
-                    break;
-                case 'sword-ready':
-                    p.rightArm.rotation.x = -1.45;
-                    p.rightArm.rotation.y = -0.35;
-                    p.leftArm.rotation.x = -0.65;
-                    p.rightLeg.rotation.x = -0.25;
-                    p.leftLeg.rotation.x = 0.25;
-                    break;
-                case 'thinker':
-                    p.rightArm.rotation.x = -1.75;
-                    p.rightArm.rotation.z = -0.35;
-                    p.head.rotation.x = 0.14;
-                    p.head.rotation.y = 0.22;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        function setPose(pose) {
-            if (!loggedInUser) { showToast('Сначала войдите в аккаунт!'); return; }
-            window.playerPoses[loggedInUser] = pose;
-            saveLocalDb();
-            if (skinViewer) applyPoseToViewer(skinViewer, pose);
-            showToast('Поза обновлена');
-        }
-
-        function setBg(bgName) {
-            if (!loggedInUser) { showToast('Сначала войдите в аккаунт!'); return; }
-            window.playerBgTheme[loggedInUser] = bgName;
-            saveLocalDb();
-            const cardBox = document.getElementById('profileCardBox');
-            if (cardBox) cardBox.className = 'left-profile-card bg-' + bgName;
-            showToast('Фон персонажа обновлён');
-        }
-
-        function copyProfileLink() {
-            const url = window.location.href;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url).then(() => showToast('Ссылка скопирована!')).catch(() => showToast('Ссылка: ' + url));
-            } else {
-                showToast('Ссылка: ' + url);
-            }
-        }
-
-        function switchKit(kit) {
-            currentKit = kit;
-            openPage('tier');
-            renderTierGrid();
-        }
-
-        function renderTierGrid() {
-            const wrapper = document.getElementById('tierWrapper');
-            const titleEl = document.getElementById('kitTitle');
-            const grid = document.getElementById('tierGridContent');
-            const soonBox = document.getElementById('kitSoonContainer');
-            if (!grid || !wrapper || !titleEl) return;
-
-            wrapper.className = `tier-table-wrapper theme-${currentKit}`;
-            titleEl.innerText = `${currentKit.toUpperCase()} TIER LIST`;
-
-            if (SOON_KITS.includes(currentKit)) {
-                grid.style.display = 'none';
-                grid.innerHTML = '';
-                if (soonBox) {
-                    soonBox.style.display = 'block';
-                    const badge = document.getElementById('kitSoonBadge');
-                    const desc = document.getElementById('kitSoonDesc');
-                    if (badge) badge.innerText = `${currentKit.toUpperCase()} • SOON`;
-                    if (desc) desc.innerText = `Дисциплина ${currentKit.toUpperCase()} скоро появится в основном тир-листе PrizTiers. Следите за новостями в Discord и Telegram!`;
-                }
-                return;
-            }
-
-            if (soonBox) soonBox.style.display = 'none';
-            grid.style.display = '';
-
-            const tierRankOrder = {
-                RHT1: 1, HT1: 2, RLT1: 3, LT1: 4,
-                RHT2: 5, HT2: 6, RLT2: 7, LT2: 8,
-                RHT3: 9, HT3: 10, RLT3: 11, LT3: 12,
-                RHT4: 13, HT4: 14, RLT4: 15, LT4: 16,
-                RHT5: 17, HT5: 18, RLT5: 19, LT5: 20
-            };
-
-            const allParticipants = getAllLeaderboardParticipants();
-            grid.innerHTML = '';
-
-            const highPlayers = [];
-            const lowPlayers = [];
-
-            Object.keys(allParticipants).forEach(nick => {
-                const p = allParticipants[nick];
-                const t = (p[currentKit] || '').toUpperCase().trim();
-                if (!t || t === '0') return;
-
-                if (t.startsWith('HT') || t.startsWith('RHT')) {
-                    highPlayers.push({ nick, tier: t, title: p.title || '', rank: tierRankOrder[t] || 99 });
-                } else if (t.startsWith('LT') || t.startsWith('RLT')) {
-                    lowPlayers.push({ nick, tier: t, title: p.title || '', rank: tierRankOrder[t] || 99 });
-                }
-            });
-
-            highPlayers.sort((a, b) => a.rank - b.rank || a.nick.localeCompare(b.nick));
-            lowPlayers.sort((a, b) => a.rank - b.rank || a.nick.localeCompare(b.nick));
-
-            const renderPlayerRow = (item) => {
-                const safeNick = escapeHTML(item.nick);
-                const jsNick = escapeJSArg(item.nick);
-                const safeTier = escapeHTML(item.tier);
-                return `
-                    <div class="tier-player-item" onclick="openPlayerPopup('${jsNick}')">
-                        <img src="https://mc-heads.net/avatar/${safeNick}/22" width="22" onerror="this.src='https://minotar.net/avatar/Steve/22'" alt="" class="protected-asset">
-                        <span>${safeNick}</span>
-                        <span class="tier-pill-badge" style="margin-left:auto;font-size:10px;font-weight:800;">${safeTier}</span>
-                    </div>
-                `;
-            };
-
-            [
-                { label: 'HIGH', subClass: 'high-sub', list: highPlayers },
-                { label: 'LOW', subClass: 'low-sub', list: lowPlayers }
-            ].forEach(group => {
-                const colDiv = document.createElement('div');
-                colDiv.className = 'tier-col';
-                colDiv.innerHTML = `
-                    <div class="tier-col-header tier-sub-header ${group.subClass}">${group.label} (${group.list.length})</div>
-                    <div class="tier-player-list">${group.list.length ? group.list.map(renderPlayerRow).join('') : '<div style="font-size:11px;color:#64748b;padding:8px;">Пусто</div>'}</div>
-                `;
-                grid.appendChild(colDiv);
-            });
-        }
-
-        function renderLeaderboard() {
-            const searchInput = document.getElementById('lbSearchInput');
-            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-            const tbody = document.getElementById('leaderboardTableBody');
-            const podium = document.getElementById('leaderboardPodium');
-            if (!tbody) return;
-
-            const allParticipants = getAllLeaderboardParticipants();
-            let totalPlayers = 0, totalBeast = 0, totalMace = 0, totalCarts = 0, totalAxe = 0;
-
-            const ranked = Object.keys(allParticipants).map(nick => {
-                const p = allParticipants[nick];
-                const score = calculatePlayerScore(p);
-                const hasBeast = p.beast && p.beast !== '0';
-                const hasMace = p.mace && p.mace !== '0';
-                const hasCarts = p.carts && p.carts !== '0';
-                const hasAxe = p.axe && p.axe !== '0';
-
-                totalPlayers++;
-                if (hasBeast) totalBeast++;
-                if (hasMace) totalMace++;
-                if (hasCarts) totalCarts++;
-                if (hasAxe) totalAxe++;
-
-                return { nick, data: p, score };
-            }).sort((a, b) => b.score - a.score);
-
-            if (document.getElementById('lbTotalPlayers')) document.getElementById('lbTotalPlayers').innerText = totalPlayers;
-            if (document.getElementById('lbTotalBeast')) document.getElementById('lbTotalBeast').innerText = totalBeast;
-            if (document.getElementById('lbTotalMace')) document.getElementById('lbTotalMace').innerText = totalMace;
-            if (document.getElementById('lbTotalCarts')) document.getElementById('lbTotalCarts').innerText = totalCarts;
-            if (document.getElementById('lbTotalAxe')) document.getElementById('lbTotalAxe').innerText = totalAxe;
-
-            if (podium) {
-                const top3 = ranked.slice(0, 3);
-                podium.innerHTML = top3.map((entry, idx) => {
-                    const safeNick = escapeHTML(entry.nick);
-                    const jsNick = escapeJSArg(entry.nick);
-                    const medals = ['🥇 #1', '🥈 #2', '🥉 #3'];
-                    return `
-                        <div class="lb-podium-card rank-${idx + 1}" onclick="openPlayerPopup('${jsNick}')">
-                            <div class="lb-podium-rank">${medals[idx] || '#' + (idx + 1)}</div>
-                            <img src="https://mc-heads.net/avatar/${safeNick}/48" width="48" style="border-radius:10px;margin:6px auto;" onerror="this.src='https://minotar.net/avatar/Steve/48'" alt="" class="protected-asset">
-                            <div class="lb-podium-name">${safeNick}</div>
-                            <div class="lb-podium-pts">${entry.score} очков</div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            const filtered = query
-                ? ranked.filter(r => r.nick.toLowerCase().includes(query))
-                : ranked;
-
-            tbody.innerHTML = '';
-            filtered.forEach((entry, idx) => {
-                const rankPos = ranked.findIndex(r => r.nick === entry.nick) + 1;
-                const safeNick = escapeHTML(entry.nick);
-                const jsNick = escapeJSArg(entry.nick);
-                const badgesHtml = ALL_KITS
-                    .filter(k => entry.data[k] && entry.data[k] !== '0')
-                    .map(k => `<span class="tier-badge-pill">${k.toUpperCase()}: ${escapeHTML(entry.data[k])}</span>`)
-                    .join(' ');
-
-                const adminActionCell = hasActiveAdminBypass()
-                    ? `<td style="text-align:right;"><button class="btn-action-sm" onclick="event.stopPropagation(); openAdminForPlayer('${jsNick}')">✏️ Тир</button></td>`
-                    : `<td></td>`;
-
-                tbody.innerHTML += `
-                    <tr onclick="openPlayerPopup('${jsNick}')" style="cursor:pointer;">
-                        <td><strong>#${rankPos}</strong></td>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:8px;">
-                                <img src="https://mc-heads.net/avatar/${safeNick}/24" width="24" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset">
-                                <span>${safeNick}</span>
-                            </div>
-                        </td>
-                        <td>${badgesHtml || '<span style="color:#64748b;font-size:12px;">—</span>'}</td>
-                        <td style="text-align:right;"><strong style="color:#c084fc;">${entry.score}</strong></td>
-                        ${adminActionCell}
-                    </tr>
-                `;
-            });
-        }
-
-        function openPlayerPopup(nick) {
-            const allParticipants = getAllLeaderboardParticipants();
-            const p = allParticipants[nick] || window.playersData[nick] || { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0', title: '', server: '', ping: '' };
-            const score = calculatePlayerScore(p);
-
-            recordProfileView(nick);
-            const views = window.playerViews[nick] || { day: 0, month: 0, total: 0 };
-
-            if (document.getElementById('modalPlayerIgn')) document.getElementById('modalPlayerIgn').innerText = nick;
-            if (document.getElementById('modalPlayerPts')) document.getElementById('modalPlayerPts').innerText = `${score} очков`;
-            if (document.getElementById('modalPlayerMeta')) {
-                const parts = [];
-                if (p.title) parts.push(p.title);
-                if (p.server) parts.push(`Сервер: ${p.server}`);
-                if (p.ping) parts.push(`Пинг: ${p.ping}`);
-                document.getElementById('modalPlayerMeta').innerText = parts.join(' • ');
-            }
-
-            const badgesContainer = document.getElementById('modalTierBadges');
-            if (badgesContainer) {
-                const active = ALL_KITS.filter(k => p[k] && p[k] !== '0').map(k => `<span class="tier-badge-pill">${k.toUpperCase()}: ${escapeHTML(p[k])}</span>`);
-                badgesContainer.innerHTML = active.length ? active.join('') : '<span style="font-size:12px;color:#94a3b8;">Нет тиров</span>';
-            }
-
-            if (document.getElementById('modalViewsDay')) document.getElementById('modalViewsDay').innerText = views.day || 0;
-            if (document.getElementById('modalViewsMonth')) document.getElementById('modalViewsMonth').innerText = views.month || 0;
-            if (document.getElementById('modalViewsTotal')) document.getElementById('modalViewsTotal').innerText = views.total || 0;
-
-            const histContainer = document.getElementById('modalPlayerHistoryList');
-            if (histContainer) {
-                const items = (window.matchHistory || []).filter(m => normalizeNickKey(m.player) === normalizeNickKey(nick));
-                histContainer.innerHTML = items.length
-                    ? items.slice(0, 8).map(m => `<div>• <strong>${escapeHTML((m.kit || '').toUpperCase())}</strong>: ${escapeHTML(m.tier || '')} (${escapeHTML(m.date || '')})</div>`).join('')
-                    : 'Тестов пока нет';
-            }
-
-            const modalBg = window.playerBgTheme[nick] || 'default';
-            const modalBox = document.getElementById('modalProfileBox');
-            if (modalBox) modalBox.className = 'modal-box bg-' + modalBg;
-
-            const skinUrl = window.playerSkins[nick] || `https://minotar.net/skin/${nick}`;
-            const pose = window.playerPoses[nick] || 'default';
-            if (modalSkinViewer) {
-                modalSkinViewer.loadSkin(skinUrl).catch(() => {
-                    modalSkinViewer.loadSkin("https://minotar.net/skin/Steve");
-                });
-                applyPoseToViewer(modalSkinViewer, pose);
-            }
-
-            const modal = document.getElementById('playerModal');
-            if (modal) modal.style.display = 'flex';
-        }
-
-        function closePlayerModal() {
-            const modal = document.getElementById('playerModal');
-            if (modal) modal.style.display = 'none';
-        }
-
-        function closeModalOnBg(event, modalId) {
-            if (event.target && event.target.id === modalId) {
-                const el = document.getElementById(modalId);
-                if (el) el.style.display = 'none';
-            }
-        }
-
-        function openAdminLoginModal() {
-            const passInput = document.getElementById('adminPassInput');
-            if (passInput) passInput.value = '';
-            const modal = document.getElementById('adminLoginModal');
-            if (modal) modal.style.display = 'flex';
-        }
-
-        function applyAdminUI(active) {
-            isAdminMode = Boolean(active);
-            localStorage.setItem('priz_admin_mode', isAdminMode ? 'true' : 'false');
+        function enforceAdminOnlyDevPanel() {
+            const allowed = isStrictlyAdmin();
             const devDot = document.getElementById('devTriggerDot');
-            if (devDot) devDot.style.display = isAdminMode ? 'inline-block' : 'none';
-            document.querySelectorAll('.admin-only-item').forEach(el => {
-                el.style.display = isAdminMode ? 'inline-flex' : 'none';
-            });
-            renderLeaderboard();
-        }
-
-        async function loginAdmin() {
-            const input = document.getElementById('adminPassInput');
-            const pass = input ? input.value : '';
-            if (!pass) {
-                showToast('Введите пароль!');
-                return;
+            const devModal = document.getElementById('devModal');
+            const codeModal = document.getElementById('codeEditorModal');
+            if (devDot) {
+                devDot.style.display = allowed ? 'inline-block' : 'none';
             }
-
-            const backendCheck = await verifyAdminOnBackend(pass);
-            const localMatch = (pass === ADMIN_PASS);
-
-            if (backendCheck.checked && !backendCheck.authorized) {
-                showToast('⛔ Неверный пароль администратора!');
-                return;
+            if (!allowed) {
+                if (devModal) devModal.style.display = 'none';
+                if (codeModal) codeModal.style.display = 'none';
             }
-
-            if (!backendCheck.checked && !localMatch) {
-                showToast('⛔ Неверный пароль администратора!');
-                return;
-            }
-
-            if (backendCheck.checked && backendCheck.authorized && !localMatch) {
-                ADMIN_PASS = pass;
-                localStorage.setItem('priz_custom_admin_pass', pass);
-            }
-
-            const loginModal = document.getElementById('adminLoginModal');
-            if (loginModal) loginModal.style.display = 'none';
-
-            applyAdminUI(true);
-            openAdminPanel();
-            showToast('✅ Вход в панель администратора выполнен');
-            notifyAdminPanelAccess();
-        }
-
-        function deactivateAdminMode() {
-            applyAdminUI(false);
-            closeAdminPanel();
-            showToast('Вы вышли из режима администратора');
-        }
-
-        function openAdminPanel() {
-            if (!hasActiveAdminBypass()) {
-                openAdminLoginModal();
-                return;
-            }
-            const panel = document.getElementById('adminPanelModal');
-            if (panel) panel.style.display = 'flex';
-            refreshBotKitTiersStatus();
-            renderAdminHistory();
-        }
-
-        function closeAdminPanel() {
-            const panel = document.getElementById('adminPanelModal');
-            if (panel) panel.style.display = 'none';
-        }
-
-        function openAdminForPlayer(nick) {
-            openAdminPanel();
-            switchAdminTab('issue');
-            const nickInp = document.getElementById('admPlayerNick');
-            if (nickInp) {
-                nickInp.value = nick;
-                autoFillAdminPlayer();
-            }
-        }
-
-        function switchAdminTab(tabName) {
-            ['issue', 'profile', 'history', 'tools'].forEach(t => {
-                const btn = document.getElementById(`admTabBtn-${t}`);
-                const pnl = document.getElementById(`admTab-${t}`);
-                if (btn) btn.classList.toggle('active', t === tabName);
-                if (pnl) pnl.classList.toggle('active', t === tabName);
-            });
-            if (tabName === 'history') renderAdminHistory();
-        }
-
-        function autoFillAdminPlayer() {
-            const nickInp = document.getElementById('admPlayerNick');
-            const kitSel = document.getElementById('admKitSelect');
-            if (!nickInp || !kitSel) return;
-
-            const rawNick = nickInp.value.trim();
-            if (!rawNick) return;
-            const foundKey = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === normalizeNickKey(rawNick));
-            const p = foundKey ? window.playersData[foundKey] : null;
-            if (!p) return;
-
-            const tierSel = document.getElementById('admTierSelect');
-            if (tierSel) tierSel.value = p[kitSel.value] || '0';
-            if (document.getElementById('admPlayerServer')) document.getElementById('admPlayerServer').value = p.server || '';
-            if (document.getElementById('admPlayerPing')) document.getElementById('admPlayerPing').value = p.ping || '';
-            if (document.getElementById('admPlayerDiscordId')) document.getElementById('admPlayerDiscordId').value = p.discord_id || '';
-            if (document.getElementById('admTitleInput')) document.getElementById('admTitleInput').value = p.title || '';
-        }
-
-        async function adminSavePlayer() {
-            if (!hasActiveAdminBypass()) return;
-            const nick = (document.getElementById('admPlayerNick')?.value || '').trim();
-            const kit = document.getElementById('admKitSelect')?.value || 'beast';
-            const tier = document.getElementById('admTierSelect')?.value || '0';
-            const score = (document.getElementById('admMatchScore')?.value || '3-0').trim();
-            const tester = (document.getElementById('admTesterNick')?.value || loggedInUser || 'Admin').trim();
-            const server = (document.getElementById('admPlayerServer')?.value || '').trim();
-            const ping = (document.getElementById('admPlayerPing')?.value || '').trim();
-            const discordId = (document.getElementById('admPlayerDiscordId')?.value || '').trim();
-            const title = (document.getElementById('admTitleInput')?.value || '').trim();
-
-            if (!nick) {
-                showToast('Введите игровой ник!');
-                return;
-            }
-
-            if (!window.playersData[nick]) {
-                window.playersData[nick] = {
-                    beast: '0', mace: '0', carts: '0',
-                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
-                    title: '', server: '', ping: '', discord_id: ''
-                };
-            }
-
-            window.playersData[nick][kit] = tier;
-            if (server) window.playersData[nick].server = server;
-            if (ping) window.playersData[nick].ping = ping;
-            if (discordId) {
-                window.playersData[nick].discord_id = discordId;
-                bindNickToDiscordAccount(nick, discordId);
-            }
-            window.playersData[nick].title = title;
-
-            window.matchHistory.unshift({
-                player: nick,
-                kit,
-                tier,
-                score,
-                tester,
-                date: new Date().toLocaleDateString('ru-RU')
-            });
-            if (window.matchHistory.length > 200) {
-                window.matchHistory = window.matchHistory.slice(0, 200);
-            }
-
-            saveLocalDb();
-            renderTierGrid();
-            renderLeaderboard();
-            renderAdminHistory();
-
-            await syncTierIssueToBackendAndBot({
-                player: nick,
-                kit,
-                tier,
-                score,
-                tester,
-                server,
-                ping,
-                discord_id: discordId,
-                title,
-                players: window.playersData
-            });
-
-            showToast(`✅ Тир ${tier} (${kit.toUpperCase()}) выдан игроку ${escapeHTML(nick)}`);
-        }
-
-        function adminForceRename() {
-            if (!hasActiveAdminBypass()) return;
-            const oldNick = (document.getElementById('admRenameOldNick')?.value || '').trim();
-            const newNick = (document.getElementById('admRenameNewNick')?.value || '').trim();
-            if (!oldNick || !newNick) {
-                showToast('Укажите старый и новый ник!');
-                return;
-            }
-            renamePlayerRecords(oldNick, newNick);
-            if (loggedInUser === oldNick) {
-                loggedInUser = newNick;
-                localStorage.setItem('priz_ign', newNick);
-                const lbl = document.getElementById('navBtnLabel');
-                if (lbl) lbl.innerText = newNick;
-            }
-            saveLocalDb();
-            renderTierGrid();
-            renderLeaderboard();
-            showToast(`✅ Игрок переименован в ${escapeHTML(newNick)}`);
-        }
-
-        function adminDeletePlayer() {
-            if (!hasActiveAdminBypass()) return;
-            const nick = (document.getElementById('admPlayerNick')?.value || '').trim();
-            if (!nick || !window.playersData[nick]) {
-                showToast('Игрок не найден!');
-                return;
-            }
-            delete window.playersData[nick];
-            saveLocalDb();
-            renderTierGrid();
-            renderLeaderboard();
-            showToast(`🗑️ Игрок ${escapeHTML(nick)} удалён`);
-        }
-
-        function renderAdminHistory() {
-            const container = document.getElementById('adminMatchHistoryContainer');
-            if (!container) return;
-            if (!Array.isArray(window.matchHistory) || window.matchHistory.length === 0) {
-                container.innerHTML = 'История пуста.';
-                return;
-            }
-            container.innerHTML = window.matchHistory.slice(0, 40).map(item =>
-                `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-                    <strong style="color:#fff;">${escapeHTML(item.player || '')}</strong> •
-                    <span style="color:#c084fc;">${escapeHTML((item.kit || '').toUpperCase())} → ${escapeHTML(item.tier || '')}</span>
-                    (${escapeHTML(item.score || '')}) • тестер: ${escapeHTML(item.tester || '')}
-                    <span style="float:right;color:#64748b;">${escapeHTML(item.date || '')}</span>
-                </div>`
-            ).join('');
-        }
-
-        function adminClearHistory() {
-            if (!hasActiveAdminBypass()) return;
-            window.matchHistory = [];
-            saveLocalDb();
-            renderAdminHistory();
-            showToast('История очищена');
-        }
-
-        function adminSyncFromBotDatabase() {
-            if (!hasActiveAdminBypass()) return;
-            refreshBotKitTiersStatus();
-            showToast('🔄 Запрошена синхронизация с БД бота');
-        }
-
-        function adminGenerateDemoPlayers() {
-            if (!hasActiveAdminBypass()) return;
-            const demos = {
-                "VortexPvP": { beast: "HT1", mace: "LT2", carts: "LT3", smp: "0", uhc: "0", axe: "HT2", op: "0", spearmace: "0", title: "⚔️ Pro", server: "PriZriT", ping: "30ms" },
-                "KuroBlade": { beast: "LT1", mace: "HT2", carts: "0", smp: "0", uhc: "0", axe: "LT2", op: "0", spearmace: "0", title: "", server: "HolyWorld", ping: "48ms" },
-                "NyxCart": { beast: "LT3", mace: "0", carts: "HT1", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "💣 Bomber", server: "FunTime", ping: "62ms" }
-            };
-            window.playersData = { ...window.playersData, ...demos };
-            saveLocalDb();
-            renderTierGrid();
-            renderLeaderboard();
-            showToast('✨ Демо-игроки добавлены');
-        }
-
-        function adminExportDatabaseJson() {
-            if (!hasActiveAdminBypass()) return;
-            const payload = JSON.stringify({
-                players: window.playersData,
-                views: window.playerViews,
-                history: window.matchHistory
-            }, null, 2);
-            const blob = new Blob([payload], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'priztier-database.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('📥 База экспортирована');
-        }
-
-        function triggerAdminImportJson() {
-            if (!hasActiveAdminBypass()) return;
-            const inp = document.getElementById('admImportJsonInput');
-            if (inp) inp.click();
-        }
-
-        function adminImportDatabaseJson(event) {
-            if (!hasActiveAdminBypass()) return;
-            const file = event?.target?.files?.[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const parsed = JSON.parse(e.target.result);
-                    if (parsed.players && typeof parsed.players === 'object') {
-                        window.playersData = parsed.players;
-                        saveLocalDb();
-                        renderTierGrid();
-                        renderLeaderboard();
-                        showToast('📤 База успешно импортирована!');
-                    }
-                } catch (err) {
-                    showToast('Ошибка чтения JSON файла');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function adminResetViews() {
-            if (!hasActiveAdminBypass()) return;
-            window.playerViews = {};
-            saveLocalDb();
-            showToast('🔄 Статистика просмотров сброшена');
-        }
-
-        function adminSeasonReset() {
-            if (!hasActiveAdminBypass()) return;
-            if (!confirm('Сбросить все тиры у всех игроков?')) return;
-            Object.keys(window.playersData || {}).forEach(nick => {
-                ALL_KITS.forEach(k => {
-                    window.playersData[nick][k] = '0';
-                });
-            });
-            saveLocalDb();
-            renderTierGrid();
-            renderLeaderboard();
-            showToast('🏆 Сезон сброшен');
         }
 
         function openDevModal() {
-            if (!hasActiveAdminBypass()) return;
+            if (!isStrictlyAdmin()) {
+                enforceAdminOnlyDevPanel();
+                if (typeof showToast === 'function') {
+                    showToast('⛔ Панель разработчика доступна только администраторам');
+                }
+                if (typeof openAdminLoginModal === 'function') {
+                    openAdminLoginModal();
+                }
+                return;
+            }
             const modal = document.getElementById('devModal');
             if (modal) modal.style.display = 'flex';
         }
@@ -4132,28 +4408,41 @@
         }
 
         function changeAdminPass() {
-            if (!hasActiveAdminBypass()) return;
-            const val = (document.getElementById('newAdminPassInput')?.value || '').trim();
-            if (!val) return;
-            ADMIN_PASS = val;
-            localStorage.setItem('priz_custom_admin_pass', val);
-            showToast('Пароль админки обновлён');
+            if (!isStrictlyAdmin()) {
+                enforceAdminOnlyDevPanel();
+                return;
+            }
+            const input = document.getElementById('newAdminPassInput');
+            const newPass = input ? input.value.trim() : '';
+            if (!newPass || newPass.length < 4) {
+                showToast('Пароль должен содержать минимум 4 символа!');
+                return;
+            }
+            ADMIN_PASS = newPass;
+            localStorage.setItem('priz_custom_admin_pass', newPass);
+            if (input) input.value = '';
+            showToast('Пароль админ-панели обновлен!');
         }
 
         function downloadSiteCode() {
-            const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+            if (!hasActiveAdminBypass()) return;
+            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'index.html';
             a.click();
             URL.revokeObjectURL(url);
+            showToast('💾 Исходный код скачан (.html)');
         }
 
         function openCodeEditorModal() {
+            if (!hasActiveAdminBypass()) return;
             const ta = document.getElementById('siteCodeTextarea');
-            if (ta) ta.value = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            if (ta) {
+                ta.value = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            }
             const modal = document.getElementById('codeEditorModal');
             if (modal) modal.style.display = 'flex';
         }
@@ -4164,56 +4453,70 @@
         }
 
         function applySiteCodeChanges() {
+            if (!hasActiveAdminBypass()) return;
             const ta = document.getElementById('siteCodeTextarea');
-            if (!ta) return;
+            const code = ta ? ta.value : '';
+            if (!code.trim()) {
+                showToast('Код пуст!');
+                return;
+            }
             document.open();
-            document.write(ta.value);
+            document.write(code);
             document.close();
         }
-    </script>
-    <script id="priz-ui-hold-wave-script">
-        (function() {
-            const PRESSABLE_SELECTOR = 'button, .btn-action-sm, .btn-purple, .nav-icon-btn, .c-tab-btn, .profile-avatar-btn, .social-hub-btn, .guide-faq-btn, .tier-search-btn';
-            let activeHoldEl = null;
-            let holdTimer = null;
 
-            function clearHoldState() {
-                if (holdTimer) {
-                    clearTimeout(holdTimer);
-                    holdTimer = null;
-                }
-                if (activeHoldEl) {
-                    activeHoldEl.classList.remove('priz-ui-holding');
-                    activeHoldEl = null;
-                }
-            }
+        (function initPrizBtnHoldWave() {
+            if (window.__prizBtnHoldWaveInitialized) return;
+            window.__prizBtnHoldWaveInitialized = true;
+
+            const PRESS_SELECTOR = [
+                'button',
+                '[role="button"]',
+                '.nav-icon-btn',
+                '.profile-avatar-btn',
+                '.btn-action-sm',
+                '.btn-purple',
+                '.c-tab-btn',
+                '.social-hub-btn',
+                '.guide-faq-btn',
+                '.player-card-mini',
+                '.lb-podium-card',
+                '.lb-list-row',
+                '.brand-logo',
+                '.admin-trigger'
+            ].join(',');
 
             function triggerPressAnimation(el) {
                 if (!el || !el.classList) return;
                 el.classList.remove('priz-ui-press-anim');
                 void el.offsetWidth;
                 el.classList.add('priz-ui-press-anim');
-                setTimeout(() => {
-                    if (el && el.classList) el.classList.remove('priz-ui-press-anim');
+                window.setTimeout(() => {
+                    el.classList.remove('priz-ui-press-anim');
                 }, 360);
             }
 
-            document.addEventListener('pointerdown', function(e) {
-                const target = e.target && e.target.closest ? e.target.closest(PRESSABLE_SELECTOR) : null;
-                if (!target) return;
+            let activeHoldEl = null;
+            function clearHoldState() {
+                if (activeHoldEl) {
+                    activeHoldEl.classList.remove('priz-ui-holding');
+                    activeHoldEl = null;
+                }
+            }
+
+            document.addEventListener('pointerdown', (event) => {
+                if (event.button !== undefined && event.button !== 0) return;
+                const targetEl = event.target && event.target.closest ? event.target.closest(PRESS_SELECTOR) : null;
+                if (!targetEl) return;
                 clearHoldState();
-                activeHoldEl = target;
-                holdTimer = setTimeout(() => {
-                    if (activeHoldEl === target) {
-                        target.classList.add('priz-ui-holding');
-                    }
-                }, 140);
-                triggerPressAnimation(target);
+                activeHoldEl = targetEl;
+                targetEl.classList.add('priz-ui-holding');
+                triggerPressAnimation(targetEl);
             }, { passive: true });
 
             document.addEventListener('pointerup', clearHoldState, { passive: true });
             document.addEventListener('pointercancel', clearHoldState, { passive: true });
-            window.addEventListener('blur', clearHoldState);
+            window.addEventListener('blur', clearHoldState, { passive: true });
         })();
     </script>
 </body>
