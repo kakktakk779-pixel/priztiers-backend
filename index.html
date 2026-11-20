@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PrizTiers — Competitive PvP Tier List</title>
+  <title>PrizTiers • Competitive PvP Tier List</title>
   <style>
     :root {
-      --bg-page: #05060b;
-      --bg-surface: #0b0d16;
-      --bg-card: rgba(15, 18, 29, 0.9);
-      --bg-card-hover: rgba(22, 26, 42, 0.98);
-      --border-soft: rgba(255, 255, 255, 0.07);
-      --border-accent: rgba(139, 92, 246, 0.45);
+      --bg-base: #06070c;
+      --bg-card: rgba(16, 19, 31, 0.88);
+      --bg-card-hover: rgba(23, 27, 44, 0.96);
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-active: rgba(139, 92, 246, 0.45);
       --text-main: #f3f5ff;
-      --text-sub: #9ea5c2;
-      --text-dim: #68708d;
+      --text-muted: #9da4c0;
+      --text-dim: #666e8b;
       --purple: #8b5cf6;
-      --purple-soft: #a78bfa;
+      --purple-light: #a78bfa;
       --cyan: #22d3ee;
       --green: #10b981;
       --amber: #f59e0b;
@@ -33,14 +32,14 @@
 
     html, body {
       min-height: 100%;
-      background-color: var(--bg-page);
+      background-color: var(--bg-base);
       color: var(--text-main);
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.45;
       overflow-x: hidden;
       background-image:
-        radial-gradient(ellipse 75% 45% at 50% -8%, rgba(124, 58, 237, 0.20), transparent 65%),
-        radial-gradient(ellipse 40% 30% at 88% 18%, rgba(34, 211, 238, 0.08), transparent 60%);
+        radial-gradient(ellipse 75% 45% at 50% -8%, rgba(124, 58, 237, 0.18), transparent 65%),
+        radial-gradient(ellipse 40% 30% at 88% 18%, rgba(34, 211, 238, 0.07), transparent 60%);
     }
 
     a {
@@ -53,20 +52,20 @@
       color: inherit;
     }
 
-    /* Top bar */
+    /* Top Header */
     .topbar {
       position: sticky;
       top: 0;
       z-index: 100;
-      height: 52px;
-      background: rgba(7, 8, 14, 0.92);
+      height: 50px;
+      background: rgba(7, 8, 13, 0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-subtle);
     }
 
     .topbar-inner {
-      max-width: 1480px;
+      max-width: 1520px;
       height: 100%;
       margin: 0 auto;
       padding: 0 18px;
@@ -76,28 +75,23 @@
       gap: 12px;
     }
 
-    .logo {
+    .brand {
       display: inline-flex;
       align-items: center;
-      gap: 2px;
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       letter-spacing: -0.02em;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
-    .logo .priz {
-      color: #ffffff;
-    }
-
-    .logo .tiers {
+    .brand .tiers {
       background: linear-gradient(90deg, #c084fc, #60a5fa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .nav-list {
+    .nav-tabs {
       display: flex;
       align-items: center;
       gap: 3px;
@@ -105,11 +99,11 @@
       scrollbar-width: none;
     }
 
-    .nav-list::-webkit-scrollbar {
+    .nav-tabs::-webkit-scrollbar {
       display: none;
     }
 
-    .nav-item {
+    .nav-btn {
       display: inline-flex;
       align-items: center;
       gap: 5px;
@@ -117,44 +111,43 @@
       border-radius: 7px;
       border: 1px solid transparent;
       background: transparent;
-      color: var(--text-sub);
-      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       cursor: pointer;
       white-space: nowrap;
-      transition: 0.18s ease;
+      transition: 0.16s ease;
     }
 
-    .nav-item:hover {
+    .nav-btn:hover {
       color: var(--text-main);
       background: rgba(255, 255, 255, 0.05);
     }
 
-    .nav-item.active {
+    .nav-btn.active {
       color: #ffffff;
       background: rgba(139, 92, 246, 0.30);
       border-color: rgba(167, 139, 250, 0.55);
-      box-shadow: 0 0 14px rgba(139, 92, 246, 0.22);
     }
 
-    .profile-pill {
+    .user-badge {
       display: inline-flex;
       align-items: center;
       gap: 7px;
       padding: 4px 11px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-soft);
-      font-size: 0.78rem;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.76rem;
       font-weight: 600;
       white-space: nowrap;
       flex-shrink: 0;
       cursor: pointer;
     }
 
-    .profile-pill .dot {
+    .user-badge .dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
@@ -162,16 +155,16 @@
       box-shadow: 0 0 6px var(--green);
     }
 
-    /* Page layout */
-    .container {
-      max-width: 1120px;
+    /* Main Container */
+    .main-wrap {
+      max-width: 1080px;
       margin: 0 auto;
       padding: 28px 20px 56px;
     }
 
-    /* Lifted containers for kit pages & links page */
-    .container.lifted-page {
-      padding-top: 12px;
+    /* Lifted spacing for kit pages & Discord links page */
+    .main-wrap.lifted {
+      padding-top: 10px;
     }
 
     .view {
@@ -182,15 +175,15 @@
       display: block;
     }
 
-    /* Hero on Leaderboard */
-    .hero-box {
+    /* Hero */
+    .hero {
       text-align: center;
-      margin-top: 8px;
+      margin-top: 6px;
       margin-bottom: 24px;
     }
 
     .hero-title {
-      font-size: clamp(2.1rem, 4.4vw, 3.1rem);
+      font-size: clamp(2.2rem, 4.5vw, 3.2rem);
       font-weight: 900;
       letter-spacing: 0.05em;
       line-height: 1.06;
@@ -199,27 +192,27 @@
       margin-bottom: 6px;
     }
 
-    .hero-subtitle {
-      font-size: 0.9rem;
-      color: var(--text-sub);
+    .hero-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
     }
 
-    /* Discipline Cards on Leaderboard */
-    .cards-grid {
+    /* Leaderboard Discipline Cards (3 per row, no duplicate MACE/CARTS cards) */
+    .disc-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .disc-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-soft);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
       padding: 16px 18px;
       cursor: pointer;
-      transition: 0.18s ease;
-      min-height: 112px;
+      transition: 0.16s ease;
+      min-height: 108px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -227,16 +220,14 @@
 
     .disc-card:hover {
       background: var(--bg-card-hover);
-      border-color: var(--border-accent);
-      transform: translateY(-2px);
+      border-color: var(--border-active);
     }
 
-    .disc-card.selected {
+    .disc-card.active {
       border-color: rgba(167, 139, 250, 0.55);
-      box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.2) inset;
     }
 
-    .disc-head {
+    .disc-top {
       display: flex;
       align-items: center;
       gap: 9px;
@@ -252,33 +243,33 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       flex-shrink: 0;
     }
 
     .disc-title {
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       font-weight: 800;
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
     .disc-count {
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       font-weight: 800;
       color: #ffffff;
       margin-bottom: 6px;
     }
 
-    .disc-meta {
+    .disc-foot {
       display: flex;
       align-items: center;
       gap: 6px;
       font-size: 0.74rem;
-      color: var(--text-sub);
+      color: var(--text-muted);
     }
 
-    .disc-meta .dot {
+    .disc-foot .dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
@@ -287,49 +278,43 @@
     }
 
     /* Section Header */
-    .sec-header {
+    .sec-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 2px;
+      margin-top: 0;
       margin-bottom: 14px;
     }
 
     .sec-title {
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       font-weight: 800;
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
 
-    .sec-sub {
-      font-size: 0.82rem;
-      color: var(--text-sub);
-      margin-top: 2px;
-    }
-
-    .search-wrap {
+    .search-box {
       position: relative;
       width: 220px;
     }
 
-    .search-wrap input {
+    .search-box input {
       width: 100%;
       padding: 7px 11px 7px 30px;
       border-radius: 8px;
-      border: 1px solid var(--border-soft);
-      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.035);
       font-size: 0.82rem;
       outline: none;
     }
 
-    .search-wrap input:focus {
+    .search-box input:focus {
       border-color: var(--purple);
     }
 
-    .search-wrap .loupe {
+    .search-box .icon {
       position: absolute;
       left: 10px;
       top: 50%;
@@ -339,116 +324,114 @@
       pointer-events: none;
     }
 
-    /* 5 Tier Columns */
-    .tiers-row {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 12px;
-      align-items: start;
-    }
-
-    .tier-col {
-      background: var(--bg-card);
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-    }
-
-    .tier-col-head {
-      padding: 10px 12px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--border-soft);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .tier-col-1 .tier-col-head { background: rgba(245, 158, 11, 0.14); color: #fbbf24; }
-    .tier-col-2 .tier-col-head { background: rgba(168, 85, 247, 0.14); color: #c084fc; }
-    .tier-col-3 .tier-col-head { background: rgba(59, 130, 246, 0.14); color: #60a5fa; }
-    .tier-col-4 .tier-col-head { background: rgba(16, 185, 129, 0.14); color: #34d399; }
-    .tier-col-5 .tier-col-head { background: rgba(148, 163, 184, 0.12); color: #cbd5e1; }
-
-    .tier-col-body {
-      padding: 10px;
-      min-height: 150px;
+    /* Tier Rows Stack (matching video layout: HT1, LT1, HT2, LT2, HT3, LT3, HT4, LT4, HT5, LT5) */
+    .tier-stack {
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 8px;
     }
 
-    .player-entry {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 7px;
-      padding: 8px 9px;
+    .tier-row-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 11px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
+      min-height: 46px;
+    }
+
+    .tier-code-label {
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      min-width: 46px;
+    }
+
+    .t-ht1 { color: #facc15; }
+    .t-lt1 { color: #fde047; }
+    .t-ht2 { color: #c084fc; }
+    .t-lt2 { color: #d8b4fe; }
+    .t-ht3 { color: #60a5fa; }
+    .t-lt3 { color: #93c5fd; }
+    .t-ht4 { color: #34d399; }
+    .t-lt4 { color: #6ee7b7; }
+    .t-ht5 { color: #cbd5e1; }
+    .t-lt5 { color: #94a3b8; }
+
+    .tier-players-inline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
       gap: 6px;
+      flex: 1;
+    }
+
+    .player-chip {
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.78rem;
+      font-weight: 600;
       cursor: pointer;
     }
 
-    .player-entry:hover {
-      background: rgba(139, 92, 246, 0.14);
-      border-color: rgba(167, 139, 250, 0.35);
+    .player-chip:hover {
+      background: rgba(139, 92, 246, 0.18);
+      border-color: rgba(167, 139, 250, 0.4);
     }
 
-    .player-name {
-      font-size: 0.82rem;
+    .tier-count-right {
+      font-size: 0.78rem;
       font-weight: 700;
-    }
-
-    .player-meta {
-      font-size: 0.7rem;
       color: var(--text-dim);
+      white-space: nowrap;
     }
 
     /* Soon Card (lifted upward) */
-    .soon-panel {
-      max-width: 640px;
+    .soon-card {
+      max-width: 660px;
       margin: 4px auto 0;
       background: var(--bg-card);
-      border: 1px solid var(--border-soft);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
       padding: 32px 24px;
       text-align: center;
     }
 
-    .soon-tag {
+    .soon-pill {
       display: inline-block;
-      padding: 4px 11px;
+      padding: 4px 12px;
       border-radius: 999px;
       font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       background: rgba(139, 92, 246, 0.18);
-      border: 1px solid rgba(167, 139, 250, 0.38);
-      color: var(--purple-soft);
+      border: 1px solid rgba(167, 139, 250, 0.36);
+      color: var(--purple-light);
       margin-bottom: 10px;
     }
 
-    .soon-h1 {
+    .soon-title {
       font-size: 1.85rem;
       font-weight: 900;
       margin-bottom: 8px;
     }
 
-    .soon-text {
-      font-size: 0.9rem;
-      color: var(--text-sub);
+    .soon-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
       margin-bottom: 20px;
     }
 
-    .action-btn {
+    .btn-purple {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
       padding: 9px 16px;
       border-radius: 8px;
       border: 1px solid rgba(167, 139, 250, 0.45);
@@ -459,18 +442,18 @@
       cursor: pointer;
     }
 
-    .action-btn:hover {
+    .btn-purple:hover {
       background: rgba(139, 92, 246, 0.92);
     }
 
-    /* Guide page (lifted cleanly at top) */
-    .guide-top {
+    /* Guide View */
+    .guide-head {
       text-align: center;
       margin-top: 0;
       margin-bottom: 18px;
     }
 
-    .pill-badge {
+    .badge-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -478,35 +461,35 @@
       border-radius: 999px;
       background: rgba(139, 92, 246, 0.15);
       border: 1px solid rgba(167, 139, 250, 0.32);
-      color: var(--purple-soft);
-      font-size: 0.76rem;
+      color: var(--purple-light);
+      font-size: 0.74rem;
       font-weight: 700;
       margin-bottom: 8px;
     }
 
-    .page-h1 {
-      font-size: clamp(1.55rem, 3vw, 2.2rem);
+    .h1-main {
+      font-size: clamp(1.55rem, 3vw, 2.15rem);
       font-weight: 900;
       line-height: 1.15;
       margin-bottom: 6px;
     }
 
-    .page-desc {
-      font-size: 0.88rem;
-      color: var(--text-sub);
+    .sub-main {
+      font-size: 0.86rem;
+      color: var(--text-muted);
       max-width: 720px;
       margin: 0 auto;
     }
 
-    .surface-card {
+    .card-box {
       background: var(--bg-card);
-      border: 1px solid var(--border-soft);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
       padding: 18px 20px;
       margin-bottom: 16px;
     }
 
-    .calc-head {
+    .calc-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -515,70 +498,70 @@
       margin-bottom: 12px;
     }
 
-    .calc-total {
-      padding: 4px 11px;
+    .calc-score {
+      padding: 4px 10px;
       border-radius: 999px;
       background: rgba(34, 211, 238, 0.12);
       border: 1px solid rgba(34, 211, 238, 0.28);
       color: var(--cyan);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 800;
     }
 
-    .calc-row {
+    .calc-8-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
     }
 
-    .calc-box {
+    .calc-cell {
       background: rgba(255, 255, 255, 0.025);
-      border: 1px solid var(--border-soft);
+      border: 1px solid var(--border-subtle);
       border-radius: 8px;
       padding: 9px 11px;
     }
 
-    .calc-box-top {
+    .calc-cell-label {
       display: flex;
       justify-content: space-between;
       font-size: 0.74rem;
       font-weight: 700;
-      color: var(--text-sub);
+      color: var(--text-muted);
       margin-bottom: 6px;
     }
 
-    .calc-box select {
+    .calc-cell select {
       width: 100%;
       padding: 6px 8px;
       border-radius: 6px;
-      border: 1px solid var(--border-soft);
+      border: 1px solid var(--border-subtle);
       background: #101422;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       outline: none;
     }
 
-    .steps-row {
+    .steps-3 {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
       margin-bottom: 16px;
     }
 
-    .step-box {
+    .step-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-soft);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       padding: 16px;
     }
 
-    .step-num {
-      width: 24px;
-      height: 24px;
+    .step-badge {
+      width: 22px;
+      height: 22px;
       border-radius: 6px;
       background: rgba(139, 92, 246, 0.2);
       border: 1px solid rgba(167, 139, 250, 0.4);
-      color: var(--purple-soft);
-      font-size: 0.78rem;
+      color: var(--purple-light);
+      font-size: 0.75rem;
       font-weight: 800;
       display: inline-flex;
       align-items: center;
@@ -586,73 +569,69 @@
       margin-bottom: 8px;
     }
 
-    .step-box h3 {
-      font-size: 0.92rem;
+    .step-card h3 {
+      font-size: 0.9rem;
       font-weight: 800;
       margin-bottom: 4px;
     }
 
-    .step-box p {
-      font-size: 0.8rem;
-      color: var(--text-sub);
+    .step-card p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
     }
 
-    .scale-line {
+    .bar-row {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
-    .scale-line:last-child {
+    .bar-row:last-child {
       margin-bottom: 0;
     }
 
-    .scale-code {
-      width: 50px;
-      padding: 3px 6px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.06);
+    .bar-tier {
+      width: 44px;
       font-size: 0.78rem;
       font-weight: 800;
-      text-align: center;
       flex-shrink: 0;
     }
 
-    .scale-track {
+    .bar-track {
       flex: 1;
-      height: 8px;
+      height: 7px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.06);
       overflow: hidden;
     }
 
-    .scale-fill {
+    .bar-fill {
       height: 100%;
       border-radius: 999px;
       background: linear-gradient(90deg, #8b5cf6, #22d3ee);
     }
 
-    .scale-val {
+    .bar-pts {
       width: 68px;
       text-align: right;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
-      color: var(--text-sub);
+      color: var(--text-muted);
       flex-shrink: 0;
     }
 
-    .faq-row {
-      border-bottom: 1px solid var(--border-soft);
+    .faq-item {
+      border-bottom: 1px solid var(--border-subtle);
       padding: 12px 0;
     }
 
-    .faq-row:last-child {
+    .faq-item:last-child {
       border-bottom: none;
       padding-bottom: 2px;
     }
 
-    .faq-btn {
+    .faq-trigger {
       width: 100%;
       background: transparent;
       border: none;
@@ -660,86 +639,80 @@
       align-items: center;
       justify-content: space-between;
       text-align: left;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 700;
       cursor: pointer;
     }
 
-    .faq-ans {
+    .faq-body {
       display: none;
       margin-top: 6px;
-      font-size: 0.82rem;
-      color: var(--text-sub);
+      font-size: 0.8rem;
+      color: var(--text-muted);
     }
 
-    .faq-row.open .faq-ans {
+    .faq-item.open .faq-body {
       display: block;
     }
 
-    /* Links / Discord page (lifted cleanly at top) */
-    .links-top {
+    /* Links / Discord View (lifted cleanly at top) */
+    .links-head {
       text-align: center;
       margin-top: 0;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
-    .links-grid {
+    .links-2col {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
-    .link-box {
+    .link-item-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-soft);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
       padding: 18px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .link-box h3 {
-      font-size: 0.98rem;
+    .link-item-card h3 {
+      font-size: 0.96rem;
       font-weight: 800;
       margin-bottom: 5px;
     }
 
-    .link-box p {
-      font-size: 0.82rem;
-      color: var(--text-sub);
+    .link-item-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
     }
 
-    .link-go {
+    .link-btn-box {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 8px 13px;
+      padding: 8px 14px;
       border-radius: 8px;
       background: rgba(139, 92, 246, 0.16);
-      border: 1px solid rgba(167, 139, 250, 0.36);
+      border: 1px solid rgba(167, 139, 250, 0.34);
       font-size: 0.8rem;
       font-weight: 700;
     }
 
-    .link-go:hover {
+    .link-btn-box:hover {
       background: rgba(139, 92, 246, 0.28);
     }
 
     /* Footer */
     .footer {
-      max-width: 1120px;
+      max-width: 1080px;
       margin: 20px auto 0;
       padding: 14px 20px 24px;
-      border-top: 1px solid var(--border-soft);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-      font-size: 0.76rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.74rem;
       color: var(--text-dim);
     }
 
@@ -762,24 +735,23 @@
 
     .modal-card {
       width: 100%;
-      max-width: 420px;
+      max-width: 400px;
       background: #0e121f;
-      border: 1px solid var(--border-accent);
+      border: 1px solid var(--border-active);
       border-radius: var(--radius-lg);
       padding: 20px;
     }
 
-    @media (max-width: 980px) {
-      .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .tiers-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .calc-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 960px) {
+      .disc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .calc-8-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 640px) {
-      .cards-grid, .tiers-row, .calc-row, .steps-row, .links-grid {
+      .disc-grid, .calc-8-grid, .steps-3, .links-2col {
         grid-template-columns: 1fr;
       }
-      .search-wrap {
+      .search-box {
         width: 100%;
       }
     }
@@ -788,485 +760,469 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <a href="#leaderboard" class="logo" data-nav="leaderboard">
-        <span class="priz">Priz</span><span class="tiers">Tiers</span>
+      <a href="#leaderboard" class="brand" data-nav="leaderboard">
+        <span>Priz</span><span class="tiers">Tiers</span>
       </a>
 
-      <nav class="nav-list" aria-label="Навигация">
-        <button class="nav-item active" data-nav="leaderboard">🏆 Лидерборд</button>
-        <button class="nav-item" data-nav="kit-beast">⚔️ BEAST</button>
-        <button class="nav-item" data-nav="kit-mace">🔨 MACE</button>
-        <button class="nav-item" data-nav="kit-carts">💣 CARTS</button>
-        <button class="nav-item" data-nav="kit-axe">🪓 AXE</button>
-        <button class="nav-item" data-nav="kit-smp">🛡️ SMP</button>
-        <button class="nav-item" data-nav="kit-uhc">❤️ UHC</button>
-        <button class="nav-item" data-nav="kit-op">⚡ OP</button>
-        <button class="nav-item" data-nav="kit-spearmace">🔱 SPEARMACE</button>
-        <button class="nav-item" data-nav="guide">📘 Гайд</button>
-        <button class="nav-item" data-nav="links">💬 Discord</button>
+      <nav class="nav-tabs" aria-label="Навигация">
+        <button class="nav-btn active" data-nav="leaderboard">🏆 Лидерборд</button>
+        <button class="nav-btn" data-nav="kit-beast">⚔️ BEAST</button>
+        <button class="nav-btn" data-nav="kit-mace">🔨 MACE</button>
+        <button class="nav-btn" data-nav="kit-carts">💣 CARTS</button>
+        <button class="nav-btn" data-nav="kit-axe">🪓 AXE</button>
+        <button class="nav-btn" data-nav="kit-smp">🛡️ SMP</button>
+        <button class="nav-btn" data-nav="kit-uhc">❤️ UHC</button>
+        <button class="nav-btn" data-nav="kit-op">⚡ OP</button>
+        <button class="nav-btn" data-nav="kit-spearmace">🔱 SPEARMACE</button>
+        <button class="nav-btn" data-nav="guide">📘 Гайд</button>
+        <button class="nav-btn" data-nav="links">💬 Discord</button>
       </nav>
 
-      <button class="profile-pill" id="profilePillBtn" type="button">
+      <button class="user-badge" id="userBadgeBtn" type="button">
         <span class="dot"></span>
         <span>KingErgo</span>
       </button>
     </div>
   </header>
 
-  <main class="container" id="mainContainer">
+  <main class="main-wrap" id="mainWrap">
     <!-- Leaderboard -->
     <section id="view-leaderboard" class="view active">
-      <div class="hero-box">
+      <div class="hero">
         <h1 class="hero-title">PRIZTIERS</h1>
-        <p class="hero-subtitle">Соревновательная экосистема &amp; PvP Tier List платформа</p>
+        <p class="hero-sub">Соревновательная экосистема &amp; PvP Tier List платформа</p>
       </div>
 
-      <!-- Unique discipline cards: BEAST, MACE, CARTS, AXE (duplicates removed) -->
-      <div class="cards-grid" id="leaderboardCardsGrid"></div>
+      <!-- Unique discipline cards (no duplicate MACE / CARTS cards) -->
+      <div class="disc-grid" id="discGrid"></div>
 
-      <div class="sec-header">
-        <div>
-          <h2 class="sec-title" id="lbKitTitle">BEAST TIER LIST</h2>
-          <p class="sec-sub" id="lbKitSub">Распределение игроков по тирам дисциплины</p>
-        </div>
-        <div class="search-wrap">
-          <span class="loupe">🔍</span>
-          <input type="search" id="lbSearchInput" placeholder="Поиск игрока..." autocomplete="off" />
+      <div class="sec-head">
+        <h2 class="sec-title" id="lbTitle">BEAST TIER LIST</h2>
+        <div class="search-box">
+          <span class="icon">🔍</span>
+          <input type="search" id="lbSearch" placeholder="Поиск игрока..." autocomplete="off" />
         </div>
       </div>
 
-      <div class="tiers-row" id="lbTiersRow"></div>
+      <div class="tier-stack" id="lbTierStack"></div>
     </section>
 
-    <!-- Individual Kit View -->
+    <!-- Individual Kit Page -->
     <section id="view-kit" class="view">
       <div id="kitMount"></div>
     </section>
 
-    <!-- Guide View -->
+    <!-- Guide Page -->
     <section id="view-guide" class="view">
-      <div class="guide-top">
-        <div class="pill-badge">📘 Гайд по тестированию</div>
-        <h1 class="page-h1">Всё, что нужно знать о тестировании в PrizTiers</h1>
-        <p class="page-desc">Пошаговый порядок получения тира по дисциплинам Beast, Mace, Carts, Axe, SMP, UHC, OP и SpearMace, правила и ответы на частые вопросы.</p>
+      <div class="guide-head">
+        <div class="badge-tag">📘 Гайд по тестированию</div>
+        <h1 class="h1-main">Всё, что нужно знать о тестировании в PrizTiers</h1>
+        <p class="sub-main">Пошаговый порядок получения тира по дисциплинам Beast, Mace, Carts, Axe, SMP, UHC, OP и SpearMace, правила и ответы на частые вопросы.</p>
       </div>
 
-      <div class="surface-card">
-        <div class="calc-head">
-          <h2 style="font-size: 1rem; font-weight: 800;">🧮 Калькулятор очков по дисциплинам</h2>
-          <span class="calc-total" id="calcTotalBadge">Итого: 0 очков</span>
+      <div class="card-box">
+        <div class="calc-top">
+          <h2 style="font-size:0.96rem;font-weight:800;">🧮 Калькулятор очков по дисциплинам</h2>
+          <span class="calc-score" id="calcScoreBadge">Итого: 0 очков</span>
         </div>
-        <div class="calc-row" id="calcRow"></div>
+        <div class="calc-8-grid" id="calc8Grid"></div>
       </div>
 
-      <div class="steps-row">
-        <div class="step-box">
-          <div class="step-num">1</div>
+      <div class="steps-3">
+        <div class="step-card">
+          <div class="step-badge">1</div>
           <h3>Зайди в каналы связи</h3>
           <p>Подключись к очереди выбранной дисциплины в официальном Discord PrizTiers и следи за статусом тестеров.</p>
         </div>
-        <div class="step-box">
-          <div class="step-num">2</div>
+        <div class="step-card">
+          <div class="step-badge">2</div>
           <h3>Авторизуйся на сайте</h3>
-          <p>Войди через аккаунт Discord или проверь свой профиль и историю матчей в таблице PrizTiers.</p>
+          <p>Нажми кнопку «Войти» или проверь свой профиль и историю матчей в таблице PrizTiers.</p>
         </div>
-        <div class="step-box">
-          <div class="step-num">3</div>
+        <div class="step-card">
+          <div class="step-badge">3</div>
           <h3>Пройди тест</h3>
-          <p>После завершения серии боёв тестер выставит итоговый тир, а очки автоматически обновят общий рейтинг.</p>
+          <p>После проверки тестер занесёт твой тир в базу, и он появится в профиле и лидерборде.</p>
         </div>
       </div>
 
-      <div class="surface-card">
-        <h2 style="font-size: 1rem; font-weight: 800; margin-bottom: 12px;">📊 Как устроены тиры</h2>
-        <div id="scaleMount"></div>
+      <div class="card-box">
+        <h2 style="font-size:0.96rem;font-weight:800;margin-bottom:10px;">📊 Как устроены тиры</h2>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">От LT5 и HT5 до HT1 (высший ранг). Чем выше ступень, тем больше за неё очков.</p>
+        <div id="tierBarsMount"></div>
       </div>
 
-      <div class="surface-card">
-        <h2 style="font-size: 1rem; font-weight: 800; margin-bottom: 6px;">❓ Часто задаваемые вопросы</h2>
+      <div class="card-box">
+        <h2 style="font-size:0.96rem;font-weight:800;margin-bottom:4px;">❓ Часто задаваемые вопросы</h2>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;">Ответы на самые популярные вопросы.</p>
         <div id="faqMount"></div>
       </div>
     </section>
 
-    <!-- Discord / Links View -->
+    <!-- Discord / Links Page -->
     <section id="view-links" class="view">
-      <div class="links-top">
-        <div class="pill-badge">💬 Discord и каналы связи</div>
-        <h1 class="page-h1">Discord-серверы и каналы PrizTiers</h1>
-        <p class="page-desc">Переходи в нужный раздел для записи на тест, общения с сообществом и отслеживания обновлений платформы.</p>
+      <div class="links-head">
+        <div class="badge-tag">💬 Discord и каналы связи</div>
+        <h1 class="h1-main">Discord-серверы и Telegram-канал PrizTiers</h1>
+        <p class="sub-main">Переходи в нужную дисциплину для записи на тест или подпишись на Telegram, чтобы следить за обновлениями.</p>
       </div>
 
-      <div class="links-grid" id="linksMount"></div>
+      <div class="links-2col" id="linksMount"></div>
     </section>
   </main>
 
   <footer class="footer">
     <span>© 2026 PrizTiers. All rights reserved.</span>
-    <span>Competitive PvP Tier List</span>
   </footer>
 
   <div class="modal-bg" id="infoModal">
     <div class="modal-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-        <strong id="modalTitle" style="font-size:1.05rem;"></strong>
-        <button id="modalCloseBtn" type="button" style="background:rgba(255,255,255,0.06);border:1px solid var(--border-soft);border-radius:6px;width:28px;height:28px;cursor:pointer;">✕</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <strong id="modalTitle" style="font-size:1rem;"></strong>
+        <button id="modalClose" type="button" style="background:rgba(255,255,255,0.06);border:1px solid var(--border-subtle);border-radius:6px;width:26px;height:26px;cursor:pointer;">✕</button>
       </div>
-      <div id="modalBody" style="font-size:0.86rem;color:var(--text-sub);"></div>
+      <div id="modalBody" style="font-size:0.84rem;color:var(--text-muted);"></div>
     </div>
   </div>
 
   <script>
     const KITS = [
       { id: "beast", name: "BEAST", icon: "⚔️", active: true, countText: "44 участников", meta: "Discord • 3 в сети" },
-      { id: "mace", name: "MACE", icon: "🔨", active: true, countText: "31 участников", meta: "Discord • 2 в сети" },
+      { id: "mace", name: "MACE", icon: "🔨", active: true, countText: "... участников", meta: "Discord • 2 в сети" },
       { id: "carts", name: "CARTS", icon: "💣", active: true, countText: "16 участников", meta: "Discord • 3 в сети" },
-      { id: "axe", name: "AXE", icon: "🪓", active: true, countText: "27 участников", meta: "Discord • 2 в сети" },
+      { id: "axe", name: "AXE", icon: "🪓", active: true, countText: "... участников", meta: "Discord • 2 в сети" },
       { id: "smp", name: "SMP", icon: "🛡️", active: false, countText: "Скоро", meta: "В разработке" },
       { id: "uhc", name: "UHC", icon: "❤️", active: false, countText: "Скоро", meta: "В разработке" },
       { id: "op", name: "OP", icon: "⚡", active: false, countText: "Скоро", meta: "В разработке" },
       { id: "spearmace", name: "SPEARMACE", icon: "🔱", active: false, countText: "Скоро", meta: "В разработке" }
     ];
 
-    const LB_DISCIPLINES = [
+    const LB_CARDS = [
       { id: "beast", title: "BEAST DISCIPLINE", icon: "⚔️", count: "44 участников", meta: "Discord • 3 в сети" },
-      { id: "mace", title: "MACE DISCIPLINE", icon: "🔨", count: "31 участников", meta: "Discord • 2 в сети" },
+      { id: "mace", title: "MACE DISCIPLINE", icon: "🔨", count: "... участников", meta: "Discord • 2 в сети" },
       { id: "carts", title: "CARTS DISCIPLINE", icon: "💣", count: "16 участников", meta: "Discord • 3 в сети" },
-      { id: "axe", title: "AXE DISCIPLINE", icon: "🪓", count: "27 участников", meta: "Discord • 2 в сети" }
+      { id: "axe", title: "AXE DISCIPLINE", icon: "🪓", count: "... участников", meta: "Discord • 2 в сети" }
     ];
 
-    const PLAYERS = {
+    const TIER_CODES = ["HT1", "LT1", "HT2", "LT2", "HT3", "LT3", "HT4", "LT4", "HT5", "LT5"];
+
+    const TIER_DATA = {
       beast: {
-        1: [{ nick: "KingErgo", region: "CIS", pts: 60 }, { nick: "VortexPvP", region: "EU", pts: 60 }],
-        2: [{ nick: "KuroAxe", region: "CIS", pts: 45 }, { nick: "Nexon_", region: "CIS", pts: 45 }],
-        3: [{ nick: "zxc_blade", region: "CIS", pts: 30 }, { nick: "Moriarty", region: "EU", pts: 30 }],
-        4: [{ nick: "ShadowHit", region: "CIS", pts: 15 }],
-        5: [{ nick: "NovaLite", region: "CIS", pts: 5 }]
+        HT1: ["KingErgo"],
+        LT1: ["VortexPvP"],
+        HT2: ["KuroAxe", "Nexon_"],
+        LT2: ["AresAim"],
+        HT3: ["zxc_blade", "Moriarty"],
+        LT3: ["RivenX"],
+        HT4: ["ShadowHit"],
+        LT4: ["KainFlow"],
+        HT5: ["NovaLite"],
+        LT5: []
       },
       mace: {
-        1: [{ nick: "KingErgo", region: "CIS", pts: 60 }],
-        2: [{ nick: "StormDrop", region: "EU", pts: 45 }, { nick: "DanteHit", region: "CIS", pts: 45 }],
-        3: [{ nick: "FuryJump", region: "CIS", pts: 30 }],
-        4: [{ nick: "EchoPulse", region: "EU", pts: 15 }],
-        5: [{ nick: "RookieWind", region: "CIS", pts: 5 }]
+        HT1: [], LT1: [], HT2: [], LT2: [], HT3: [], LT3: [], HT4: [], LT4: [], HT5: [], LT5: []
       },
       carts: {
-        1: [{ nick: "CartKing", region: "CIS", pts: 60 }],
-        2: [{ nick: "TntMaster", region: "CIS", pts: 45 }, { nick: "BlastLine", region: "EU", pts: 45 }],
-        3: [{ nick: "PixelCart", region: "CIS", pts: 30 }],
-        4: [{ nick: "Sparky99", region: "CIS", pts: 15 }],
-        5: [{ nick: "StarterTNT", region: "CIS", pts: 5 }]
+        HT1: ["CartKing"],
+        LT1: [],
+        HT2: ["TntMaster", "BlastLine"],
+        LT2: [],
+        HT3: ["PixelCart"],
+        LT3: ["NoxBoom"],
+        HT4: ["Sparky99"],
+        LT4: [],
+        HT5: ["StarterTNT"],
+        LT5: []
       },
       axe: {
-        1: [{ nick: "KingErgo", region: "CIS", pts: 60 }],
-        2: [{ nick: "CleaverPro", region: "CIS", pts: 45 }, { nick: "HectorShield", region: "EU", pts: 45 }],
-        3: [{ nick: "TimberX", region: "CIS", pts: 30 }],
-        4: [{ nick: "LumenPvP", region: "CIS", pts: 15 }],
-        5: [{ nick: "WoodCut", region: "CIS", pts: 5 }]
+        HT1: ["KingErgo"],
+        LT1: [],
+        HT2: ["CleaverPro"],
+        LT2: ["HectorShield"],
+        HT3: ["TimberX"],
+        LT3: ["BramAxe"],
+        HT4: ["LumenPvP"],
+        LT4: [],
+        HT5: ["WoodCut"],
+        LT5: []
       }
     };
 
-    const PTS_MAP = { none: 0, t5: 5, t4: 15, t3: 30, t2: 45, t1: 60 };
-
-    const SCALE_ROWS = [
-      { code: "TIER 1", name: "Элита дисциплины", pts: 60, width: "100%" },
-      { code: "TIER 2", name: "Высокий уровень", pts: 45, width: "78%" },
-      { code: "TIER 3", name: "Уверенный соревновательный", pts: 30, width: "54%" },
-      { code: "TIER 4", name: "Базовый ранг", pts: 15, width: "30%" },
-      { code: "TIER 5", name: "Начальный тир", pts: 5, width: "14%" }
+    const TIER_SCALE_BARS = [
+      { code: "HT1", pts: 60, pct: "100%" },
+      { code: "LT1", pts: 45, pct: "75%" },
+      { code: "HT2", pts: 30, pct: "50%" },
+      { code: "LT2", pts: 20, pct: "34%" },
+      { code: "HT3", pts: 10, pct: "18%" },
+      { code: "LT3", pts: 6, pct: "12%" },
+      { code: "HT4", pts: 4, pct: "9%" },
+      { code: "LT4", pts: 3, pct: "7%" },
+      { code: "HT5", pts: 2, pct: "5%" },
+      { code: "LT5", pts: 1, pct: "3%" }
     ];
 
-    const FAQ_DATA = [
+    const CALC_OPTS = [
+      { val: "none", label: "Без тира (0)", pts: 0 },
+      { val: "lt5", label: "LT5 (1)", pts: 1 },
+      { val: "ht5", label: "HT5 (2)", pts: 2 },
+      { val: "lt4", label: "LT4 (3)", pts: 3 },
+      { val: "ht4", label: "HT4 (4)", pts: 4 },
+      { val: "lt3", label: "LT3 (6)", pts: 6 },
+      { val: "ht3", label: "HT3 (10)", pts: 10 },
+      { val: "lt2", label: "LT2 (20)", pts: 20 },
+      { val: "ht2", label: "HT2 (30)", pts: 30 },
+      { val: "lt1", label: "LT1 (45)", pts: 45 },
+      { val: "ht1", label: "HT1 (60)", pts: 60 }
+    ];
+
+    const FAQ_LIST = [
       {
         q: "Что такое Tier List в PrizTiers?",
-        a: "Tier List — это рейтинг игроков по уровню навыков в PvP-дисциплинах от Tier 5 (начальный уровень) до Tier 1 (высший уровень мастерства)."
+        a: "Tier List — это рейтинг игроков по уровню навыков в PvP-дисциплинах от LT5 (начальный уровень) до HT1 (высший уровень мастерства)."
       },
       {
         q: "Как часто можно проходить тест?",
-        a: "Повторное тестирование по одной дисциплине доступно после прохождения кулдауна (обычно 14 дней)."
+        a: "Повторное тестирование по дисциплине доступно после прохождения установленного кулдауна."
       },
       {
         q: "Сколько китов есть для тестирования?",
-        a: "Доступны дисциплины Beast, Mace, Carts, Axe, а также готовящиеся к запуску разделы SMP, UHC, OP и SpearMace."
+        a: "В системе представлены Beast, Mace, Carts, Axe, а также разделы SMP, UHC, OP и SpearMace."
       },
       {
         q: "Как считаются очки?",
-        a: "Каждый тир даёт фиксированные очки (Tier 1 — 60, Tier 2 — 45, Tier 3 — 30, Tier 4 — 15, Tier 5 — 5), которые суммируются по китам."
+        a: "Каждый тир даёт фиксированные очки (от LT5 — 1 очко до HT1 — 60 очков), которые суммируются по дисциплинам."
       }
     ];
 
-    const LINKS_ITEMS = [
+    const LINKS_CARDS = [
       {
-        title: "💬 Основной Discord-сервер PrizTiers",
-        desc: "Очереди на тестирование, тикеты, оповещения о тестерах и новости по дисциплинам Beast, Mace, Carts и Axe.",
-        btn: "Открыть Discord",
-        target: "links"
+        title: "💬 Discord • Beast (Sword)",
+        desc: "Очереди на тестирование, правила и новости по дисциплине Beast PvP.",
+        btn: "Открыть Discord Beast"
       },
       {
-        title: "📢 Оповещения и анонсы",
-        desc: "Следи за открытием очередей, обновлением правил и запуском новых PvP-дисциплин в режиме реального времени.",
-        btn: "Перейти к гайду",
-        target: "guide"
+        title: "💬 Discord • Mace",
+        desc: "Тестирования и обсуждения по дисциплине Mace PvP.",
+        btn: "Открыть Discord Mace"
       },
       {
-        title: "🛡️ Апелляции и модерация",
-        desc: "Вопросы по результатам теста, проверкам и спорным ситуациям рассматриваются через официальную систему тикетов.",
-        btn: "Открыть правила",
-        target: "guide"
+        title: "💬 Discord • Carts",
+        desc: "Тестирования и матчи по дисциплине Carts.",
+        btn: "Открыть Discord Carts"
       },
       {
-        title: "🏆 Общий лидерборд",
-        desc: "Сравнивай свой счёт по дисциплинам и отслеживай позиции игроков в таблице PrizTiers.",
-        btn: "К лидерборду",
-        target: "leaderboard"
+        title: "📣 Telegram • PrizTiers",
+        desc: "Анонсы обновлений сайта и бота, важные объявления и новости проекта.",
+        btn: "Перейти в Telegram"
       }
     ];
 
-    let appState = { view: "leaderboard", selectedKit: "beast", query: "" };
+    let state = { view: "leaderboard", kit: "beast", query: "" };
 
-    function switchView(viewKey) {
-      appState.view = viewKey;
-      document.querySelectorAll(".nav-item").forEach((el) => {
-        el.classList.toggle("active", el.dataset.nav === viewKey);
-      });
-      document.querySelectorAll(".view").forEach((sec) => sec.classList.remove("active"));
+    function setView(v) {
+      state.view = v;
+      document.querySelectorAll(".nav-btn").forEach((b) => b.classList.toggle("active", b.dataset.nav === v));
+      document.querySelectorAll(".view").forEach((s) => s.classList.remove("active"));
 
-      const mainEl = document.getElementById("mainContainer");
-      const liftNeeded = viewKey.startsWith("kit-") || viewKey === "links";
-      mainEl.classList.toggle("lifted-page", liftNeeded);
+      const wrap = document.getElementById("mainWrap");
+      wrap.classList.toggle("lifted", v.startsWith("kit-") || v === "links");
 
-      if (viewKey === "leaderboard") {
+      if (v === "leaderboard") {
         document.getElementById("view-leaderboard").classList.add("active");
         renderLeaderboard();
-      } else if (viewKey === "guide") {
+      } else if (v === "guide") {
         document.getElementById("view-guide").classList.add("active");
-      } else if (viewKey === "links") {
+      } else if (v === "links") {
         document.getElementById("view-links").classList.add("active");
-      } else if (viewKey.startsWith("kit-")) {
+      } else if (v.startsWith("kit-")) {
         document.getElementById("view-kit").classList.add("active");
-        renderKitPage(viewKey.replace("kit-", ""));
+        renderKit(v.replace("kit-", ""));
       }
     }
 
-    function renderLeaderboardCards() {
-      const grid = document.getElementById("leaderboardCardsGrid");
-      grid.innerHTML = LB_DISCIPLINES.map((item) => `
-        <div class="disc-card ${appState.selectedKit === item.id ? "selected" : ""}" data-select-kit="${item.id}">
+    function renderDiscCards() {
+      const grid = document.getElementById("discGrid");
+      grid.innerHTML = LB_CARDS.map((c) => `
+        <div class="disc-card ${state.kit === c.id ? "active" : ""}" data-pick-kit="${c.id}">
           <div>
-            <div class="disc-head">
-              <span class="disc-icon">${item.icon}</span>
-              <span class="disc-title">${item.title}</span>
+            <div class="disc-top">
+              <span class="disc-icon">${c.icon}</span>
+              <span class="disc-title">${c.title}</span>
             </div>
-            <div class="disc-count">${item.count}</div>
+            <div class="disc-count">${c.count}</div>
           </div>
-          <div class="disc-meta">
+          <div class="disc-foot">
             <span class="dot"></span>
-            <span>${item.meta}</span>
+            <span>${c.meta}</span>
           </div>
         </div>
       `).join("");
 
-      grid.querySelectorAll("[data-select-kit]").forEach((card) => {
-        card.addEventListener("click", () => {
-          appState.selectedKit = card.dataset.selectKit;
+      grid.querySelectorAll("[data-pick-kit]").forEach((el) => {
+        el.addEventListener("click", () => {
+          state.kit = el.dataset.pickKit;
           renderLeaderboard();
         });
       });
     }
 
-    function renderTiersColumns(kitId, queryText = "") {
-      const data = PLAYERS[kitId] || PLAYERS.beast;
-      const q = queryText.trim().toLowerCase();
+    function renderTierStack(kitId, filter = "") {
+      const map = TIER_DATA[kitId] || TIER_DATA.beast;
+      const q = filter.trim().toLowerCase();
 
-      return [1, 2, 3, 4, 5].map((tNum) => {
-        const list = data[tNum] || [];
-        const filtered = q
-          ? list.filter((p) => p.nick.toLowerCase().includes(q) || p.region.toLowerCase().includes(q))
-          : list;
-
-        const cardsHtml = filtered.length
-          ? filtered.map((p) => `
-              <div class="player-entry" data-nick="${p.nick}" data-tier="TIER ${tNum}" data-pts="${p.pts}" data-region="${p.region}">
-                <div>
-                  <div class="player-name">${p.nick}</div>
-                  <div class="player-meta">${p.region} • +${p.pts} pts</div>
-                </div>
-                <span style="font-size:0.72rem;font-weight:800;opacity:0.85;">T${tNum}</span>
-              </div>
-            `).join("")
-          : `<div style="font-size:0.76rem;color:var(--text-dim);text-align:center;padding:16px 4px;">Нет игроков</div>`;
+      return TIER_CODES.map((code) => {
+        const list = map[code] || [];
+        const matched = q ? list.filter((n) => n.toLowerCase().includes(q)) : list;
+        const cls = "t-" + code.toLowerCase();
+        const chips = matched
+          .map((nick) => `<span class="player-chip" data-p-nick="${nick}" data-p-tier="${code}">${nick}</span>`)
+          .join("");
 
         return `
-          <div class="tier-col tier-col-${tNum}">
-            <div class="tier-col-head">
-              <span>TIER ${tNum}</span>
-              <span>${filtered.length}</span>
-            </div>
-            <div class="tier-col-body">${cardsHtml}</div>
+          <div class="tier-row-card">
+            <span class="tier-code-label ${cls}">${code}</span>
+            <div class="tier-players-inline">${chips}</div>
+            <span class="tier-count-right">${matched.length} игроков</span>
           </div>
         `;
       }).join("");
     }
 
-    function attachPlayerClicks(rootEl) {
-      rootEl.querySelectorAll("[data-nick]").forEach((el) => {
+    function bindChips(container) {
+      container.querySelectorAll("[data-p-nick]").forEach((el) => {
         el.addEventListener("click", () => {
-          document.getElementById("modalTitle").textContent = el.dataset.nick;
-          document.getElementById("modalBody").innerHTML = `
-            <p style="margin-bottom:6px;">Ранг: <strong style="color:#fff;">${el.dataset.tier}</strong> (${el.dataset.region})</p>
-            <p>Очки: <strong style="color:var(--cyan);">+${el.dataset.pts} очков</strong></p>
-          `;
+          document.getElementById("modalTitle").textContent = el.dataset.pNick;
+          document.getElementById("modalBody").innerHTML = `<p>Тир: <strong style="color:#fff;">${el.dataset.pTier}</strong></p>`;
           document.getElementById("infoModal").classList.add("open");
         });
       });
     }
 
     function renderLeaderboard() {
-      renderLeaderboardCards();
-      const kit = KITS.find((k) => k.id === appState.selectedKit) || KITS[0];
-      document.getElementById("lbKitTitle").textContent = `${kit.name} TIER LIST`;
-      document.getElementById("lbKitSub").textContent = `Распределение игроков по тирам дисциплины ${kit.name}`;
-
-      const rowEl = document.getElementById("lbTiersRow");
-      rowEl.innerHTML = renderTiersColumns(appState.selectedKit, appState.query);
-      attachPlayerClicks(rowEl);
+      renderDiscCards();
+      const kit = KITS.find((k) => k.id === state.kit) || KITS[0];
+      document.getElementById("lbTitle").textContent = `${kit.name} TIER LIST`;
+      const stack = document.getElementById("lbTierStack");
+      stack.innerHTML = renderTierStack(state.kit, state.query);
+      bindChips(stack);
     }
 
-    function renderKitPage(kitId) {
+    function renderKit(kitId) {
       const mount = document.getElementById("kitMount");
       const kit = KITS.find((k) => k.id === kitId) || KITS[0];
 
       if (!kit.active) {
         mount.innerHTML = `
-          <div class="soon-panel">
-            <div class="soon-tag">${kit.name} PVP • SOON</div>
-            <h1 class="soon-h1">Soon...</h1>
-            <p class="soon-text">Дисциплина <strong>${kit.name}</strong> находится в разработке и скоро откроется для тестирований и тиров в PrizTiers.</p>
-            <button class="action-btn" type="button" id="soonBackBtn">Вернуться к доступным китам</button>
+          <div class="soon-card">
+            <div class="soon-pill">${kit.name} PVP • SOON</div>
+            <h1 class="soon-title">Soon...</h1>
+            <p class="soon-desc">Дисциплина <strong>${kit.name}</strong> находится в разработке и скоро откроется для тестирований и тиров в PrizTiers.</p>
+            <button class="btn-purple" type="button" id="soonReturnBtn">Вернуться к доступным китам</button>
           </div>
         `;
-        document.getElementById("soonBackBtn").addEventListener("click", () => switchView("leaderboard"));
+        document.getElementById("soonReturnBtn").addEventListener("click", () => setView("leaderboard"));
         return;
       }
 
       mount.innerHTML = `
-        <div class="sec-header">
-          <div>
-            <h1 class="sec-title">${kit.icon} ${kit.name} TIER LIST</h1>
-            <p class="sec-sub">Таблица тиров по дисциплине ${kit.name} • ${kit.countText}</p>
-          </div>
-          <div class="search-wrap">
-            <span class="loupe">🔍</span>
-            <input type="search" id="kitSearchField" placeholder="Поиск в ${kit.name}..." autocomplete="off" />
+        <div class="sec-head">
+          <h1 class="sec-title">${kit.name} TIER LIST</h1>
+          <div class="search-box">
+            <span class="icon">🔍</span>
+            <input type="search" id="kitSearch" placeholder="Поиск игрока..." autocomplete="off" />
           </div>
         </div>
-        <div class="tiers-row" id="kitTiersMount">${renderTiersColumns(kitId, "")}</div>
+        <div class="tier-stack" id="kitStackMount">${renderTierStack(kitId, "")}</div>
       `;
 
-      const kitTiersEl = document.getElementById("kitTiersMount");
-      attachPlayerClicks(kitTiersEl);
+      const stackEl = document.getElementById("kitStackMount");
+      bindChips(stackEl);
 
-      document.getElementById("kitSearchField").addEventListener("input", (e) => {
-        kitTiersEl.innerHTML = renderTiersColumns(kitId, e.target.value);
-        attachPlayerClicks(kitTiersEl);
+      document.getElementById("kitSearch").addEventListener("input", (e) => {
+        stackEl.innerHTML = renderTierStack(kitId, e.target.value);
+        bindChips(stackEl);
       });
     }
 
     function initGuide() {
-      const calcRow = document.getElementById("calcRow");
-      calcRow.innerHTML = KITS.map((k) => `
-        <div class="calc-box">
-          <div class="calc-box-top">
+      const calcGrid = document.getElementById("calc8Grid");
+      const optionsHtml = CALC_OPTS.map((o) => `<option value="${o.pts}">${o.label}</option>`).join("");
+
+      calcGrid.innerHTML = KITS.map((k) => `
+        <div class="calc-cell">
+          <div class="calc-cell-label">
             <span>${k.icon} ${k.name}</span>
-            <span data-pts-for="${k.id}">0 pts</span>
+            <span data-cell-pts="${k.id}">0 pts</span>
           </div>
-          <select data-calc-kit="${k.id}">
-            <option value="none">Без тира (0)</option>
-            <option value="t5">TIER 5 (5)</option>
-            <option value="t4">TIER 4 (15)</option>
-            <option value="t3">TIER 3 (30)</option>
-            <option value="t2">TIER 2 (45)</option>
-            <option value="t1">TIER 1 (60)</option>
-          </select>
+          <select data-cell-sel="${k.id}">${optionsHtml}</select>
         </div>
       `).join("");
 
       const recalc = () => {
-        let sum = 0;
-        calcRow.querySelectorAll("[data-calc-kit]").forEach((sel) => {
-          const val = PTS_MAP[sel.value] || 0;
-          sum += val;
-          const badge = calcRow.querySelector(`[data-pts-for="${sel.dataset.calcKit}"]`);
-          if (badge) badge.textContent = `${val} pts`;
+        let total = 0;
+        calcGrid.querySelectorAll("[data-cell-sel]").forEach((sel) => {
+          const pts = Number(sel.value) || 0;
+          total += pts;
+          const lbl = calcGrid.querySelector(`[data-cell-pts="${sel.dataset.cellSel}"]`);
+          if (lbl) lbl.textContent = `${pts} pts`;
         });
-        document.getElementById("calcTotalBadge").textContent = `Итого: ${sum} очков`;
+        document.getElementById("calcScoreBadge").textContent = `Итого: ${total} очков`;
       };
 
-      calcRow.querySelectorAll("[data-calc-kit]").forEach((sel) => sel.addEventListener("change", recalc));
+      calcGrid.querySelectorAll("[data-cell-sel]").forEach((s) => s.addEventListener("change", recalc));
 
-      document.getElementById("scaleMount").innerHTML = SCALE_ROWS.map((r) => `
-        <div class="scale-line">
-          <span class="scale-code">${r.code}</span>
-          <div style="flex:1;min-width:120px;">
-            <div style="font-size:0.8rem;font-weight:700;margin-bottom:4px;">${r.name}</div>
-            <div class="scale-track"><div class="scale-fill" style="width:${r.width};"></div></div>
-          </div>
-          <span class="scale-val">${r.pts} очков</span>
+      document.getElementById("tierBarsMount").innerHTML = TIER_SCALE_BARS.map((b) => `
+        <div class="bar-row">
+          <span class="bar-tier">${b.code}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${b.pct};"></div></div>
+          <span class="bar-pts">${b.pts} очков</span>
         </div>
       `).join("");
 
-      const faqMount = document.getElementById("faqMount");
-      faqMount.innerHTML = FAQ_DATA.map((f, i) => `
-        <div class="faq-row ${i === 0 ? "open" : ""}">
-          <button class="faq-btn" type="button">
-            <span>${f.q}</span>
-            <span>${i === 0 ? "−" : "+"}</span>
+      document.getElementById("faqMount").innerHTML = FAQ_LIST.map((item, idx) => `
+        <div class="faq-item ${idx === 0 ? "open" : ""}">
+          <button class="faq-trigger" type="button">
+            <span>${item.q}</span>
+            <span>${idx === 0 ? "−" : "+"}</span>
           </button>
-          <div class="faq-ans">${f.a}</div>
+          <div class="faq-body">${item.a}</div>
         </div>
       `).join("");
 
-      faqMount.querySelectorAll(".faq-btn").forEach((btn) => {
+      document.querySelectorAll(".faq-trigger").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const row = btn.closest(".faq-row");
-          row.classList.toggle("open");
-          btn.querySelector("span:last-child").textContent = row.classList.contains("open") ? "−" : "+";
+          const item = btn.closest(".faq-item");
+          item.classList.toggle("open");
+          btn.querySelector("span:last-child").textContent = item.classList.contains("open") ? "−" : "+";
         });
       });
     }
 
     function initLinks() {
-      const linksMount = document.getElementById("linksMount");
-      linksMount.innerHTML = LINKS_ITEMS.map((item) => `
-        <div class="link-box">
+      document.getElementById("linksMount").innerHTML = LINKS_CARDS.map((card) => `
+        <div class="link-item-card">
           <div>
-            <h3>${item.title}</h3>
-            <p>${item.desc}</p>
+            <h3>${card.title}</h3>
+            <p>${card.desc}</p>
           </div>
-          <a class="link-go" href="#${item.target}" data-go="${item.target}">${item.btn} →</a>
+          <a class="link-btn-box" href="#links">${card.btn}</a>
         </div>
       `).join("");
-
-      linksMount.querySelectorAll("[data-go]").forEach((a) => {
-        a.addEventListener("click", (e) => {
-          e.preventDefault();
-          switchView(a.dataset.go);
-        });
-      });
     }
 
     document.querySelectorAll("[data-nav]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        switchView(btn.dataset.nav);
+        setView(btn.dataset.nav);
       });
     });
 
-    document.getElementById("lbSearchInput").addEventListener("input", (e) => {
-      appState.query = e.target.value;
+    document.getElementById("lbSearch").addEventListener("input", (e) => {
+      state.query = e.target.value;
       renderLeaderboard();
     });
 
-    document.getElementById("modalCloseBtn").addEventListener("click", () => {
+    document.getElementById("modalClose").addEventListener("click", () => {
       document.getElementById("infoModal").classList.remove("open");
     });
 
@@ -1274,7 +1230,7 @@
       if (e.target.id === "infoModal") e.currentTarget.classList.remove("open");
     });
 
-    document.getElementById("profilePillBtn").addEventListener("click", () => {
+    document.getElementById("userBadgeBtn").addEventListener("click", () => {
       document.getElementById("modalTitle").textContent = "KingErgo";
       document.getElementById("modalBody").innerHTML = `<p>Профиль участника <strong style="color:#fff;">PrizTiers</strong>.</p>`;
       document.getElementById("infoModal").classList.add("open");
