@@ -499,6 +499,7 @@
             pointer-events: none !important;
         }
     </style>
+    <style id="priz-page-spacing-fix">
         #page-tier .tier-table-wrapper,
         #page-tier .tier-header-bar,
         #page-tier .tier-grid,
@@ -608,6 +609,57 @@
             color: #99f6e4 !important;
         }
     </style>
+
+    <style id="priz-headings-and-admin-lock">
+        /* Поднимаем съехавшие заголовки и верхние блоки внутри страниц */
+        .page-view {
+            padding-top: 4px !important;
+        }
+        #page-home .hero-section {
+            margin-top: 6px !important;
+            margin-bottom: 14px !important;
+            padding-top: 4px !important;
+        }
+        #page-leaderboard .lb-header-section {
+            margin-top: 4px !important;
+            margin-bottom: 12px !important;
+            padding-top: 4px !important;
+        }
+        #page-guide .guide-hero-card,
+        #page-links .guide-hero-card {
+            margin-top: 4px !important;
+            margin-bottom: 14px !important;
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
+        }
+        #page-guide .guide-section-heading,
+        #page-guide .home-tiers-header,
+        #page-guide .info-title {
+            margin-top: 10px !important;
+        }
+
+        /* Строго скрываем админские элементы для не-админов */
+        body:not(.admin-authenticated) #devTriggerDot,
+        body:not(.admin-authenticated) #axeInviteEditorBox,
+        body:not(.admin-authenticated) .admin-only-axe-editor,
+        body:not(.admin-authenticated) .admin-only-item {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+        body.admin-authenticated #devTriggerDot {
+            display: inline-block !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+        body.admin-authenticated #axeInviteEditorBox,
+        body.admin-authenticated .admin-only-axe-editor {
+            display: flex !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+    </style>
+
 </head>
 <body class="site-bg-hw-dungeon">
 
@@ -709,25 +761,6 @@
                     </div>
                 </div>
 
-                    <div class="kit-stat-card">
-                        <div class="kit-stat-info">
-                            <div class="kit-stat-title">
-                                <img src="https://minecraft.wiki/images/Mace_JE1_BE1.png" width="16" height="16" alt="" class="protected-asset"> MACE DISCIPLINE
-                            </div>
-                            <div class="kit-stat-count" id="statCountMace">... участников</div>
-                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordMaceOnline">...</span> в сети</div>
-                        </div>
-                    </div>
-
-                    <div class="kit-stat-card">
-                        <div class="kit-stat-info">
-                            <div class="kit-stat-title">
-                                <img src="https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png" width="16" height="16" alt="" class="protected-asset"> CARTS DISCIPLINE
-                            </div>
-                            <div class="kit-stat-count" id="statCountCarts">... участников</div>
-                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordCartsOnline">...</span> в сети</div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -1120,7 +1153,7 @@
                                 <span>Discord • Axe</span>
                             </div>
                             <div class="social-hub-desc" id="socialHubAxeDesc">Тестирование и обсуждения по дисциплине Axe PvP.</div>
-                            <div id="axeInviteEditorBox" style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+                            <div id="axeInviteEditorBox" class="admin-only-axe-editor" style="margin-top:8px;display:none;gap:6px;flex-wrap:wrap;">
                                 <input type="text" id="siteAxeDiscordInput" class="form-input" placeholder="https://discord.gg/... (ссылка на Discord Axe)" style="margin:0;padding:6px 10px;font-size:12px;flex:1;min-width:170px;">
                                 <button type="button" class="btn-action-sm" style="padding:6px 10px;font-size:11px;border-color:rgba(6,245,214,0.45);color:#06f5d6;" onclick="saveAxeDiscordInviteFromSite('siteAxeDiscordInput')">Сохранить</button>
                             </div>
@@ -2549,6 +2582,8 @@
             renderCustomHomeKits();
             renderCustomDiscordLinks();
 
+            enforceAdminOnlyDevPanel();
+            syncAxeDiscordUI();
             if (isAdminMode) {
                 applyAdminUI(true);
             }
@@ -2590,7 +2625,13 @@
             refreshBotKitTiersStatus();
             setInterval(refreshBotKitTiersStatus, 15000);
             fetchDiscordStats();
-            setInterval(() => { fetchDiscordStats(); (window.customHomeKits || []).forEach(fetchCustomInviteStats); }, 15000);
+            setInterval(() => { fetchDiscordStats(); }, 5000);
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) fetchDiscordStats();
+            });
+            window.addEventListener('focus', () => {
+                fetchDiscordStats();
+            });
         });
 
         function findNickByDiscordId(discordId) {
@@ -2709,12 +2750,37 @@
             }
         }
 
+        async function fetchDiscordInviteCounts(code) {
+            const cleanCode = extractDiscordInviteCode(code);
+            if (!cleanCode) return null;
+            const endpoints = [
+                `https://discord.com/api/v10/invites/${encodeURIComponent(cleanCode)}?with_counts=true&_t=${Date.now()}`,
+                `https://discord.com/api/v9/invites/${encodeURIComponent(cleanCode)}?with_counts=true&_t=${Date.now()}`
+            ];
+            for (const url of endpoints) {
+                try {
+                    const res = await fetch(url, { cache: 'no-store' });
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    if (data && (data.approximate_presence_count !== undefined || data.approximate_member_count !== undefined)) {
+                        return {
+                            members: data.approximate_member_count,
+                            online: data.approximate_presence_count
+                        };
+                    }
+                } catch (e) {}
+            }
+            return null;
+        }
+
         async function fetchDiscordStats() {
+            let liveApplied = false;
             try {
                 const controller = new AbortController();
                 const timer = setTimeout(() => controller.abort(), 2500);
                 const liveRes = await fetch(`${BACKEND_URL}/api/discord/live-stats?_t=${Date.now()}`, {
-                    signal: controller.signal
+                    signal: controller.signal,
+                    cache: 'no-store'
                 });
                 clearTimeout(timer);
                 if (liveRes.ok) {
@@ -2723,45 +2789,58 @@
                         ['beast', 'mace', 'carts'].forEach(kit => {
                             const kData = liveData.kits[kit];
                             if (kData) {
-                                applyDiscordStatsToUI(kit, kData.members ?? kData.approximate_member_count, kData.online ?? kData.approximate_presence_count);
+                                const m = kData.members ?? kData.approximate_member_count;
+                                const o = kData.online ?? kData.approximate_presence_count;
+                                if (m !== undefined || o !== undefined) {
+                                    applyDiscordStatsToUI(kit, m, o);
+                                    liveApplied = true;
+                                }
                             }
                         });
-                        return;
                     }
                 }
             } catch (e) {}
 
-            ['beast', 'mace', 'carts'].forEach(async (kit) => {
+            const targets = ['beast', 'mace', 'carts'];
+            await Promise.all(targets.map(async (kit) => {
                 const code = DISCORD_KITS_WIDGETS[kit];
-                try {
-                    const res = await fetch(`https://discord.com/api/v9/invites/${code}?with_counts=true&_t=${Date.now()}`);
-                    if (!res.ok) return;
-                    const data = await res.json();
-                    if (data) {
-                        applyDiscordStatsToUI(kit, data.approximate_member_count, data.approximate_presence_count);
-                    }
-                } catch(e) {
-                    console.warn(`Не удалось загрузить данные Discord для ${kit}`);
+                if (!code) return;
+                const counts = await fetchDiscordInviteCounts(code);
+                if (counts) {
+                    applyDiscordStatsToUI(kit, counts.members, counts.online);
+                } else if (!liveApplied) {
+                    const onlineEl = document.getElementById(
+                        kit === 'beast' ? 'statDiscordBeastOnline' : (kit === 'mace' ? 'statDiscordMaceOnline' : 'statDiscordCartsOnline')
+                    );
+                    if (onlineEl && onlineEl.innerText === '...') onlineEl.innerText = '0';
                 }
-            });
+            }));
+
+            const axeCode = extractDiscordInviteCode(getSavedAxeInviteUrl());
+            if (axeCode) {
+                const axeCounts = await fetchDiscordInviteCounts(axeCode);
+                const axeOnlineEl = document.getElementById('statDiscordAxeOnline');
+                const axeCountEl = document.getElementById('statCountAxe');
+                if (axeCounts) {
+                    if (axeCountEl && axeCounts.members !== undefined) axeCountEl.innerText = `${axeCounts.members} участников`;
+                    if (axeOnlineEl && axeCounts.online !== undefined) axeOnlineEl.innerText = axeCounts.online;
+                }
+            }
+
+            if (Array.isArray(window.customHomeKits)) {
+                await Promise.all(window.customHomeKits.map(fetchCustomInviteStats));
+            }
         }
 
-        let isPageTransitioning = false;
+        let pageTransitionTimer = null;
         function openPage(pageId) {
-            const currentActive = document.querySelector('.page-view.active');
             const targetPage = document.getElementById(`page-${pageId}`);
+            if (!targetPage) return;
 
             if (pageId === 'home') {
                 document.body.className = 'site-bg-hw-dungeon';
             } else {
                 document.body.className = 'site-bg-' + currentCustomSiteBg;
-            }
-
-            if (!targetPage) return;
-            if (currentActive === targetPage) {
-                if (pageId === 'tier') renderTierGrid();
-                if (pageId === 'leaderboard') { updatePointsCalculator(); renderLeaderboard(); }
-                return;
             }
 
             const applyPageContent = () => {
@@ -2773,33 +2852,44 @@
                 }
             };
 
-            if (!currentActive) {
-                targetPage.classList.add('active');
+            if (pageTransitionTimer) {
+                clearTimeout(pageTransitionTimer);
+                pageTransitionTimer = null;
+            }
+
+            const currentActive = document.querySelector('.page-view.active');
+            if (currentActive === targetPage) {
+                document.querySelectorAll('.page-view').forEach(p => {
+                    if (p !== targetPage) {
+                        p.classList.remove('active');
+                        p.classList.remove('page-leaving');
+                    }
+                });
+                targetPage.classList.remove('page-leaving');
                 applyPageContent();
                 return;
             }
 
-            if (isPageTransitioning) {
+            if (!currentActive) {
                 document.querySelectorAll('.page-view').forEach(p => {
                     p.classList.remove('active');
                     p.classList.remove('page-leaving');
                 });
                 targetPage.classList.add('active');
                 applyPageContent();
-                isPageTransitioning = false;
                 return;
             }
 
-            isPageTransitioning = true;
             currentActive.classList.add('page-leaving');
-
-            setTimeout(() => {
-                currentActive.classList.remove('active');
-                currentActive.classList.remove('page-leaving');
+            pageTransitionTimer = setTimeout(() => {
+                document.querySelectorAll('.page-view').forEach(p => {
+                    p.classList.remove('active');
+                    p.classList.remove('page-leaving');
+                });
                 targetPage.classList.add('active');
                 applyPageContent();
-                isPageTransitioning = false;
-            }, 140);
+                pageTransitionTimer = null;
+            }, 120);
         }
 
         function setSiteBg(style, saveToAccount = true) {
@@ -3272,7 +3362,7 @@
                 if (wrapper) wrapper.classList.add('theme-carts');
                 if (title) title.innerText = 'CARTS TIER LIST';
             } else if (currentKit === 'axe') {
-                if (wrapper) wrapper.classList.add('theme-beast');
+                if (wrapper) wrapper.classList.add('theme-axe');
                 if (title) title.innerText = 'AXE TIER LIST';
             } else {
                 if (wrapper) wrapper.classList.add('theme-beast');
@@ -3322,7 +3412,7 @@
             for (let t = 1; t <= 5; t++) {
                 let col = document.createElement('div');
                 col.className = 'tier-col';
-                col.innerHTML = `<div class="tier-badge-head tier-${t}">TIER ${t}</div>`;
+                col.innerHTML = `<div class="tier-badge-head tier-ht${t}">TIER ${t}</div>`;
 
                 const tierPlayers = Object.keys(sourcePlayers)
                     .filter(nick => tierGroups[t].includes(((sourcePlayers[nick] && sourcePlayers[nick][currentKit]) || '').toUpperCase()))
@@ -3850,8 +3940,8 @@
         }
 
         function applyAdminUI(active) {
-            const devDot = document.getElementById('devTriggerDot');
-            if (devDot) devDot.style.display = active ? 'inline-block' : 'none';
+            isAdminMode = Boolean(active);
+            enforceAdminOnlyDevPanel();
 
             document.querySelectorAll('.admin-only-item').forEach(el => {
                 el.style.display = active ? (el.classList.contains('bg-section-title') ? 'block' : 'inline-block') : 'none';
@@ -3885,6 +3975,10 @@
         }
 
         function openAdminPanel() {
+            if (!isStrictlyAdmin()) {
+                openAdminLoginModal();
+                return;
+            }
             switchAdminTab('issue');
             const nickInput = document.getElementById('admPlayerNick');
             if (nickInput && !nickInput.value.trim() && loggedInUser) {
@@ -4337,6 +4431,10 @@
         }
 
         function saveAxeDiscordInviteFromSite(inputId) {
+            if (!isStrictlyAdmin()) {
+                if (typeof showToast === 'function') showToast('⛔ Изменять ссылку на Discord Axe может только администратор');
+                return;
+            }
             const inp = document.getElementById(inputId);
             if (!inp) return;
             const raw = (inp.value || '').trim();
@@ -4375,11 +4473,22 @@
 
         function enforceAdminOnlyDevPanel() {
             const allowed = isStrictlyAdmin();
+            if (document.body) {
+                document.body.classList.toggle('admin-authenticated', allowed);
+            }
             const devDot = document.getElementById('devTriggerDot');
             const devModal = document.getElementById('devModal');
             const codeModal = document.getElementById('codeEditorModal');
+            const axeEditor = document.getElementById('axeInviteEditorBox');
+            const adminColHead = document.getElementById('adminColHead');
             if (devDot) {
                 devDot.style.display = allowed ? 'inline-block' : 'none';
+            }
+            if (axeEditor) {
+                axeEditor.style.display = allowed ? 'flex' : 'none';
+            }
+            if (adminColHead) {
+                adminColHead.style.display = allowed ? '' : 'none';
             }
             if (!allowed) {
                 if (devModal) devModal.style.display = 'none';
@@ -4519,5 +4628,61 @@
             window.addEventListener('blur', clearHoldState, { passive: true });
         })();
     </script>
+<script>
+        async function runBackendAndAuthDiagnostics() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                auth: {
+                    loggedInUser: loggedInUser || null,
+                    sessionAccountId: sessionAccountId || null,
+                    isAdminMode: Boolean(isAdminMode),
+                    modalsPresent: {
+                        authModal: Boolean(document.getElementById('authModal')),
+                        codeLoginModal: Boolean(document.getElementById('codeLoginModal')),
+                        postOAuthNickModal: Boolean(document.getElementById('postOAuthNickModal')),
+                        nickModal: Boolean(document.getElementById('nickModal')),
+                        adminLoginModal: Boolean(document.getElementById('adminLoginModal'))
+                    }
+                },
+                backend: {
+                    dataGetOk: false,
+                    botKitTiersOk: false,
+                    discordLiveStatsOk: false
+                }
+            };
+
+            try {
+                const r1 = await fetch(`${BACKEND_URL}/api/data/get?_t=${Date.now()}`, { cache: 'no-store' });
+                report.backend.dataGetOk = r1.ok;
+                report.backend.dataGetStatus = r1.status;
+            } catch (e) {
+                report.backend.dataGetError = String(e && e.message || e);
+            }
+
+            try {
+                const r2 = await fetch(`${BACKEND_URL}/api/bot/kit-tiers?kit=${encodeURIComponent(currentKit)}&_t=${Date.now()}`, { cache: 'no-store' });
+                report.backend.botKitTiersOk = r2.ok;
+                report.backend.botKitTiersStatus = r2.status;
+            } catch (e) {
+                report.backend.botKitTiersError = String(e && e.message || e);
+            }
+
+            try {
+                const r3 = await fetch(`${BACKEND_URL}/api/discord/live-stats?_t=${Date.now()}`, { cache: 'no-store' });
+                report.backend.discordLiveStatsOk = r3.ok;
+                report.backend.discordLiveStatsStatus = r3.status;
+            } catch (e) {
+                report.backend.discordLiveStatsError = String(e && e.message || e);
+            }
+
+            const anyBackendOk = report.backend.dataGetOk || report.backend.botKitTiersOk || report.backend.discordLiveStatsOk;
+            if (typeof showToast === 'function') {
+                showToast(anyBackendOk
+                    ? '✅ Бэкенд доступен, модальные окна авторизации на месте'
+                    : '⚠️ Внешний бэкенд не отвечает (работает локальное/Discord API хранилище)');
+            }
+            return report;
+        }
+</script>
 </body>
 </html>
