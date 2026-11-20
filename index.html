@@ -169,7 +169,7 @@
       box-shadow: 0 0 8px var(--accent-emerald);
     }
 
-    /* Main Container */
+    /* Main Container — lifted spacing & tight top alignment */
     .page-shell {
       max-width: 1220px;
       margin: 0 auto;
@@ -190,7 +190,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Hero Header */
+    /* Hero Header — lifted upward */
     .hero {
       text-align: center;
       margin-top: 2px;
@@ -215,7 +215,7 @@
       font-weight: 500;
     }
 
-    /* Discipline Cards Grid on Leaderboard */
+    /* Discipline Cards Grid on Leaderboard (3 top + 1 bottom-left = 4 unique disciplines, NO duplicates) */
     .disciplines-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -310,14 +310,14 @@
       display: inline-block;
     }
 
-    /* Section Header */
+    /* Section Header — lifted */
     .section-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 4px;
+      margin-top: 6px;
       margin-bottom: 16px;
     }
 
@@ -334,7 +334,7 @@
       margin-top: 2px;
     }
 
-    /* Tier Columns */
+    /* Tier Columns (TIER 1 .. TIER 5) */
     .tiers-grid {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -468,10 +468,10 @@
       pointer-events: none;
     }
 
-    /* Coming Soon / Developing Kit View */
+    /* Coming Soon / Developing Kit View — lifted */
     .soon-card {
       max-width: 680px;
-      margin: 8px auto 0;
+      margin: 12px auto 0;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
@@ -527,7 +527,7 @@
       box-shadow: 0 8px 22px rgba(124, 58, 237, 0.35);
     }
 
-    /* Guide / FAQ View */
+    /* Guide / FAQ View — lifted cleanly */
     .guide-hero {
       text-align: center;
       margin-top: 0;
@@ -746,7 +746,7 @@
       display: block;
     }
 
-    /* Links / Discord View */
+    /* Links / Discord View — lifted cleanly */
     .links-header {
       text-align: center;
       margin-top: 0;
@@ -916,7 +916,7 @@
   </header>
 
   <main class="page-shell">
-    <!-- 1. LEADERBOARD VIEW -->
+    <!-- 1. LEADERBOARD VIEW (No duplicate Mace/Carts cards) -->
     <section id="view-leaderboard" class="view active">
       <div class="hero">
         <h1 class="hero-title">PRIZTIERS</h1>
@@ -939,12 +939,12 @@
       <div class="tiers-grid" id="tiersGrid"></div>
     </section>
 
-    <!-- 2. INDIVIDUAL KIT VIEW -->
+    <!-- 2. INDIVIDUAL KIT VIEW (Active kits or Coming Soon) -->
     <section id="view-kit" class="view">
       <div id="kitContentMount"></div>
     </section>
 
-    <!-- 3. GUIDE & FAQ VIEW -->
+    <!-- 3. GUIDE & FAQ VIEW (Lifted cleanly at top) -->
     <section id="view-guide" class="view">
       <div class="guide-hero">
         <div class="guide-pill">📘 Гайд по тестированию</div>
@@ -989,7 +989,7 @@
       </div>
     </section>
 
-    <!-- 4. DISCORD & LINKS VIEW -->
+    <!-- 4. DISCORD & LINKS VIEW (Lifted cleanly at top) -->
     <section id="view-links" class="view">
       <div class="links-header">
         <div class="guide-pill">💬 Discord и каналы связи</div>
@@ -1032,6 +1032,7 @@
       { id: "spearmace", name: "SPEARMACE", icon: "🔱", active: false, playersCount: 0, queueLabel: "Скоро" }
     ];
 
+    // Unique discipline cards on the main leaderboard (strictly NO duplicates)
     const LEADERBOARD_DISCIPLINES = [
       { kitId: "beast", title: "BEAST DISCIPLINE", countText: "44 участников", meta: "Discord • 3 в сети", icon: "⚔️" },
       { kitId: "mace", title: "MACE DISCIPLINE", countText: "31 участников", meta: "Discord • 2 в сети", icon: "🔨" },
@@ -1070,7 +1071,14 @@
       }
     };
 
-    const TIER_POINTS = { none: 0, t5: 5, t4: 15, t3: 30, t2: 45, t1: 60 };
+    const TIER_POINTS = {
+      none: 0,
+      t5: 5,
+      t4: 15,
+      t3: 30,
+      t2: 45,
+      t1: 60
+    };
 
     const TIER_SCALE = [
       { tag: "TIER 1", label: "Элита дисциплины", pts: 60, width: "100%" },
@@ -1126,13 +1134,19 @@
       }
     ];
 
-    let state = { activeNav: "leaderboard", selectedKit: "beast", searchQuery: "" };
+    let state = {
+      activeNav: "leaderboard",
+      selectedKit: "beast",
+      searchQuery: ""
+    };
 
     function setActiveView(navKey) {
       state.activeNav = navKey;
+
       document.querySelectorAll(".nav-btn").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.nav === navKey);
       });
+
       document.querySelectorAll(".view").forEach((sec) => sec.classList.remove("active"));
 
       if (navKey === "leaderboard") {
@@ -1376,6 +1390,7 @@
       });
     }
 
+    // Event bindings
     document.querySelectorAll("[data-nav]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -1408,6 +1423,7 @@
       document.getElementById("playerModal").classList.add("open");
     });
 
+    // Initial render
     renderGuidePanels();
     renderLinksGrid();
     renderLeaderboard();
