@@ -482,6 +482,22 @@
             transition: transform 0.1s ease, filter 0.1s ease, box-shadow 0.1s ease !important;
         }
 
+
+        #page-tier .tier-table-wrapper,
+        #page-tier .tier-header-bar,
+        #page-tier .tier-grid,
+        #page-tier .kit-soon-box {
+            margin-top: 0 !important;
+            padding-top: 6px;
+        }
+        #page-links .guide-hero-card {
+            margin-top: 8px !important;
+            margin-bottom: 14px !important;
+            padding: 18px 20px !important;
+        }
+        #page-links .links-grid {
+            margin-top: 10px !important;
+        }
     </style>
     <style id="priz-remove-bottom-nav-only">
         footer ~ nav,
@@ -598,31 +614,12 @@
                     </div>
                 </div>
 
-                    <div class="kit-stat-card">
-                        <div class="kit-stat-info">
-                            <div class="kit-stat-title">
-                                <img src="https://minecraft.wiki/images/Mace_JE1_BE1.png" width="16" height="16" alt="" class="protected-asset"> MACE DISCIPLINE
-                            </div>
-                            <div class="kit-stat-count" id="statCountMace">... участников</div>
-                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordMaceOnline">...</span> в сети</div>
-                        </div>
-                    </div>
-
-                    <div class="kit-stat-card">
-                        <div class="kit-stat-info">
-                            <div class="kit-stat-title">
-                                <img src="https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png" width="16" height="16" alt="" class="protected-asset"> CARTS DISCIPLINE
-                            </div>
-                            <div class="kit-stat-count" id="statCountCarts">... участников</div>
-                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordCartsOnline">...</span> в сети</div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <!-- СТРАНИЦЫ ТИРОВ ПО КИТАМ -->
             <div id="page-tier" class="page-view">
-                <div class="tier-table-wrapper theme-beast" id="tierWrapper" style="margin-top: 32px;">
+                <div class="tier-table-wrapper theme-beast" id="tierWrapper" style="margin-top: 10px;">
                     <div class="tier-header-bar">
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                             <div style="font-size: 20px; font-weight: 900; letter-spacing: 0.5px;" id="kitTitle">BEAST TIER LIST</div>
@@ -2011,11 +2008,11 @@
         function escapeJSArg(str) {
             if (str === null || str === undefined) return '';
             return String(str)
-                .replace(/\\/g, '\\\\')
-                .replace(/'/g, "\\'")
-                .replace(/"/g, '\\"')
-                .replace(/</g, '\\x3c')
-                .replace(/>/g, '\\x3e');
+                .replace(/\/g, '\\')
+                .replace(/'/g, "\'")
+                .replace(/"/g, '\"')
+                .replace(/</g, '\x3c')
+                .replace(/>/g, '\x3e');
         }
 
         function calculatePlayerScore(playerData) {
@@ -3054,16 +3051,11 @@
         function renamePlayerRecords(oldNick, newNick) {
             if (!oldNick || !newNick || oldNick === newNick) return;
             if (!window.playersData[oldNick]) {
-                window.playersData[newNick] = {
-                    beast: "0", mace: "0", carts: "0",
-                    smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0",
-                    title: ''
-                };
+                window.playersData[newNick] = { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0', title: '', server: '', ping: '' };
             } else {
-                window.playersData[newNick] = { ...window.playersData[oldNick] };
+                window.playersData[newNick] = window.playersData[oldNick];
                 delete window.playersData[oldNick];
             }
-
             if (window.playerViews[oldNick]) {
                 window.playerViews[newNick] = window.playerViews[oldNick];
                 delete window.playerViews[oldNick];
@@ -3080,377 +3072,37 @@
                 window.playerPoses[newNick] = window.playerPoses[oldNick];
                 delete window.playerPoses[oldNick];
             }
-
             window.matchHistory.forEach(item => {
-                if (item.ign && item.ign.toLowerCase() === oldNick.toLowerCase()) {
-                    item.ign = newNick;
-                }
+                if (item.player === oldNick) item.player = newNick;
             });
-
             const oldKey = normalizeNickKey(oldNick);
             const newKey = normalizeNickKey(newNick);
             if (window.discordNickBindings && window.discordNickBindings[oldKey]) {
-                const boundData = window.discordNickBindings[oldKey];
+                const bData = window.discordNickBindings[oldKey];
                 delete window.discordNickBindings[oldKey];
-                window.discordNickBindings[newKey] = {
-                    discord_id: boundData.discord_id,
-                    nickname: newNick,
-                    bound_at: boundData.bound_at || new Date().toISOString()
-                };
-                if (window.playersData[newNick] && boundData.discord_id) {
-                    window.playersData[newNick].discord_id = boundData.discord_id;
-                }
+                window.discordNickBindings[newKey] = { ...bData, nickname: newNick };
                 persistDiscordBindings();
             }
-
-            saveLocalDb();
-        }
-
-        function closeModalOnBg(event, modalId) {
-            if (event.target.id === modalId) {
-                const modal = document.getElementById(modalId);
-                if (modal) modal.style.display = 'none';
-            }
-        }
-
-        function isSoonKit(kit) {
-            return SOON_KITS.includes(String(kit || '').toLowerCase());
-        }
-
-        function switchKit(kit) {
-            currentKit = String(kit || 'beast').toLowerCase();
-            openPage('tier');
-
-            document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById(`btn-${currentKit}`);
-            if (btn) btn.classList.add('active');
-
-            const wrapper = document.getElementById('tierWrapper');
-            let title = document.getElementById('kitTitle');
-            if (wrapper) wrapper.className = 'tier-table-wrapper';
-
-            if (currentKit === 'beast') {
-                if (wrapper) wrapper.classList.add('theme-beast');
-                if (title) title.innerText = 'BEAST TIER LIST';
-            } else if (currentKit === 'mace') {
-                if (wrapper) wrapper.classList.add('theme-mace');
-                if (title) title.innerText = 'MACE TIER LIST';
-            } else if (currentKit === 'carts') {
-                if (wrapper) wrapper.classList.add('theme-carts');
-                if (title) title.innerText = 'CARTS TIER LIST';
-            } else if (currentKit === 'axe') {
-                if (wrapper) wrapper.classList.add('theme-beast');
-                if (title) title.innerText = 'AXE TIER LIST';
-            } else {
-                if (wrapper) wrapper.classList.add('theme-beast');
-                if (title) title.innerText = `${currentKit.toUpperCase()} TIER LIST`;
-            }
-
-            renderTierGrid();
-            refreshBotKitTiersStatus();
-        }
-
-        function renderTierGrid() {
-            let grid = document.getElementById('tierGridContent');
-            const soonBox = document.getElementById('kitSoonContainer');
-            const soonBadge = document.getElementById('kitSoonBadge');
-            const soonDesc = document.getElementById('kitSoonDesc');
-            const searchBtn = document.getElementById('tierSearchBtn');
-            if (!grid) return;
-
-            if (isSoonKit(currentKit)) {
-                grid.style.display = 'none';
-                grid.innerHTML = '';
-                if (searchBtn) searchBtn.style.display = 'none';
-                if (soonBox) soonBox.style.display = 'block';
-                if (soonBadge) soonBadge.innerText = `${currentKit.toUpperCase()} PVP • SOON`;
-                if (soonDesc) {
-                    soonDesc.innerText = `Дисциплина ${currentKit.toUpperCase()} находится в разработке и скоро откроется для тестирований и тиров в PrizTiers.`;
-                }
-                return;
-            }
-
-            grid.style.display = '';
-            if (searchBtn) searchBtn.style.display = '';
-            if (soonBox) soonBox.style.display = 'none';
-
-            const sourcePlayers = getAllLeaderboardParticipants();
-
-            grid.innerHTML = '';
-
-            const tierGroups = {
-                1: ['HT1', 'RHT1', 'LT1', 'RLT1'],
-                2: ['HT2', 'RHT2', 'LT2', 'RLT2'],
-                3: ['HT3', 'LT3'],
-                4: ['HT4', 'LT4'],
-                5: ['HT5', 'LT5']
-            };
-
-            for (let t = 1; t <= 5; t++) {
-                let col = document.createElement('div');
-                col.className = 'tier-col';
-                col.innerHTML = `<div class="tier-badge-head tier-${t}">TIER ${t}</div>`;
-
-                const tierPlayers = Object.keys(sourcePlayers)
-                    .filter(nick => tierGroups[t].includes(((sourcePlayers[nick] && sourcePlayers[nick][currentKit]) || '').toUpperCase()))
-                    .sort((a, b) => {
-                        const tA = ((sourcePlayers[a] && sourcePlayers[a][currentKit]) || '').toUpperCase();
-                        const tB = ((sourcePlayers[b] && sourcePlayers[b][currentKit]) || '').toUpperCase();
-                        return (TIER_WEIGHTS[tB] || 0) - (TIER_WEIGHTS[tA] || 0);
-                    });
-
-                tierPlayers.forEach(nick => {
-                    const playerVal = ((sourcePlayers[nick] && sourcePlayers[nick][currentKit]) || '').toUpperCase();
-                    const safeNick = escapeHTML(nick);
-                    const jsNick = escapeJSArg(nick);
-                    const safeTier = escapeHTML(playerVal);
-                    col.innerHTML += `
-                        <div class="player-card-mini" onclick="openPlayerPopup('${jsNick}')">
-                            <img src="https://mc-heads.net/avatar/${safeNick}/24" width="22" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset"> 
-                            <span>${safeNick} <small style="color: #c084fc; font-weight: 700;">(${safeTier})</small></span>
-                        </div>
-                    `;
-                });
-                grid.appendChild(col);
-            }
-        }
-
-        function buildKitPillsHtml(p) {
-            let html = '';
-            ALL_KITS.forEach(k => {
-                const tierVal = (p[k] || '').toUpperCase();
-                if (tierVal && TIER_WEIGHTS[tierVal]) {
-                    let tierNum = tierVal.replace(/[^0-9]/g, '') || '1';
-                    const safeTier = escapeHTML(tierVal);
-                    const iconHtml = KIT_ICONS[k] ? `<img src="${KIT_ICONS[k]}" alt="" class="protected-asset">` : `<span>${k.toUpperCase()}:</span>`;
-                    html += `<span class="lb-kit-pill tier-${tierNum}">${iconHtml}${safeTier}</span>`;
-                }
-            });
-            return html || `<span style="font-size: 11px; color: #64748b;">—</span>`;
-        }
-
-        function renderLeaderboard() {
-            let tbody = document.getElementById('leaderboardTableBody');
-            let podium = document.getElementById('leaderboardPodium');
-            if (!tbody || !podium) return;
-
-            const visibleParticipants = getAllLeaderboardParticipants();
-            const allKeys = Object.keys(visibleParticipants);
-            const totalEl = document.getElementById('lbTotalPlayers');
-            const beastEl = document.getElementById('lbTotalBeast');
-            const maceEl = document.getElementById('lbTotalMace');
-            const cartsEl = document.getElementById('lbTotalCarts');
-
-            if (totalEl) totalEl.innerText = allKeys.length.toLocaleString('ru-RU');
-            if (beastEl) beastEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].beast || '').toUpperCase()]).length.toLocaleString('ru-RU');
-            if (maceEl) maceEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].mace || '').toUpperCase()]).length.toLocaleString('ru-RU');
-            const axeEl = document.getElementById('lbTotalAxe');
-            if (cartsEl) cartsEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].carts || '').toUpperCase()]).length.toLocaleString('ru-RU');
-            if (axeEl) axeEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].axe || '').toUpperCase()]).length.toLocaleString('ru-RU');
-
-            let searchInput = document.getElementById('lbSearchInput');
-            let searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
-
-            let sorted = allKeys
-                .filter(nick => nick.toLowerCase().includes(searchQuery))
-                .sort((a, b) => {
-                    const scoreDiff = calculatePlayerScore(visibleParticipants[b]) - calculatePlayerScore(visibleParticipants[a]);
-                    if (scoreDiff !== 0) return scoreDiff;
-                    return a.localeCompare(b, 'ru');
-                });
-
-            tbody.innerHTML = '';
-            podium.innerHTML = '';
-
-            if (sorted.length === 0) {
-                podium.style.display = 'none';
-                tbody.innerHTML = `<tr><td colspan="5" style="padding: 24px; text-align: center; color: #94a3b8;">Игроки не найдены</td></tr>`;
-                return;
-            }
-
-            let listStartIndex = 0;
-            if (!searchQuery && sorted.length > 0) {
-                podium.style.display = 'grid';
-                const top3 = sorted.slice(0, 3);
-                const podiumOrder = [
-                    { idx: 1, rank: 2 },
-                    { idx: 0, rank: 1 },
-                    { idx: 2, rank: 3 }
-                ];
-
-                podiumOrder.forEach(slot => {
-                    const nick = top3[slot.idx];
-                    if (!nick) {
-                        podium.innerHTML += `<div></div>`;
-                        return;
-                    }
-                    const p = visibleParticipants[nick];
-                    const safeNick = escapeHTML(nick);
-                    const jsNick = escapeJSArg(nick);
-                    const score = calculatePlayerScore(p);
-                    const subText = p.title ? escapeHTML(p.title) : `#${slot.rank} МЕСТО`;
-                    const podiumAdminBtn = hasActiveAdminBypass()
-                        ? `<button class="btn-action-sm" style="margin-top: 8px; padding: 3px 8px; font-size: 11px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️ Тир</button>`
-                        : '';
-                    podium.innerHTML += `
-                        <div class="lb-podium-card rank-${slot.rank}" onclick="openPlayerPopup('${jsNick}')">
-                            <div class="lb-podium-pts">${score}</div>
-                            <div class="lb-podium-pts-lbl">очков</div>
-                            <div class="lb-podium-sub">${subText}</div>
-                            <div class="lb-podium-avatar">
-                                <img src="https://mc-heads.net/avatar/${safeNick}/80" alt="${safeNick}" onerror="this.src='https://minotar.net/avatar/Steve/80'" class="protected-asset">
-                            </div>
-                            <div class="lb-podium-name">${safeNick}</div>
-                            <div class="lb-podium-tiers">${buildKitPillsHtml(p)}</div>
-                            ${podiumAdminBtn}
-                        </div>
-                    `;
-                });
-                listStartIndex = 3;
-            } else {
-                podium.style.display = 'none';
-            }
-
-            const restPlayers = sorted.slice(listStartIndex);
-            if (restPlayers.length === 0 && listStartIndex > 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="padding: 18px; text-align: center; color: #64748b; font-size: 13px;">Все участники представлены на подиуме выше</td></tr>`;
-                return;
-            }
-
-            restPlayers.forEach((nick, i) => {
-                const rank = listStartIndex + i + 1;
-                const p = visibleParticipants[nick];
-                const safeNick = escapeHTML(nick);
-                const jsNick = escapeJSArg(nick);
-                const score = calculatePlayerScore(p);
-                const adminControls = hasActiveAdminBypass()
-                    ? `<div style="display:flex; gap:4px; justify-content:flex-end;">
-                        <button class="btn-action-sm" style="padding: 4px 8px;" onclick="quickAdminEdit(event, '${jsNick}')">✏️</button>
-                        <button class="btn-action-sm btn-danger-sm" style="padding: 4px 8px;" onclick="quickAdminDelete(event, '${jsNick}')">🗑️</button>
-                       </div>`
-                    : '';
-
-                tbody.innerHTML += `
-                    <tr class="lb-list-row" onclick="openPlayerPopup('${jsNick}')">
-                        <td style="padding: 14px; font-weight: 800; color: #94a3b8; font-size: 13px;">${rank}</td>
-                        <td style="padding: 14px;">
-                            <div class="lb-player-cell">
-                                <img src="https://mc-heads.net/avatar/${safeNick}/32" alt="" onerror="this.src='https://minotar.net/avatar/Steve/32'" class="protected-asset">
-                                <div class="lb-player-meta">
-                                    <span class="lb-player-nick">${safeNick}</span>
-                                    ${p.title ? `<span class="lb-player-tag">${escapeHTML(p.title)}</span>` : ''}
-                                </div>
-                            </div>
-                        </td>
-                        <td style="padding: 14px;">
-                            <div class="lb-tiers-cell">${buildKitPillsHtml(p)}</div>
-                        </td>
-                        <td style="padding: 14px;" class="lb-pts-cell">
-                            <div class="lb-pts-num">${score}</div>
-                            <div class="lb-pts-unit">очков</div>
-                        </td>
-                        <td style="padding: 14px; text-align: right;">${adminControls}</td>
-                    </tr>
-                `;
-            });
-        }
-
-        function buildPlayerHistoryHtml(nick) {
-            if (!window.matchHistory || !window.matchHistory.length) {
-                return 'Тестов пока нет';
-            }
-            const list = window.matchHistory
-                .filter(h => h.ign && h.ign.toLowerCase() === nick.toLowerCase())
-                .slice(0, 10);
-
-            if (!list.length) return 'Тестов пока нет';
-
-            return list.map(h => {
-                const k = escapeHTML((h.kit || '').toUpperCase());
-                const oldT = escapeHTML(h.old_tier || 'None');
-                const newT = escapeHTML(h.new_tier || 'None');
-                const sc = escapeHTML(h.score || '3-0');
-                const tester = escapeHTML(h.tester || 'Admin');
-                const dt = escapeHTML(h.date || '');
-                return `<div style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">
-                    <strong style="color:#c084fc;">[${k}]</strong> <code>${oldT}</code> ➔ <code>${newT}</code> (${sc}) • <span style="color:#cbd5e1;">${tester}</span> <span style="float:right; color:#64748b;">${dt}</span>
-                </div>`;
-            }).join('');
-        }
-
-        function openPlayerPopup(nick) {
-            recordProfileView(nick);
-            const allVisible = getAllLeaderboardParticipants();
-            let data = window.playersData[nick] || allVisible[nick] || { beast: '0', mace: '0', carts: '0', title: '' };
-            let views = window.playerViews[nick] || { day: 1, month: 1, total: 1 };
-            let bgTheme = window.playerBgTheme[nick] || 'dark-default';
-            const score = calculatePlayerScore(data);
-
-            const ignEl = document.getElementById('modalPlayerIgn');
-            const ptsEl = document.getElementById('modalPlayerPts');
-            const metaEl = document.getElementById('modalPlayerMeta');
-            const dayEl = document.getElementById('modalViewsDay');
-            const monthEl = document.getElementById('modalViewsMonth');
-            const totalEl = document.getElementById('modalViewsTotal');
-            const histEl = document.getElementById('modalPlayerHistoryList');
-
-            if (ignEl) ignEl.innerText = nick;
-            if (ptsEl) ptsEl.innerText = `${score} очков`;
-            if (metaEl) {
-                const rankLabel = data.title || getCombatTitleByScore(score);
-                const srv = data.server ? `🌐 ${escapeHTML(data.server)}` : '';
-                const png = data.ping ? `📶 ${escapeHTML(data.ping)}` : '';
-                metaEl.innerText = [`🏅 ${escapeHTML(rankLabel)}`, srv, png].filter(Boolean).join('  •  ');
-            }
-            if (dayEl) dayEl.innerText = views.day;
-            if (monthEl) monthEl.innerText = views.month;
-            if (totalEl) totalEl.innerText = views.total;
-            if (histEl) histEl.innerHTML = buildPlayerHistoryHtml(nick);
-
-            let modalBox = document.getElementById('modalProfileBox');
-            if (modalBox) modalBox.className = "modal-box bg-" + bgTheme;
-
-            if (modalSkinViewer) {
-                try {
-                    let baseSkin = window.playerSkins[nick] || `https://minotar.net/skin/${nick}`;
-                    let skinUrl = baseSkin.includes('?') ? `${baseSkin}&t=${Date.now()}` : `${baseSkin}?t=${Date.now()}`;
-                    modalSkinViewer.loadSkin(skinUrl).then(() => {
-                        let modalPose = window.playerPoses[nick] || 'default';
-                        applyPoseToViewer(modalSkinViewer, modalPose);
-                    }).catch(() => {
-                        let modalPose = window.playerPoses[nick] || 'default';
-                        applyPoseToViewer(modalSkinViewer, modalPose);
-                    });
-                } catch (e) {}
-            }
-
-            let badgesContainer = document.getElementById('modalTierBadges');
-            if (badgesContainer) {
-                badgesContainer.innerHTML = '';
-                ALL_KITS.forEach(k => {
-                    const tierVal = (data[k] || '').toUpperCase();
-                    if (tierVal && TIER_WEIGHTS[tierVal]) {
-                        let tierNum = tierVal.replace(/[^0-9]/g, '') || '1';
-                        badgesContainer.innerHTML += `<span class="badge-item tier-${tierNum}">${k.toUpperCase()}: ${escapeHTML(tierVal)}</span>`;
-                    }
-                });
-            }
-
-            const playerModal = document.getElementById('playerModal');
-            if (playerModal) playerModal.style.display = 'flex';
-            renderLeaderboard();
-        }
-
-        function closePlayerModal() {
-            const playerModal = document.getElementById('playerModal');
-            if (playerModal) playerModal.style.display = 'none';
         }
 
         function checkAuthAndOpenProfile() {
-            if (!loggedInUser) {
+            if (!loggedInUser && !sessionAccountId) {
                 const authModal = document.getElementById('authModal');
                 if (authModal) authModal.style.display = 'flex';
             } else {
+                if (!loggedInUser && sessionAccountId) {
+                    const found = findNickByDiscordId(sessionAccountId);
+                    if (found) {
+                        loggedInUser = found;
+                        localStorage.setItem('priz_ign', loggedInUser);
+                        const label = document.getElementById('navBtnLabel');
+                        if (label) label.innerText = loggedInUser;
+                    } else {
+                        const nickModal = document.getElementById('postOAuthNickModal');
+                        if (nickModal) nickModal.style.display = 'flex';
+                        return;
+                    }
+                }
                 viewProfile(loggedInUser);
             }
         }
@@ -3458,448 +3110,720 @@
         function viewProfile(nick) {
             recordProfileView(nick);
             openPage('profile');
-            const allVisible = getAllLeaderboardParticipants();
-            const userData = window.playersData[nick] || allVisible[nick] || { beast: "0", mace: "0", carts: "0", title: '' };
-            const score = calculatePlayerScore(userData);
 
-            const ignTxt = document.getElementById('userIgnTxt');
-            const ptsTxt = document.getElementById('userPtsTxt');
-            if (ignTxt) ignTxt.innerText = nick;
-            if (ptsTxt) ptsTxt.innerText = `${score} очков`;
+            const ignEl = document.getElementById('userIgnTxt');
+            if (ignEl) ignEl.innerText = nick;
 
-            const rankTitleEl = document.getElementById('profileRankTitle');
-            const metaInfoEl = document.getElementById('profileMetaInfo');
-            if (rankTitleEl) {
-                const sortedNicks = Object.keys(allVisible).sort((a, b) => calculatePlayerScore(allVisible[b]) - calculatePlayerScore(allVisible[a]));
-                const pos = sortedNicks.findIndex(n => n.toLowerCase() === nick.toLowerCase());
-                const rankPosStr = pos >= 0 ? `#${pos + 1}` : '#—';
-                const customOrAutoRank = userData.title || getCombatTitleByScore(score);
-                rankTitleEl.innerText = `${customOrAutoRank} • ${rankPosStr}`;
+            const createdTxt = document.getElementById('accountCreatedDateTxt');
+            if (createdTxt) {
+                createdTxt.innerText = (sessionAccountId && userCreatedDates[sessionAccountId]) ? userCreatedDates[sessionAccountId] : 'сегодня';
             }
+
+            const allParticipants = getAllLeaderboardParticipants();
+            const p = allParticipants[nick] || window.playersData[nick] || { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0', server: '', ping: '' };
+            const totalPts = calculatePlayerScore(p);
+
+            const ptsEl = document.getElementById('userPtsTxt');
+            if (ptsEl) ptsEl.innerText = `${totalPts} очков`;
+
+            const rankedList = Object.keys(allParticipants)
+                .map(n => ({ nick: n, score: calculatePlayerScore(allParticipants[n]) }))
+                .sort((a, b) => b.score - a.score);
+            const posIndex = rankedList.findIndex(item => normalizeNickKey(item.nick) === normalizeNickKey(nick));
+            const rankTitleEl = document.getElementById('profileRankTitle');
+            if (rankTitleEl) {
+                const posText = posIndex >= 0 ? `#${posIndex + 1}` : '#—';
+                rankTitleEl.innerText = `${getCombatTitleByScore(totalPts)} • ${posText}`;
+            }
+
+            const metaInfoEl = document.getElementById('profileMetaInfo');
             if (metaInfoEl) {
-                const parts = [];
-                if (userData.server) parts.push(userData.server);
-                if (userData.ping) parts.push(userData.ping);
-                metaInfoEl.innerText = parts.length ? parts.join(' • ') : 'Не указано';
+                const srv = p.server || 'Сервер не указан';
+                const png = p.ping || '—';
+                metaInfoEl.innerText = `${srv} • ${png}`;
             }
 
             const slotsGrid = document.getElementById('profileKitSlotsGrid');
             if (slotsGrid) {
-                const mainKits = [
-                    { key: 'beast', label: 'BEAST' },
-                    { key: 'mace', label: 'MACE' },
-                    { key: 'carts', label: 'CARTS' }
+                const slotKits = [
+                    { key: 'beast', label: 'Beast' },
+                    { key: 'mace', label: 'Mace' },
+                    { key: 'carts', label: 'Carts' },
+                    { key: 'axe', label: 'AXE' },
+                    { key: 'smp', label: 'SMP' },
+                    { key: 'uhc', label: 'UHC' },
+                    { key: 'op', label: 'OP' },
+                    { key: 'spearmace', label: 'SPEARMACE' }
                 ];
-                slotsGrid.innerHTML = mainKits.map(mk => {
-                    const tVal = (userData[mk.key] || '').toUpperCase();
-                    const hasT = Boolean(tVal && TIER_WEIGHTS[tVal]);
-                    const tNum = hasT ? (tVal.replace(/[^0-9]/g, '') || '1') : '';
-                    return `
+                slotsGrid.innerHTML = '';
+                slotKits.forEach(item => {
+                    const tVal = (p[item.key] && p[item.key] !== '0') ? p[item.key].toUpperCase() : 'UNRANKED';
+                    const badgeClass = tVal !== 'UNRANKED' ? `tier-badge tier-${tVal}` : '';
+                    slotsGrid.innerHTML += `
                         <div class="profile-kit-slot">
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <img src="${KIT_ICONS[mk.key]}" width="20" height="20" alt="" class="protected-asset">
-                                <span style="font-size:12px; font-weight:800; color:#e2e8f0;">${mk.label}</span>
-                            </div>
-                            ${hasT
-                                ? `<span class="badge-item tier-${tNum}" style="margin:0;">${escapeHTML(tVal)}</span>`
-                                : `<span style="font-size:11px; color:#64748b; font-weight:700;">Нет тира</span>`
-                            }
+                            <span style="font-size: 12px; font-weight: 800; color: #e2e8f0; display: inline-flex; align-items: center; gap: 6px;">
+                                <img src="${KIT_ICONS[item.key]}" width="15" height="15" alt="" class="protected-asset"> ${item.label}
+                            </span>
+                            ${tVal !== 'UNRANKED'
+                                ? `<span class="${badgeClass}" style="font-size: 10px; padding: 2px 7px;">${tVal}</span>`
+                                : `<span style="font-size: 10px; font-weight: 700; color: #64748b;">—</span>`}
                         </div>
                     `;
-                }).join('');
+                });
             }
 
-            const dateEl = document.getElementById('accountCreatedDateTxt');
-            if (dateEl) {
-                if (sessionAccountId && !userCreatedDates[sessionAccountId]) {
-                    userCreatedDates[sessionAccountId] = new Date().toLocaleDateString('ru-RU');
-                    localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+            const stats = window.playerViews[nick] || { day: 0, month: 0, total: 0 };
+            if (document.getElementById('viewsDay')) document.getElementById('viewsDay').innerText = stats.day;
+            if (document.getElementById('viewsMonth')) document.getElementById('viewsMonth').innerText = stats.month;
+            if (document.getElementById('viewsTotal')) document.getElementById('viewsTotal').innerText = stats.total;
+
+            let badgesHtml = '';
+            const kitNames = { beast: "Beast", mace: "Mace", carts: "Carts", smp: "SMP", uhc: "UHC", axe: "AXE", op: "OP", spearmace: "SPEARMACE" };
+            ALL_KITS.forEach(k => {
+                if (p[k] && p[k] !== '0') {
+                    badgesHtml += `<div class="tier-badge tier-${p[k]}">${kitNames[k]}: ${p[k]}</div>`;
                 }
-                const createdStr = (sessionAccountId && userCreatedDates[sessionAccountId]) || 'сегодня';
-                dateEl.innerText = createdStr;
+            });
+            const tierBadgesEl = document.getElementById('profileTierBadges');
+            if (tierBadgesEl) {
+                tierBadgesEl.innerHTML = badgesHtml || `<span style="font-size: 13px; color: #94a3b8;">У вас пока нет присвоенных тиров. Пройдите тестирование в Discord!</span>`;
             }
 
-            const histEl = document.getElementById('profileHistoryList');
-            if (histEl) {
-                histEl.innerHTML = buildPlayerHistoryHtml(nick);
-            }
+            renderHistoryList(nick, 'profileHistoryList');
 
-            let views = window.playerViews[nick] || { day: 0, month: 0, total: 0 };
-            const vDay = document.getElementById('viewsDay');
-            const vMonth = document.getElementById('viewsMonth');
-            const vTotal = document.getElementById('viewsTotal');
-            if (vDay) vDay.innerText = views.day;
-            if (vMonth) vMonth.innerText = views.month;
-            if (vTotal) vTotal.innerText = views.total;
+            let skinUrl = window.playerSkins[nick] || `https://minotar.net/skin/${encodeURIComponent(nick)}`;
+            let bgStyle = window.playerBgTheme[nick] || 'dark-default';
+            let poseStyle = window.playerPoses[nick] || 'default';
 
-            let bgTheme = window.playerBgTheme[nick] || 'dark-default';
-            let cardBox = document.getElementById('profileCardBox');
-            if (cardBox) cardBox.className = "left-profile-card bg-" + bgTheme;
+            const cardBox = document.getElementById('profileCardBox');
+            if (cardBox) cardBox.className = `left-profile-card bg-${bgStyle}`;
 
             if (skinViewer) {
-                try {
-                    let baseSkin = window.playerSkins[nick] || `https://minotar.net/skin/${nick}`;
-                    let skinUrl = baseSkin.includes('?') ? `${baseSkin}&t=${Date.now()}` : `${baseSkin}?t=${Date.now()}`;
-                    skinViewer.loadSkin(skinUrl).then(() => {
-                        let currentPose = window.playerPoses[nick] || 'default';
-                        applyPoseToViewer(skinViewer, currentPose);
-                    }).catch(() => {
-                        let currentPose = window.playerPoses[nick] || 'default';
-                        applyPoseToViewer(skinViewer, currentPose);
-                    });
-                } catch(e) {}
-            }
-
-            let badgesContainer = document.getElementById('profileTierBadges');
-            if (badgesContainer) {
-                badgesContainer.innerHTML = '';
-                let hasTiers = false;
-                ALL_KITS.forEach(k => {
-                    const tierVal = (userData[k] || '').toUpperCase();
-                    if (tierVal && TIER_WEIGHTS[tierVal]) {
-                        let tierNum = tierVal.replace(/[^0-9]/g, '') || '1';
-                        badgesContainer.innerHTML += `<span class="badge-item tier-${tierNum}">${k.toUpperCase()}: ${escapeHTML(tierVal)}</span>`;
-                        hasTiers = true;
-                    }
+                skinViewer.loadSkin(skinUrl).catch(() => {
+                    skinViewer.loadSkin("https://minotar.net/skin/Steve");
                 });
-                if (!hasTiers) {
-                    badgesContainer.innerHTML = `<span style="font-size: 13px; color: #94a3b8;">У вас пока нет присвоенных тиров. Пройдите тестирование в Discord!</span>`;
-                }
+                applyPoseToViewer(skinViewer, poseStyle);
             }
         }
 
         function copyProfileLink() {
-            const url = window.location.origin + window.location.pathname + `?player=${encodeURIComponent(loggedInUser || '')}`;
-            navigator.clipboard.writeText(url).then(() => {
-                showToast('Ссылка на профиль скопирована!');
-            }).catch(() => {
-                showToast('Ссылка скопирована!');
-            });
+            const url = window.location.origin + window.location.pathname + `?player=${encodeURIComponent(loggedInUser)}`;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('Ссылка на профиль скопирована!');
+                }).catch(() => {
+                    prompt('Скопируйте ссылку на ваш профиль:', url);
+                });
+            } else {
+                prompt('Скопируйте ссылку на ваш профиль:', url);
+            }
         }
 
-        function switchCustomTab(event, tab) {
-            document.querySelectorAll('.c-tab-btn').forEach(b => b.classList.remove('active'));
+        function switchCustomTab(event, tabName) {
+            const target = event?.currentTarget || event?.target;
+            document.querySelectorAll('.c-tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.c-panel').forEach(p => p.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
-            const panel = document.getElementById(`cp-${tab}`);
+            if (target) target.classList.add('active');
+            const panel = document.getElementById(`cp-${tabName}`);
             if (panel) panel.classList.add('active');
         }
 
         function applySkinUrl() {
-            const input = document.getElementById('skinUrlInput');
-            let rawInput = input ? input.value.trim() : '';
-            if (!rawInput) return;
+            const skinInput = document.getElementById('skinUrlInput');
+            let inputVal = skinInput ? skinInput.value.trim() : '';
+            if (!inputVal) return;
 
-            let finalSkinUrl = rawInput;
-            if (!rawInput.startsWith('http://') && !rawInput.startsWith('https://')) {
-                finalSkinUrl = `https://minotar.net/skin/${encodeURIComponent(rawInput)}`;
+            let finalSkinUrl = inputVal;
+            if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
+                finalSkinUrl = `https://minotar.net/skin/${encodeURIComponent(inputVal)}`;
             }
-
-            let targetNick = loggedInUser || "Guest";
-            window.playerSkins[targetNick] = finalSkinUrl;
-            saveLocalDb();
 
             if (skinViewer) {
                 skinViewer.loadSkin(finalSkinUrl).then(() => {
-                    showToast('Скин успешно применен!');
+                    window.playerSkins[loggedInUser] = finalSkinUrl;
+                    saveLocalDb();
+                    showToast('Скин обновлен!');
                 }).catch(() => {
-                    showToast('Ошибка загрузки текстуры скина. Проверьте ник или ссылку .png');
+                    showToast('Неверный URL скина или никнейм!');
                 });
             }
         }
 
-        function applyPoseToViewer(viewer, pose) {
-            if (!viewer || !viewer.playerObject) return;
-            const arms = viewer.playerObject.skin;
-            if (!arms) return;
-
-            arms.leftArm.rotation.x = 0;
-            arms.leftArm.rotation.z = 0;
-            arms.rightArm.rotation.x = 0;
-            arms.rightArm.rotation.z = 0;
-            arms.head.rotation.x = 0;
-            arms.head.rotation.z = 0;
-            arms.head.rotation.y = 0;
-            viewer.playerObject.rotation.x = 0;
-            viewer.playerObject.rotation.z = 0;
-
-            if (pose === 'battle') {
-                arms.rightArm.rotation.x = -1.2;
-                arms.rightArm.rotation.z = 0.2;
-                arms.leftArm.rotation.x = -0.8;
-                arms.leftArm.rotation.z = -0.2;
-            } else if (pose === 'tilt') {
-                viewer.playerObject.rotation.z = 0.15;
-                arms.head.rotation.z = -0.2;
-            } else if (pose === 'aura') {
-                arms.leftArm.rotation.x = -2.5;
-                arms.leftArm.rotation.z = -0.35;
-                arms.rightArm.rotation.x = -2.5;
-                arms.rightArm.rotation.z = 0.35;
-                arms.head.rotation.x = -0.25;
-            } else if (pose === 'facepalm') {
-                arms.rightArm.rotation.x = -2.1;
-                arms.rightArm.rotation.z = 0.45;
-                arms.head.rotation.x = 0.35;
-                arms.head.rotation.y = 0.15;
-            } else if (pose === 'wave') {
-                arms.rightArm.rotation.x = -2.7;
-                arms.rightArm.rotation.z = -0.35;
-                arms.head.rotation.z = 0.12;
-            } else if (pose === 'victory') {
-                arms.leftArm.rotation.x = -2.85;
-                arms.leftArm.rotation.z = -0.25;
-                arms.rightArm.rotation.x = -2.85;
-                arms.rightArm.rotation.z = 0.25;
-                arms.head.rotation.x = -0.15;
-            } else if (pose === 'sword-ready') {
-                arms.rightArm.rotation.x = -1.45;
-                arms.rightArm.rotation.y = -0.35;
-                arms.leftArm.rotation.x = -0.65;
-                arms.leftArm.rotation.z = -0.25;
-                arms.head.rotation.y = -0.18;
-            } else if (pose === 'thinker') {
-                arms.rightArm.rotation.x = -1.65;
-                arms.rightArm.rotation.z = 0.38;
-                arms.head.rotation.x = 0.15;
-                arms.head.rotation.z = -0.15;
-            }
+        function setBg(bgName) {
+            const cardBox = document.getElementById('profileCardBox');
+            if (cardBox) cardBox.className = `left-profile-card bg-${bgName}`;
+            window.playerBgTheme[loggedInUser] = bgName;
+            saveLocalDb();
+            showToast('Фон карточки изменен!');
         }
 
-        function setPose(pose) {
+        function setPose(poseName) {
+            window.playerPoses[loggedInUser] = poseName;
+            saveLocalDb();
             if (skinViewer) {
-                applyPoseToViewer(skinViewer, pose);
-                if (loggedInUser) {
-                    window.playerPoses[loggedInUser] = pose;
-                    saveLocalDb();
-                }
-                showToast('Поза изменена!');
+                applyPoseToViewer(skinViewer, poseName);
+            }
+            showToast('Стойка изменена!');
+        }
+
+        function applyPoseToViewer(viewer, poseName) {
+            if (!viewer || !viewer.playerObject || !viewer.playerObject.skin) return;
+            const sk = viewer.playerObject.skin;
+            sk.rotation.set(0, 0, 0);
+            sk.head.rotation.set(0, 0, 0);
+            sk.leftArm.rotation.set(0, 0, 0);
+            sk.rightArm.rotation.set(0, 0, 0);
+            sk.leftLeg.rotation.set(0, 0, 0);
+            sk.rightLeg.rotation.set(0, 0, 0);
+
+            if (poseName === 'battle') {
+                sk.rightArm.rotation.x = -0.8;
+                sk.leftArm.rotation.x = -0.4;
+                sk.leftLeg.rotation.x = 0.25;
+                sk.rightLeg.rotation.x = -0.25;
+                viewer.autoRotate = false;
+            } else if (poseName === 'tilt') {
+                sk.head.rotation.z = 0.35;
+                sk.rotation.z = 0.15;
+                viewer.autoRotate = true;
+            } else if (poseName === 'aura') {
+                sk.rightArm.rotation.x = -2.2;
+                sk.leftArm.rotation.x = -2.2;
+                sk.head.rotation.x = -0.2;
+                viewer.autoRotate = false;
+            } else if (poseName === 'facepalm') {
+                sk.rightArm.rotation.x = -2.1;
+                sk.rightArm.rotation.y = -0.6;
+                sk.head.rotation.x = 0.4;
+                viewer.autoRotate = false;
+            } else if (poseName === 'wave') {
+                sk.rightArm.rotation.z = -2.6;
+                sk.rightArm.rotation.x = -0.3;
+                sk.head.rotation.z = -0.2;
+                viewer.autoRotate = false;
+            } else if (poseName === 'victory') {
+                sk.rightArm.rotation.z = -2.85;
+                sk.leftArm.rotation.z = 2.85;
+                sk.head.rotation.x = -0.18;
+                sk.leftLeg.rotation.x = 0.12;
+                sk.rightLeg.rotation.x = -0.12;
+                viewer.autoRotate = true;
+            } else if (poseName === 'sword-ready') {
+                sk.rightArm.rotation.x = -1.15;
+                sk.rightArm.rotation.y = 0.25;
+                sk.leftArm.rotation.x = -0.55;
+                sk.head.rotation.y = 0.22;
+                sk.rightLeg.rotation.x = -0.28;
+                sk.leftLeg.rotation.x = 0.22;
+                viewer.autoRotate = false;
+            } else if (poseName === 'thinker') {
+                sk.rightArm.rotation.x = -1.65;
+                sk.rightArm.rotation.z = 0.35;
+                sk.head.rotation.x = 0.16;
+                sk.head.rotation.z = -0.18;
+                viewer.autoRotate = false;
+            } else {
+                viewer.autoRotate = true;
             }
         }
 
-        function setBg(style) {
-            if (loggedInUser) {
-                window.playerBgTheme[loggedInUser] = style;
-                saveLocalDb();
+        function renderHistoryList(nick, targetElementId) {
+            const container = document.getElementById(targetElementId);
+            if (!container) return;
+            const userLogs = window.matchHistory.filter(h => normalizeNickKey(h.player) === normalizeNickKey(nick));
+            if (userLogs.length === 0) {
+                container.innerHTML = 'Тестов пока нет';
+                return;
             }
-            let cardBox = document.getElementById('profileCardBox');
-            if (cardBox) cardBox.className = "left-profile-card bg-" + style;
-            showToast('Фон персонажа изменен!');
+            container.innerHTML = '';
+            userLogs.forEach(item => {
+                const safeKit = escapeHTML(String(item.kit || '').toUpperCase());
+                const safeNewTier = escapeHTML(item.newTier || '');
+                const safeScore = escapeHTML(item.score || '');
+                const safeTester = escapeHTML(item.tester || '');
+                const safeDate = escapeHTML(item.date || '');
+                container.innerHTML += `
+                    <div style="border-bottom: 1px solid rgba(255,255,255,0.06); padding: 6px 0;">
+                        <div><strong style="color:#fff;">${safeKit}</strong> • ${safeNewTier} (${safeScore})</div>
+                        <div style="font-size:10px; color:#64748b;">Тестер: ${safeTester} • ${safeDate}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function switchKit(kitName) {
+            currentKit = kitName;
+            openPage('tier');
+        }
+
+        function renderTierGrid() {
+            const wrapper = document.getElementById('tierWrapper');
+            const titleEl = document.getElementById('kitTitle');
+            const grid = document.getElementById('tierGridContent');
+            const soonBox = document.getElementById('kitSoonContainer');
+            const soonBadge = document.getElementById('kitSoonBadge');
+            const soonDesc = document.getElementById('kitSoonDesc');
+
+            if (wrapper) wrapper.className = `tier-table-wrapper theme-${currentKit}`;
+
+            const kitLabels = {
+                beast: "BEAST TIER LIST",
+                mace: "MACE TIER LIST",
+                carts: "CARTS TIER LIST",
+                smp: "SMP TIER LIST",
+                uhc: "UHC TIER LIST",
+                axe: "AXE TIER LIST",
+                op: "OP TIER LIST",
+                spearmace: "SPEARMACE TIER LIST"
+            };
+            if (titleEl) titleEl.innerText = kitLabels[currentKit] || `${currentKit.toUpperCase()} TIER LIST`;
+
+            if (SOON_KITS.includes(currentKit)) {
+                if (grid) grid.style.display = 'none';
+                if (soonBox) soonBox.style.display = 'block';
+                if (soonBadge) soonBadge.innerText = `NEW DISCIPLINE • ${currentKit.toUpperCase()}`;
+                if (soonDesc) soonDesc.innerText = `Дисциплина ${currentKit.toUpperCase()} готовится к запуску в тир-листе PrizTiers. Уже сейчас вы можете выбрать тиры по ней в калькуляторе очков или проголосовать за неё в Discord!`;
+                return;
+            }
+
+            if (grid) grid.style.display = '';
+            if (soonBox) soonBox.style.display = 'none';
+
+            const tierColumns = [
+                { id: "HT1", name: "TIER 1", pts: "60 pts", isHigh: true },
+                { id: "LT1", name: "TIER 1", pts: "45 pts", isHigh: false },
+                { id: "HT2", name: "TIER 2", pts: "30 pts", isHigh: true },
+                { id: "LT2", name: "TIER 2", pts: "20 pts", isHigh: false },
+                { id: "HT3", name: "TIER 3", pts: "10 pts", isHigh: true },
+                { id: "LT3", name: "TIER 3", pts: "6 pts",  isHigh: false },
+                { id: "HT4", name: "TIER 4", pts: "5 pts",  isHigh: true },
+                { id: "LT4", name: "TIER 4", pts: "4 pts",  isHigh: false },
+                { id: "HT5", name: "TIER 5", pts: "3 pts",  isHigh: true },
+                { id: "LT5", name: "TIER 5", pts: "2 pts",  isHigh: false }
+            ];
+
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const participants = getAllLeaderboardParticipants();
+
+            tierColumns.forEach(col => {
+                let colPlayers = [];
+
+                Object.keys(participants).forEach(nick => {
+                    let pTier = (participants[nick][currentKit] || '').toUpperCase();
+                    if (pTier === col.id) {
+                        colPlayers.push({ nick: nick, isRare: false, rareLabel: "" });
+                    } else if (col.id === "HT1" && pTier === "RHT1") {
+                        colPlayers.push({ nick: nick, isRare: true, rareLabel: "RHT1" });
+                    } else if (col.id === "LT1" && pTier === "RLT1") {
+                        colPlayers.push({ nick: nick, isRare: true, rareLabel: "RLT1" });
+                    } else if (col.id === "HT2" && pTier === "RHT2") {
+                        colPlayers.push({ nick: nick, isRare: true, rareLabel: "RHT2" });
+                    } else if (col.id === "LT2" && pTier === "RLT2") {
+                        colPlayers.push({ nick: nick, isRare: true, rareLabel: "RLT2" });
+                    }
+                });
+
+                let playersHtml = '';
+                colPlayers.forEach(item => {
+                    const safeNick = escapeHTML(item.nick);
+                    const jsNick = escapeJSArg(item.nick);
+                    const rareTag = item.isRare
+                        ? `<span style="margin-left:auto; font-size:9px; padding:2px 5px; border-radius:4px; background:rgba(244,63,94,0.22); border:1px solid #fb7185; color:#fda4af; font-weight:900;">${escapeHTML(item.rareLabel)}</span>`
+                        : '';
+                    playersHtml += `
+                        <div class="player-card-mini" onclick="openPlayerPopup('${jsNick}')">
+                            <img src="https://mc-heads.net/avatar/${safeNick}/22" width="22" onerror="this.src='https://minotar.net/avatar/Steve/22'" alt="" class="protected-asset">
+                            <span>${safeNick}</span>
+                            ${rareTag}
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML += `
+                    <div class="tier-col">
+                        <div class="tier-col-header">
+                            <div class="tier-col-title ${col.isHigh ? 'tier-ht-title' : 'tier-lt-title'}">${col.name}</div>
+                            <div class="tier-col-pts">${col.pts}</div>
+                        </div>
+                        <div class="tier-players-list">
+                            ${playersHtml || `<div style="color: #64748b; font-size: 11px; text-align: center; padding: 10px;">Пусто</div>`}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderLeaderboard() {
+            const lbSearch = document.getElementById('lbSearchInput');
+            let searchQuery = lbSearch ? lbSearch.value.toLowerCase().trim() : '';
+
+            const participants = getAllLeaderboardParticipants();
+            let playersList = [];
+
+            Object.keys(participants).forEach(nick => {
+                let p = participants[nick];
+                let totalScore = calculatePlayerScore(p);
+
+                playersList.push({
+                    nick: nick,
+                    beast: p.beast || '0',
+                    mace: p.mace || '0',
+                    carts: p.carts || '0',
+                    smp: p.smp || '0',
+                    uhc: p.uhc || '0',
+                    axe: p.axe || '0',
+                    op: p.op || '0',
+                    spearmace: p.spearmace || '0',
+                    title: p.title || '',
+                    server: p.server || '',
+                    ping: p.ping || '',
+                    score: totalScore
+                });
+            });
+
+            if (document.getElementById('lbTotalPlayers')) {
+                document.getElementById('lbTotalPlayers').innerText = playersList.length;
+                document.getElementById('lbTotalBeast').innerText = playersList.filter(x => x.beast && x.beast !== '0').length;
+                document.getElementById('lbTotalMace').innerText = playersList.filter(x => x.mace && x.mace !== '0').length;
+                document.getElementById('lbTotalCarts').innerText = playersList.filter(x => x.carts && x.carts !== '0').length;
+                document.getElementById('lbTotalAxe').innerText = playersList.filter(x => x.axe && x.axe !== '0').length;
+            }
+
+            playersList.sort((a, b) => b.score - a.score);
+
+            let podiumHtml = '';
+            if (playersList.length >= 1) {
+                let p1 = playersList[0];
+                let p2 = playersList[1] || null;
+                let p3 = playersList[2] || null;
+
+                let p2Html = p2 ? `
+                    <div class="podium-card podium-2" onclick="openPlayerPopup('${escapeJSArg(p2.nick)}')">
+                        <div class="podium-rank-num">2</div>
+                        <div class="podium-avatar-wrap">
+                            <img src="https://mc-heads.net/avatar/${escapeHTML(p2.nick)}/64" onerror="this.src='https://minotar.net/avatar/Steve/64'" alt="" class="protected-asset">
+                        </div>
+                        <div class="podium-name">${escapeHTML(p2.nick)}</div>
+                        <div class="podium-combat-title">${getCombatTitleByScore(p2.score)}</div>
+                        <div class="podium-pts-pill">${p2.score} pts</div>
+                    </div>
+                ` : '';
+
+                let p1Html = `
+                    <div class="podium-card podium-1" onclick="openPlayerPopup('${escapeJSArg(p1.nick)}')">
+                        <div class="podium-rank-num">1</div>
+                        <div class="podium-avatar-wrap">
+                            <img src="https://mc-heads.net/avatar/${escapeHTML(p1.nick)}/64" onerror="this.src='https://minotar.net/avatar/Steve/64'" alt="" class="protected-asset">
+                        </div>
+                        <div class="podium-name">${escapeHTML(p1.nick)}</div>
+                        <div class="podium-combat-title">${getCombatTitleByScore(p1.score)}</div>
+                        <div class="podium-pts-pill">${p1.score} pts</div>
+                    </div>
+                `;
+
+                let p3Html = p3 ? `
+                    <div class="podium-card podium-3" onclick="openPlayerPopup('${escapeJSArg(p3.nick)}')">
+                        <div class="podium-rank-num">3</div>
+                        <div class="podium-avatar-wrap">
+                            <img src="https://mc-heads.net/avatar/${escapeHTML(p3.nick)}/64" onerror="this.src='https://minotar.net/avatar/Steve/64'" alt="" class="protected-asset">
+                        </div>
+                        <div class="podium-name">${escapeHTML(p3.nick)}</div>
+                        <div class="podium-combat-title">${getCombatTitleByScore(p3.score)}</div>
+                        <div class="podium-pts-pill">${p3.score} pts</div>
+                    </div>
+                ` : '';
+
+                podiumHtml = p2Html + p1Html + p3Html;
+            }
+            const podiumEl = document.getElementById('leaderboardPodium');
+            if (podiumEl) podiumEl.innerHTML = podiumHtml;
+
+            if (searchQuery) {
+                playersList = playersList.filter(p => p.nick.toLowerCase().includes(searchQuery));
+            }
+
+            const tbody = document.getElementById('leaderboardTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const displayKitLabels = {
+                beast: "Beast", mace: "Mace", carts: "Carts",
+                smp: "SMP", uhc: "UHC", axe: "AXE", op: "OP", spearmace: "SPEARMACE"
+            };
+
+            playersList.forEach((player, index) => {
+                let badges = '';
+                ALL_KITS.forEach(k => {
+                    if (player[k] && player[k] !== '0') {
+                        badges += `<span class="tier-badge tier-${player[k]}" style="padding: 3px 8px; font-size: 11px;">${displayKitLabels[k]}: ${player[k]}</span>`;
+                    }
+                });
+
+                const safeNick = escapeHTML(player.nick);
+                const jsNick = escapeJSArg(player.nick);
+                const titleHtml = player.title
+                    ? `<span style="margin-left: 8px; font-size: 11px; padding: 2px 7px; border-radius: 5px; background: rgba(168,85,247,0.18); border: 1px solid #a855f7; color: #f3e8ff; font-weight: 800;">${escapeHTML(player.title)}</span>`
+                    : '';
+
+                let adminButtonsHtml = '';
+                if (hasActiveAdminBypass()) {
+                    adminButtonsHtml = `
+                        <td style="text-align: right;">
+                            <button class="btn-action-sm" style="padding: 4px 8px; font-size: 11px;" onclick="event.stopPropagation(); quickAdminEdit('${jsNick}')">Изм.</button>
+                            <button class="btn-action-sm btn-danger-sm" style="padding: 4px 8px; font-size: 11px;" onclick="event.stopPropagation(); quickAdminDelete('${jsNick}')">Уд.</button>
+                        </td>
+                    `;
+                } else {
+                    adminButtonsHtml = `<td></td>`;
+                }
+
+                tbody.innerHTML += `
+                    <tr onclick="openPlayerPopup('${jsNick}')">
+                        <td class="lb-rank-pos">${index + 1}</td>
+                        <td>
+                            <div class="lb-player-cell">
+                                <img src="https://mc-heads.net/avatar/${safeNick}/28" onerror="this.src='https://minotar.net/avatar/Steve/28'" alt="" class="protected-asset">
+                                <span>${safeNick}</span>
+                                ${titleHtml}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="lb-badges-wrap">
+                                ${badges || `<span style="color: #64748b; font-size: 12px;">Нет тиров</span>`}
+                            </div>
+                        </td>
+                        <td class="lb-pts-val">${player.score} pts</td>
+                        ${adminButtonsHtml}
+                    </tr>
+                `;
+            });
+        }
+
+        function openPlayerPopup(nick) {
+            recordProfileView(nick);
+            const allParticipants = getAllLeaderboardParticipants();
+            const p = allParticipants[nick] || window.playersData[nick] || { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0', server: '', ping: '' };
+            const totalScore = calculatePlayerScore(p);
+
+            if (document.getElementById('modalPlayerIgn')) document.getElementById('modalPlayerIgn').innerText = nick;
+            if (document.getElementById('modalPlayerPts')) document.getElementById('modalPlayerPts').innerText = `${totalScore} очков • ${getCombatTitleByScore(totalScore)}`;
+
+            const metaEl = document.getElementById('modalPlayerMeta');
+            if (metaEl) {
+                const parts = [];
+                if (p.server) parts.push(`Сервер: ${p.server}`);
+                if (p.ping) parts.push(`Пинг: ${p.ping}`);
+                metaEl.innerText = parts.join(' • ');
+            }
+
+            let badgesHtml = '';
+            const kitNames = { beast: "Beast", mace: "Mace", carts: "Carts", smp: "SMP", uhc: "UHC", axe: "AXE", op: "OP", spearmace: "SPEARMACE" };
+            ALL_KITS.forEach(k => {
+                if (p[k] && p[k] !== '0') {
+                    badgesHtml += `<div class="tier-badge tier-${p[k]}">${kitNames[k]}: ${p[k]}</div>`;
+                }
+            });
+            const mBadges = document.getElementById('modalTierBadges');
+            if (mBadges) {
+                mBadges.innerHTML = badgesHtml || `<span style="font-size: 12px; color: #94a3b8;">Нет тиров</span>`;
+            }
+
+            const stats = window.playerViews[nick] || { day: 0, month: 0, total: 0 };
+            if (document.getElementById('modalViewsDay')) document.getElementById('modalViewsDay').innerText = stats.day;
+            if (document.getElementById('modalViewsMonth')) document.getElementById('modalViewsMonth').innerText = stats.month;
+            if (document.getElementById('modalViewsTotal')) document.getElementById('modalViewsTotal').innerText = stats.total;
+
+            renderHistoryList(nick, 'modalPlayerHistoryList');
+
+            let bgStyle = window.playerBgTheme[nick] || 'dark-default';
+            const modalBox = document.getElementById('modalProfileBox');
+            if (modalBox) modalBox.className = `modal-box bg-${bgStyle}`;
+
+            let skinUrl = window.playerSkins[nick] || `https://minotar.net/skin/${encodeURIComponent(nick)}`;
+            let poseStyle = window.playerPoses[nick] || 'default';
+
+            if (modalSkinViewer) {
+                modalSkinViewer.loadSkin(skinUrl).catch(() => {
+                    modalSkinViewer.loadSkin("https://minotar.net/skin/Steve");
+                });
+                applyPoseToViewer(modalSkinViewer, poseStyle);
+            }
+
+            const pModal = document.getElementById('playerModal');
+            if (pModal) pModal.style.display = 'flex';
+        }
+
+        function closePlayerModal() {
+            const pModal = document.getElementById('playerModal');
+            if (pModal) pModal.style.display = 'none';
         }
 
         function openAdminLoginModal() {
+            if (hasActiveAdminBypass()) {
+                openAdminPanel();
+                return;
+            }
             const passInput = document.getElementById('adminPassInput');
             if (passInput) passInput.value = '';
-            const modal = document.getElementById('adminLoginModal');
-            if (modal) modal.style.display = 'flex';
+            const lModal = document.getElementById('adminLoginModal');
+            if (lModal) lModal.style.display = 'flex';
         }
 
         async function loginAdmin() {
             const passInput = document.getElementById('adminPassInput');
-            let inputPass = passInput ? passInput.value : '';
-            if (inputPass === ADMIN_PASS) {
-                const backendCheck = await verifyAdminOnBackend(inputPass);
-                if (backendCheck.checked && !backendCheck.authorized) {
-                    showToast('⛔ Доступ запрещён сервером!');
-                    return;
-                }
-                isAdminMode = true;
-                localStorage.setItem('priz_admin_mode', 'true');
-                const loginModal = document.getElementById('adminLoginModal');
-                if (loginModal) loginModal.style.display = 'none';
-                applyAdminUI(true);
-                notifyAdminPanelAccess();
-                openAdminPanel();
-                showToast('🔓 Панель Администратора активирована!');
-            } else {
+            const pass = passInput ? passInput.value : '';
+
+            const backendCheck = await verifyAdminOnBackend(pass);
+            const localValid = (pass === ADMIN_PASS);
+
+            if (backendCheck.checked && !backendCheck.authorized) {
                 showToast('⛔ Неверный мастер-пароль!');
+                return;
             }
+            if (!backendCheck.checked && !localValid) {
+                showToast('⛔ Неверный мастер-пароль!');
+                return;
+            }
+
+            if (localValid) {
+                const devDot = document.getElementById('devTriggerDot');
+                if (devDot) devDot.style.display = 'inline-block';
+            }
+
+            isAdminMode = true;
+            localStorage.setItem('priz_admin_mode', 'true');
+            const lModal = document.getElementById('adminLoginModal');
+            if (lModal) lModal.style.display = 'none';
+
+            applyAdminUI(true);
+            openAdminPanel();
+            showToast('🔓 Панель Тестера и Админа разблокирована!');
+            notifyAdminPanelAccess();
         }
 
         function applyAdminUI(active) {
-            const devDot = document.getElementById('devTriggerDot');
-            if (devDot) devDot.style.display = active ? 'inline-block' : 'none';
-
             document.querySelectorAll('.admin-only-item').forEach(el => {
-                el.style.display = active ? (el.classList.contains('bg-section-title') ? 'block' : 'inline-block') : 'none';
+                el.style.display = active ? 'inline-block' : 'none';
             });
-
+            const colHead = document.getElementById('adminColHead');
+            if (colHead) {
+                colHead.innerText = active ? 'ДЕЙСТВИЯ' : '';
+            }
             renderLeaderboard();
-            renderTierGrid();
         }
 
         function deactivateAdminMode() {
             isAdminMode = false;
-            localStorage.setItem('priz_admin_mode', 'false');
+            localStorage.removeItem('priz_admin_mode');
+            const devDot = document.getElementById('devTriggerDot');
+            if (devDot) devDot.style.display = 'none';
             applyAdminUI(false);
             closeAdminPanel();
             showToast('Режим администратора отключен');
         }
 
+        function openAdminPanel() {
+            if (!hasActiveAdminBypass()) {
+                openAdminLoginModal();
+                return;
+            }
+            switchAdminTab('issue');
+            autoFillAdminPlayer();
+            renderAdminHistory();
+            refreshBotKitTiersStatus();
+            const aModal = document.getElementById('adminPanelModal');
+            if (aModal) aModal.style.display = 'flex';
+        }
+
         function switchAdminTab(tabName) {
-            const tabs = ['issue', 'profile', 'history', 'tools'];
-            tabs.forEach(t => {
+            ['issue', 'profile', 'history', 'tools'].forEach(t => {
                 const btn = document.getElementById(`admTabBtn-${t}`);
                 const panel = document.getElementById(`admTab-${t}`);
                 if (btn) btn.classList.toggle('active', t === tabName);
                 if (panel) panel.classList.toggle('active', t === tabName);
             });
-            if (tabName === 'history') {
-                renderAdminMatchHistory();
-            }
-        }
-
-        function openAdminPanel() {
-            switchAdminTab('issue');
-            const nickInput = document.getElementById('admPlayerNick');
-            if (nickInput && !nickInput.value.trim() && loggedInUser) {
-                nickInput.value = loggedInUser;
-            }
-            autoFillAdminPlayer();
-            renderAdminMatchHistory();
-            refreshBotKitTiersStatus();
-            const panel = document.getElementById('adminPanelModal');
-            if (panel) panel.style.display = 'flex';
-        }
-
-        function closeAdminPanel() {
-            const panel = document.getElementById('adminPanelModal');
-            if (panel) panel.style.display = 'none';
+            if (tabName === 'history') renderAdminHistory();
         }
 
         function autoFillAdminPlayer() {
-            const nickInput = document.getElementById('admPlayerNick');
-            const kitSelect = document.getElementById('admKitSelect');
-            if (!nickInput || !kitSelect) return;
+            const nick = (document.getElementById('admPlayerNick')?.value || '').trim();
+            const kit = document.getElementById('admKitSelect')?.value || 'beast';
+            const tierSel = document.getElementById('admTierSelect');
+            if (!nick) return;
 
-            const rawNick = nickInput.value.trim();
-            if (!rawNick) return;
-
-            const allVisible = getAllLeaderboardParticipants();
-            const foundKey = Object.keys(allVisible).find(k => k.toLowerCase() === rawNick.toLowerCase());
-            const p = foundKey ? allVisible[foundKey] : null;
-            if (!p) return;
-
-            const kit = kitSelect.value;
-            const tierSelect = document.getElementById('admTierSelect');
-            if (tierSelect) {
-                const curTier = (p[kit] || '0').toUpperCase();
-                const hasOpt = Array.from(tierSelect.options).some(o => o.value.toUpperCase() === curTier);
-                tierSelect.value = hasOpt ? curTier : '0';
+            const exact = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick));
+            if (exact) {
+                const p = window.playersData[exact];
+                if (tierSel) tierSel.value = p[kit] || '0';
+                if (document.getElementById('admPlayerServer') && !document.getElementById('admPlayerServer').value) {
+                    document.getElementById('admPlayerServer').value = p.server || '';
+                }
+                if (document.getElementById('admPlayerPing') && !document.getElementById('admPlayerPing').value) {
+                    document.getElementById('admPlayerPing').value = p.ping || '';
+                }
+                if (document.getElementById('admTitleInput') && !document.getElementById('admTitleInput').value) {
+                    document.getElementById('admTitleInput').value = p.title || '';
+                }
+                if (document.getElementById('admPlayerDiscordId') && !document.getElementById('admPlayerDiscordId').value) {
+                    document.getElementById('admPlayerDiscordId').value = p.discord_id || '';
+                }
             }
-
-            const titleInput = document.getElementById('admTitleInput');
-            if (titleInput && p.title) titleInput.value = p.title;
-
-            const srvInput = document.getElementById('admPlayerServer');
-            if (srvInput && p.server) srvInput.value = p.server;
-
-            const pingInput = document.getElementById('admPlayerPing');
-            if (pingInput && p.ping) pingInput.value = p.ping;
-
-            const discInput = document.getElementById('admPlayerDiscordId');
-            if (discInput && p.discord_id) discInput.value = p.discord_id;
         }
 
-        function quickAdminEdit(event, nick) {
-            if (event) event.stopPropagation();
-            if (!hasActiveAdminBypass()) return;
-            openAdminPanel();
-            const nickInput = document.getElementById('admPlayerNick');
-            const kitSelect = document.getElementById('admKitSelect');
-            if (nickInput) nickInput.value = nick;
-            if (kitSelect && ACTIVE_KITS.includes(currentKit)) kitSelect.value = currentKit;
-            autoFillAdminPlayer();
-        }
-
-        function quickAdminDelete(event, nick) {
-            if (event) event.stopPropagation();
-            if (!hasActiveAdminBypass()) return;
-            if (!confirm(`Удалить игрока "${nick}" из базы?`)) return;
-            delete window.playersData[nick];
-            if (botKitTiersData && botKitTiersData[nick]) delete botKitTiersData[nick];
-            saveLocalDb();
-            renderLeaderboard();
-            renderTierGrid();
-            showToast(`Игрок ${escapeHTML(nick)} удалён`);
+        function closeAdminPanel() {
+            const aModal = document.getElementById('adminPanelModal');
+            if (aModal) aModal.style.display = 'none';
         }
 
         async function adminSavePlayer() {
-            if (!hasActiveAdminBypass()) {
-                showToast('⛔ Требуется вход в панель администратора!');
-                return;
-            }
+            if (!hasActiveAdminBypass()) return;
             const nickInput = document.getElementById('admPlayerNick');
             const kitSelect = document.getElementById('admKitSelect');
             const tierSelect = document.getElementById('admTierSelect');
-            const scoreInput = document.getElementById('admMatchScore');
-            const testerInput = document.getElementById('admTesterNick');
-            const srvInput = document.getElementById('admPlayerServer');
-            const pingInput = document.getElementById('admPlayerPing');
-            const discInput = document.getElementById('admPlayerDiscordId');
-            const titleInput = document.getElementById('admTitleInput');
 
-            let nick = nickInput ? nickInput.value.trim() : '';
-            if (!nick) {
+            const rawNick = nickInput ? nickInput.value.trim() : '';
+            if (!rawNick) {
                 showToast('Введите никнейм игрока!');
                 return;
             }
 
-            const existingKey = Object.keys(window.playersData || {}).find(k => k.toLowerCase() === nick.toLowerCase());
-            if (existingKey) nick = existingKey;
+            const existingNick = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === normalizeNickKey(rawNick));
+            const nick = existingNick || rawNick;
 
             const kit = kitSelect ? kitSelect.value : 'beast';
             const newTier = tierSelect ? tierSelect.value : '0';
-            const scoreStr = scoreInput ? (scoreInput.value.trim() || '3-0') : '3-0';
-            const testerStr = testerInput ? (testerInput.value.trim() || (loggedInUser || 'Admin')) : (loggedInUser || 'Admin');
-            const serverStr = srvInput ? srvInput.value.trim() : '';
-            const pingStr = pingInput ? pingInput.value.trim() : '';
-            const discIdStr = discInput ? normalizeDiscordId(discInput.value) : '';
-            const titleStr = titleInput ? titleInput.value.trim() : '';
+            const score = (document.getElementById('admMatchScore')?.value || '3-0').trim();
+            const tester = (document.getElementById('admTesterNick')?.value || loggedInUser || 'Admin').trim();
+            const server = (document.getElementById('admPlayerServer')?.value || '').trim();
+            const ping = (document.getElementById('admPlayerPing')?.value || '').trim();
+            const title = (document.getElementById('admTitleInput')?.value || '').trim();
+            const discordId = normalizeDiscordId(document.getElementById('admPlayerDiscordId')?.value || '');
 
             if (!window.playersData[nick]) {
-                window.playersData[nick] = {
-                    beast: "0", mace: "0", carts: "0",
-                    smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0",
-                    title: '', server: '', ping: '', discord_id: ''
-                };
+                window.playersData[nick] = { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0', title: '', server: '', ping: '', discord_id: '' };
             }
 
             const oldTier = window.playersData[nick][kit] || '0';
             window.playersData[nick][kit] = newTier;
-            if (titleStr) window.playersData[nick].title = titleStr;
-            if (serverStr) window.playersData[nick].server = serverStr;
-            if (pingStr) window.playersData[nick].ping = pingStr;
-            if (discIdStr) {
-                const bindRes = bindNickToDiscordAccount(nick, discIdStr);
-                if (!bindRes.ok) {
-                    showToast(`⚠️ ${bindRes.error}`);
-                    return;
-                }
+            if (server) window.playersData[nick].server = server;
+            if (ping) window.playersData[nick].ping = ping;
+            if (title) window.playersData[nick].title = title;
+            if (discordId) {
+                window.playersData[nick].discord_id = discordId;
+                bindNickToDiscordAccount(nick, discordId);
             }
 
-            if (!botKitTiersData || typeof botKitTiersData !== 'object') {
-                botKitTiersData = {};
-            }
-            if (!botKitTiersData[nick]) {
-                botKitTiersData[nick] = { ...window.playersData[nick] };
-            }
-            botKitTiersData[nick][kit] = newTier;
-            if (titleStr) botKitTiersData[nick].title = titleStr;
-            if (serverStr) botKitTiersData[nick].server = serverStr;
-            if (pingStr) botKitTiersData[nick].ping = pingStr;
-            if (discIdStr) botKitTiersData[nick].discord_id = discIdStr;
-
-            const historyEntry = {
-                ign: nick,
+            window.matchHistory.unshift({
+                player: nick,
                 kit: kit,
-                old_tier: oldTier === '0' ? 'None' : oldTier,
-                new_tier: newTier === '0' ? 'None' : newTier,
-                score: scoreStr,
-                tester: testerStr,
-                date: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
-            };
-            window.matchHistory.unshift(historyEntry);
+                oldTier: oldTier,
+                newTier: newTier,
+                score: score,
+                tester: tester,
+                date: new Date().toLocaleString('ru-RU')
+            });
             if (window.matchHistory.length > 200) {
                 window.matchHistory = window.matchHistory.slice(0, 200);
             }
@@ -3907,140 +3831,113 @@
             saveLocalDb();
             renderLeaderboard();
             renderTierGrid();
-            renderAdminMatchHistory();
-            if (loggedInUser && loggedInUser.toLowerCase() === nick.toLowerCase()) {
-                viewProfile(loggedInUser);
-            }
+            renderAdminHistory();
 
-            await syncTierIssueToBackendAndBot({
-                ign: nick,
-                nickname: nick,
-                kit: kit,
+            const synced = await syncTierIssueToBackendAndBot({
+                player: nick,
+                kit,
                 old_tier: oldTier,
                 tier: newTier,
-                new_tier: newTier,
-                score: scoreStr,
-                tester: testerStr,
-                server: serverStr,
-                ping: pingStr,
-                discord_id: discIdStr || window.playersData[nick].discord_id || '',
-                title: titleStr,
-                players: window.playersData
+                score,
+                tester,
+                server: window.playersData[nick].server || '',
+                ping: window.playersData[nick].ping || '',
+                title: window.playersData[nick].title || '',
+                discord_id: window.playersData[nick].discord_id || '',
+                players: window.playersData,
+                history: window.matchHistory
             });
 
-            showToast(`✅ Тир ${newTier === '0' ? 'снят' : newTier} для ${escapeHTML(nick)} (${kit.toUpperCase()}) сохранён!`);
+            if (synced) {
+                showToast(`✅ Тир ${newTier} (${kit.toUpperCase()}) выдан игроку ${escapeHTML(nick)} и синхронизирован с БД бота!`);
+            } else {
+                showToast(`✅ Тир ${newTier} (${kit.toUpperCase()}) сохранён для ${escapeHTML(nick)}!`);
+            }
         }
 
         function adminForceRename() {
             if (!hasActiveAdminBypass()) return;
-            const oldInput = document.getElementById('admRenameOldNick');
-            const newInput = document.getElementById('admRenameNewNick');
-            const oldNick = oldInput ? oldInput.value.trim() : '';
-            const newNick = newInput ? newInput.value.trim() : '';
-
+            const oldNick = (document.getElementById('admRenameOldNick')?.value || '').trim();
+            const newNick = (document.getElementById('admRenameNewNick')?.value || '').trim();
             if (!oldNick || !newNick) {
                 showToast('Укажите старый и новый никнейм!');
                 return;
             }
-            if (oldNick.toLowerCase() === newNick.toLowerCase() && oldNick === newNick) {
-                showToast('Ники совпадают!');
-                return;
-            }
-
-            const existingKey = Object.keys(window.playersData).find(k => k.toLowerCase() === oldNick.toLowerCase()) || oldNick;
-            renamePlayerRecords(existingKey, newNick);
-
-            if (loggedInUser && loggedInUser.toLowerCase() === existingKey.toLowerCase()) {
+            const exactOld = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === normalizeNickKey(oldNick)) || oldNick;
+            renamePlayerRecords(exactOld, newNick);
+            if (normalizeNickKey(loggedInUser) === normalizeNickKey(exactOld)) {
                 loggedInUser = newNick;
                 localStorage.setItem('priz_ign', newNick);
                 const label = document.getElementById('navBtnLabel');
                 if (label) label.innerText = newNick;
             }
-
+            saveLocalDb();
             renderLeaderboard();
             renderTierGrid();
-            renderAdminMatchHistory();
-            showToast(`✏️ Ник изменён: ${escapeHTML(existingKey)} ➔ ${escapeHTML(newNick)}`);
+            showToast(`✅ Ник изменён: ${escapeHTML(exactOld)} → ${escapeHTML(newNick)}`);
         }
 
         function adminDeletePlayer() {
             if (!hasActiveAdminBypass()) return;
-            const nickInput = document.getElementById('admPlayerNick');
-            const rawNick = nickInput ? nickInput.value.trim() : '';
+            const rawNick = (document.getElementById('admPlayerNick')?.value || '').trim();
             if (!rawNick) {
-                showToast('Введите ник игрока на первой вкладке для удаления!');
+                showToast('Введите никнейм игрока!');
                 return;
             }
-            const foundKey = Object.keys(window.playersData).find(k => k.toLowerCase() === rawNick.toLowerCase());
-            if (!foundKey) {
-                showToast('Игрок не найден в базе!');
-                return;
-            }
-            if (!confirm(`Удалить игрока "${foundKey}" и все его тиры?`)) return;
-
-            delete window.playersData[foundKey];
-            delete window.playerViews[foundKey];
-            delete window.playerBgTheme[foundKey];
-            delete window.playerSkins[foundKey];
-            delete window.playerPoses[foundKey];
-            if (botKitTiersData && botKitTiersData[foundKey]) delete botKitTiersData[foundKey];
+            const exact = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === normalizeNickKey(rawNick)) || rawNick;
+            delete window.playersData[exact];
+            delete window.playerViews[exact];
+            delete window.playerBgTheme[exact];
+            delete window.playerSkins[exact];
+            delete window.playerPoses[exact];
+            delete window.discordNickBindings[normalizeNickKey(exact)];
+            persistDiscordBindings();
             saveLocalDb();
             renderLeaderboard();
             renderTierGrid();
-            showToast(`🗑️ Игрок ${escapeHTML(foundKey)} удалён из базы`);
-        }
-
-        function renderAdminMatchHistory() {
-            const container = document.getElementById('adminMatchHistoryContainer');
-            if (!container) return;
-            if (!window.matchHistory || !window.matchHistory.length) {
-                container.innerHTML = 'История пуста.';
-                return;
-            }
-            container.innerHTML = window.matchHistory.slice(0, 50).map(h => `
-                <div style="padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
-                    <div>
-                        <strong style="color:#fff;">${escapeHTML(h.ign)}</strong>
-                        <span style="color:#c084fc; font-weight:700;">[${escapeHTML((h.kit || '').toUpperCase())}]</span>
-                        <span>${escapeHTML(h.old_tier || 'None')} ➔ <strong>${escapeHTML(h.new_tier || 'None')}</strong></span>
-                        <span style="color:#94a3b8;">(${escapeHTML(h.score || '3-0')})</span>
-                    </div>
-                    <div style="font-size:11px; color:#94a3b8;">
-                        Тестер: <span style="color:#e2e8f0;">${escapeHTML(h.tester || 'Admin')}</span> • ${escapeHTML(h.date || '')}
-                    </div>
-                </div>
-            `).join('');
+            showToast(`🗑️ Игрок ${escapeHTML(exact)} удалён из базы`);
         }
 
         function adminClearHistory() {
             if (!hasActiveAdminBypass()) return;
             window.matchHistory = [];
             saveLocalDb();
-            renderAdminMatchHistory();
+            renderAdminHistory();
             showToast('История матчей очищена');
         }
 
-        async function adminSyncFromBotDatabase() {
-            if (!hasActiveAdminBypass()) return;
-            showToast('🔄 Синхронизация с базой Discord-бота...');
-            await refreshBotKitTiersStatus();
-            await loadDataFromServer();
-            showToast('✅ Данные синхронизированы с БД бота!');
+        function renderAdminHistory() {
+            const box = document.getElementById('adminMatchHistoryContainer');
+            if (!box) return;
+            if (!window.matchHistory || window.matchHistory.length === 0) {
+                box.innerHTML = 'История пуста.';
+                return;
+            }
+            box.innerHTML = window.matchHistory.slice(0, 50).map(item => `
+                <div style="border-bottom: 1px solid rgba(255,255,255,0.06); padding: 6px 0;">
+                    <strong style="color:#fff;">${escapeHTML(item.player)}</strong> •
+                    <span style="color:#c084fc; font-weight:800;">${escapeHTML(String(item.kit || '').toUpperCase())}</span>:
+                    ${escapeHTML(item.oldTier || '0')} → <strong style="color:#34d399;">${escapeHTML(item.newTier || '0')}</strong>
+                    <span style="color:#94a3b8;">(${escapeHTML(item.score || '—')})</span>
+                    <div style="font-size:10px; color:#64748b;">Тестер: ${escapeHTML(item.tester || '—')} • ${escapeHTML(item.date || '')}</div>
+                </div>
+            `).join('');
         }
 
         function adminGenerateDemoPlayers() {
             if (!hasActiveAdminBypass()) return;
-            const demo = {
-                "VortexBlade": { beast: "HT1", mace: "LT1", carts: "HT2", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "⚔️ Duelist", server: "PriZriT", ping: "32ms" },
-                "KiraMace": { beast: "LT2", mace: "HT1", carts: "LT2", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "🔨 Smasher", server: "PriZriT", ping: "28ms" },
-                "TNT_Cart": { beast: "LT3", mace: "LT3", carts: "HT1", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "💣 Bomber", server: "PriZriT", ping: "44ms" },
-                "NyxPvP": { beast: "LT1", mace: "HT2", carts: "LT1", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "", server: "PriZriT", ping: "39ms" }
+            const demos = {
+                "VortexBlade": { beast: "HT2", mace: "LT2", carts: "HT3", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "🔥 Striker", server: "PriZriT", ping: "32ms" },
+                "KuroMace": { beast: "LT3", mace: "HT2", carts: "0", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "🔨 Smasher", server: "HolyWorld", ping: "48ms" },
+                "CartGod99": { beast: "0", mace: "LT3", carts: "HT2", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "💣 Bomber", server: "FunTime", ping: "39ms" }
             };
-            window.playersData = { ...window.playersData, ...demo };
+            Object.keys(demos).forEach(k => {
+                if (!window.playersData[k]) window.playersData[k] = demos[k];
+            });
             saveLocalDb();
             renderLeaderboard();
             renderTierGrid();
-            showToast('✨ Демо-игроки добавлены в базу!');
+            showToast('✨ Демо-игроки добавлены в базу');
         }
 
         function adminExportDatabaseJson() {
@@ -4048,7 +3945,6 @@
             const payload = {
                 exported_at: new Date().toISOString(),
                 players: window.playersData,
-                bot_kit_tiers: botKitTiersData,
                 views: window.playerViews,
                 bgs: window.playerBgTheme,
                 skins: window.playerSkins,
@@ -4060,8 +3956,10 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `priztiers-database-${new Date().toISOString().slice(0, 10)}.json`;
+            a.download = `priztier-db-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
             showToast('📥 База игроков экспортирована (.json)');
         }
@@ -4069,180 +3967,194 @@
         function triggerAdminImportJson() {
             if (!hasActiveAdminBypass()) return;
             const inp = document.getElementById('admImportJsonInput');
-            if (inp) {
-                inp.value = '';
-                inp.click();
-            }
+            if (inp) { inp.value = ''; inp.click(); }
         }
 
         function adminImportDatabaseJson(event) {
             if (!hasActiveAdminBypass()) return;
-            const file = event && event.target && event.target.files ? event.target.files[0] : null;
+            const file = event?.target?.files?.[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const parsed = JSON.parse(e.target.result);
-                    const incomingPlayers = parsed.players || (typeof parsed === 'object' ? parsed : null);
-                    if (!incomingPlayers || typeof incomingPlayers !== 'object') {
-                        showToast('⛔ Некорректный формат JSON!');
-                        return;
+                    const parsed = JSON.parse(String(e.target.result || '{}'));
+                    if (parsed.players && typeof parsed.players === 'object') {
+                        window.playersData = parsed.players;
                     }
-                    window.playersData = { ...window.playersData, ...incomingPlayers };
-                    if (parsed.bot_kit_tiers && typeof parsed.bot_kit_tiers === 'object') {
-                        mergeBotPlayersIntoStore(parsed.bot_kit_tiers);
+                    if (parsed.views && typeof parsed.views === 'object') {
+                        window.playerViews = parsed.views;
                     }
-                    if (parsed.views) window.playerViews = { ...window.playerViews, ...parsed.views };
-                    if (parsed.bgs) window.playerBgTheme = { ...window.playerBgTheme, ...parsed.bgs };
-                    if (parsed.skins) window.playerSkins = { ...window.playerSkins, ...parsed.skins };
-                    if (parsed.poses) window.playerPoses = { ...window.playerPoses, ...parsed.poses };
-                    if (Array.isArray(parsed.history)) window.matchHistory = [...parsed.history, ...window.matchHistory];
-                    if (parsed.discord_nick_bindings) {
-                        window.discordNickBindings = { ...window.discordNickBindings, ...parsed.discord_nick_bindings };
+                    if (parsed.bgs && typeof parsed.bgs === 'object') {
+                        window.playerBgTheme = parsed.bgs;
+                    }
+                    if (parsed.skins && typeof parsed.skins === 'object') {
+                        window.playerSkins = parsed.skins;
+                    }
+                    if (parsed.poses && typeof parsed.poses === 'object') {
+                        window.playerPoses = parsed.poses;
+                    }
+                    if (Array.isArray(parsed.history)) {
+                        window.matchHistory = parsed.history;
+                    }
+                    if (parsed.discord_nick_bindings && typeof parsed.discord_nick_bindings === 'object') {
+                        window.discordNickBindings = parsed.discord_nick_bindings;
                         persistDiscordBindings();
                     }
                     saveLocalDb();
                     renderLeaderboard();
                     renderTierGrid();
-                    renderAdminMatchHistory();
+                    renderAdminHistory();
                     showToast('📤 База игроков успешно импортирована!');
                 } catch (err) {
-                    showToast('⛔ Ошибка чтения JSON файла!');
+                    showToast('⛔ Ошибка чтения JSON-файла!');
                 }
             };
             reader.readAsText(file);
         }
 
+        async function adminSyncFromBotDatabase() {
+            if (!hasActiveAdminBypass()) return;
+            showToast('🔄 Синхронизация с БД бота...');
+            await loadDataFromServer();
+            await refreshBotKitTiersStatus();
+            showToast('✅ Данные синхронизированы с БД бота!');
+        }
+
+        function quickAdminEdit(nick) {
+            if (!hasActiveAdminBypass()) return;
+            const nickInput = document.getElementById('admPlayerNick');
+            const kitSel = document.getElementById('admKitSelect');
+            if (nickInput) nickInput.value = nick;
+            if (kitSel) kitSel.value = currentKit;
+            autoFillAdminPlayer();
+            switchAdminTab('issue');
+            const aModal = document.getElementById('adminPanelModal');
+            if (aModal) aModal.style.display = 'flex';
+        }
+
+        function quickAdminDelete(nick) {
+            if (!hasActiveAdminBypass()) return;
+            if (!confirm(`Удалить игрока ${nick} из базы?`)) return;
+            delete window.playersData[nick];
+            delete window.playerViews[nick];
+            delete window.playerBgTheme[nick];
+            delete window.playerSkins[nick];
+            delete window.playerPoses[nick];
+            delete window.discordNickBindings[normalizeNickKey(nick)];
+            persistDiscordBindings();
+            saveLocalDb();
+            renderLeaderboard();
+            renderTierGrid();
+            showToast(`Игрок ${escapeHTML(nick)} удален`);
+        }
+
         function adminResetViews() {
             if (!hasActiveAdminBypass()) return;
-            if (!confirm('Сбросить всю статистику просмотров профилей?')) return;
+            if (!confirm('Сбросить всю статистику просмотров у игроков?')) return;
             window.playerViews = {};
             saveLocalDb();
-            if (loggedInUser) viewProfile(loggedInUser);
-            showToast('🔄 Статистика просмотров сброшена');
+            showToast('Статистика просмотров сброшена');
         }
 
         function adminSeasonReset() {
             if (!hasActiveAdminBypass()) return;
-            if (!confirm('ВНИМАНИЕ! Сбросить все тиры у всех игроков для начала нового сезона?')) return;
+            if (!confirm('ВНИМАНИЕ! Сбросить ВСЕ тиры у всех игроков для начала нового сезона?')) return;
             Object.keys(window.playersData).forEach(nick => {
                 ALL_KITS.forEach(k => {
                     window.playersData[nick][k] = '0';
                 });
             });
-            if (botKitTiersData && typeof botKitTiersData === 'object') {
-                Object.keys(botKitTiersData).forEach(nick => {
-                    ALL_KITS.forEach(k => {
-                        botKitTiersData[nick][k] = '0';
-                    });
-                });
-            }
             saveLocalDb();
             renderLeaderboard();
             renderTierGrid();
-            if (loggedInUser) viewProfile(loggedInUser);
-            showToast('🏆 Сезон сброшен! Все тиры обнулены.');
+            showToast('Новый сезон начат! Все тиры сброшены.');
         }
 
         function openDevModal() {
             if (!hasActiveAdminBypass()) return;
-            const modal = document.getElementById('devModal');
-            if (modal) modal.style.display = 'flex';
+            const dModal = document.getElementById('devModal');
+            if (dModal) dModal.style.display = 'flex';
         }
 
         function closeDevModal() {
-            const modal = document.getElementById('devModal');
-            if (modal) modal.style.display = 'none';
+            const dModal = document.getElementById('devModal');
+            if (dModal) dModal.style.display = 'none';
         }
 
         function changeAdminPass() {
             if (!hasActiveAdminBypass()) return;
-            const input = document.getElementById('newAdminPassInput');
-            const newPass = input ? input.value.trim() : '';
-            if (!newPass || newPass.length < 4) {
-                showToast('Пароль должен содержать минимум 4 символа!');
+            const passInput = document.getElementById('newAdminPassInput');
+            const val = passInput ? passInput.value.trim() : '';
+            if (!val || val.length < 4) {
+                showToast('Пароль должен содержать минимум 4 символа');
                 return;
             }
-            ADMIN_PASS = newPass;
-            localStorage.setItem('priz_custom_admin_pass', newPass);
-            if (input) input.value = '';
-            showToast('Пароль админ-панели обновлен!');
+            ADMIN_PASS = val;
+            localStorage.setItem('priz_custom_admin_pass', val);
+            if (passInput) passInput.value = '';
+            showToast('Пароль админки обновлен!');
         }
 
         function downloadSiteCode() {
             if (!hasActiveAdminBypass()) return;
-            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const htmlCode = "<!DOCTYPE html>
+" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlCode], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'index.html';
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            showToast('💾 Исходный код скачан (.html)');
+            showToast('Код сайта выгружен в index.html');
         }
 
         function openCodeEditorModal() {
             if (!hasActiveAdminBypass()) return;
+            closeDevModal();
             const ta = document.getElementById('siteCodeTextarea');
             if (ta) {
-                ta.value = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+                ta.value = "<!DOCTYPE html>
+" + document.documentElement.outerHTML;
             }
-            const modal = document.getElementById('codeEditorModal');
-            if (modal) modal.style.display = 'flex';
+            const cModal = document.getElementById('codeEditorModal');
+            if (cModal) cModal.style.display = 'flex';
         }
 
         function closeCodeEditorModal() {
-            const modal = document.getElementById('codeEditorModal');
-            if (modal) modal.style.display = 'none';
+            const cModal = document.getElementById('codeEditorModal');
+            if (cModal) cModal.style.display = 'none';
         }
 
         function applySiteCodeChanges() {
             if (!hasActiveAdminBypass()) return;
             const ta = document.getElementById('siteCodeTextarea');
-            const code = ta ? ta.value : '';
-            if (!code.trim()) {
-                showToast('Код пуст!');
+            if (!ta) return;
+            const newHtml = ta.value;
+            if (!newHtml.includes('<html')) {
+                showToast('Некорректный HTML код!');
                 return;
             }
             document.open();
-            document.write(code);
+            document.write(newHtml);
             document.close();
         }
 
-        (function initPrizBtnHoldWave() {
-            if (window.__prizBtnHoldWaveInitialized) return;
-            window.__prizBtnHoldWaveInitialized = true;
-
-            const PRESS_SELECTOR = [
-                'button',
-                '[role="button"]',
-                '.nav-icon-btn',
-                '.profile-avatar-btn',
-                '.btn-action-sm',
-                '.btn-purple',
-                '.c-tab-btn',
-                '.social-hub-btn',
-                '.guide-faq-btn',
-                '.player-card-mini',
-                '.lb-podium-card',
-                '.lb-list-row',
-                '.brand-logo',
-                '.admin-trigger'
-            ].join(',');
-
-            function triggerPressAnimation(el) {
-                if (!el || !el.classList) return;
-                el.classList.remove('priz-ui-press-anim');
-                void el.offsetWidth;
-                el.classList.add('priz-ui-press-anim');
-                window.setTimeout(() => {
-                    el.classList.remove('priz-ui-press-anim');
-                }, 360);
+        function closeModalOnBg(event, modalId) {
+            if (event.target.id === modalId) {
+                const el = document.getElementById(modalId);
+                if (el) el.style.display = 'none';
             }
+        }
+    </script>
 
+    <script id="priz-btn-hold-wave-script">
+        (function() {
+            const PRESS_SELECTOR = 'button, .nav-icon-btn, .profile-avatar-btn, .btn-purple, .btn-action-sm, .social-hub-btn, .guide-faq-btn, .c-tab-btn, .brand-logo, .player-card-mini, .podium-card, .lb-list-table tbody tr';
             let activeHoldEl = null;
+
             function clearHoldState() {
                 if (activeHoldEl) {
                     activeHoldEl.classList.remove('priz-ui-holding');
@@ -4250,19 +4162,54 @@
                 }
             }
 
-            document.addEventListener('pointerdown', (event) => {
-                if (event.button !== undefined && event.button !== 0) return;
-                const targetEl = event.target && event.target.closest ? event.target.closest(PRESS_SELECTOR) : null;
-                if (!targetEl) return;
+            function triggerPressAnimation(el) {
+                if (!el) return;
+                el.classList.remove('priz-ui-press-anim');
+                void el.offsetWidth;
+                el.classList.add('priz-ui-press-anim');
+                clearTimeout(el.__prizPressTimer);
+                el.__prizPressTimer = setTimeout(() => {
+                    el.classList.remove('priz-ui-press-anim');
+                }, 360);
+            }
+
+            document.addEventListener('pointerdown', (e) => {
+                if (e.button !== 0 && e.pointerType === 'mouse') return;
+                const target = e.target && e.target.closest ? e.target.closest(PRESS_SELECTOR) : null;
                 clearHoldState();
-                activeHoldEl = targetEl;
-                targetEl.classList.add('priz-ui-holding');
-                triggerPressAnimation(targetEl);
+                if (target) {
+                    activeHoldEl = target;
+                    target.classList.add('priz-ui-holding');
+                }
             }, { passive: true });
 
-            document.addEventListener('pointerup', clearHoldState, { passive: true });
+            document.addEventListener('pointerup', (e) => {
+                const target = e.target && e.target.closest ? e.target.closest(PRESS_SELECTOR) : activeHoldEl;
+                clearHoldState();
+                if (target) {
+                    triggerPressAnimation(target);
+                }
+            }, { passive: true });
+
             document.addEventListener('pointercancel', clearHoldState, { passive: true });
-            window.addEventListener('blur', clearHoldState, { passive: true });
+            window.addEventListener('blur', clearHoldState);
+        })();
+    </script>
+
+    <script id="priz-remove-bottom-nav-only-script">
+        (function() {
+            function removeBottomNavOnly() {
+                document.querySelectorAll('footer ~ nav, footer ~ header, footer ~ [role="navigation"], [class*="bottom-nav"], [class*="mobile-nav"], [class*="nav-bottom"], [id*="bottom-nav"], [id*="mobile-nav"]').forEach((el) => {
+                    if (el.id === 'prizMainHeader' || el.id === 'prizNavIconsBar') return;
+                    el.remove();
+                });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', removeBottomNavOnly);
+            } else {
+                removeBottomNavOnly();
+            }
+            setTimeout(removeBottomNavOnly, 300);
         })();
     </script>
 </body>
