@@ -431,6 +431,57 @@
             margin: 0 auto 20px;
             line-height: 1.5;
         }
+    
+        #prizMainHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: nowrap;
+        }
+        #prizMainHeader .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+        #prizMainHeader .brand-logo {
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        #prizNavIconsBar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        #prizNavIconsBar::-webkit-scrollbar {
+            display: none;
+        }
+        #prizMainHeader .nav-icon-btn {
+            padding: 7px 10px;
+            font-size: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        #prizMainHeader .header-right {
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .priz-ui-press-anim {
+            animation: prizBloodwornPress 0.34s cubic-bezier(0.22, 1, 0.36, 1) both !important;
+            will-change: transform, filter, box-shadow;
+        }
+        .priz-ui-holding {
+            transform: scale(0.965) translateY(1px) !important;
+            filter: brightness(1.14) !important;
+            box-shadow: 0 0 18px rgba(192, 132, 252, 0.5) !important;
+            transition: transform 0.1s ease, filter 0.1s ease, box-shadow 0.1s ease !important;
+        }
+
     </style>
     <style id="priz-remove-bottom-nav-only">
         footer ~ nav,
@@ -450,10 +501,10 @@
 <body class="site-bg-hw-dungeon">
 
     <div class="page-overlay">
-        <header>
+        <header id="prizMainHeader">
             <div class="header-left">
                 <div class="brand-logo" onclick="openPage('home')">PrizTiers</div>
-                <div class="nav-icons-bar">
+                <div class="nav-icons-bar" id="prizNavIconsBar">
                     <button class="nav-icon-btn" data-tooltip="Лидерборд" onclick="openPage('leaderboard')">
                         🏆 Лидерборд
                     </button>
@@ -466,14 +517,14 @@
                     <button class="nav-icon-btn btn-carts" id="btn-carts" data-tooltip="Carts (Minecart TNT)" onclick="switchKit('carts')">
                         <img src="https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png" alt="Carts" class="protected-asset"> CARTS
                     </button>
+                    <button class="nav-icon-btn btn-axe" id="btn-axe" data-tooltip="Axe PvP" onclick="switchKit('axe')">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=" alt="Axe" class="protected-asset"> AXE
+                    </button>
                     <button class="nav-icon-btn" id="btn-smp" data-tooltip="SMP PvP" onclick="switchKit('smp')">
                         <img src="data:image/png;base64,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" alt="SMP" class="protected-asset"> SMP
                     </button>
                     <button class="nav-icon-btn" id="btn-uhc" data-tooltip="UHC PvP" onclick="switchKit('uhc')">
                         <img src="data:image/png;base64,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" alt="UHC" class="protected-asset"> UHC
-                    </button>
-                    <button class="nav-icon-btn" id="btn-axe" data-tooltip="Axe PvP" onclick="switchKit('axe')">
-                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=" alt="AXE" class="protected-asset"> AXE
                     </button>
                     <button class="nav-icon-btn" id="btn-op" data-tooltip="OP PvP" onclick="switchKit('op')">
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEwklEQVR42sWYXW8d5RHHf/PMs+f4nOOXGDtpDCKKgoAIKF8gn4CvUEoFRbSpWlG45gopIIVQFBoBygV9A1VIlfoR6A2oEkKoCMWJVRrKi5vExHaM43N299lnphfHOCnlIkbZMHcr7c7+duY//2e0cINx4vjL/trp152WI97ojRcvXWTW5zl56rTjFU89+aS0AXTDSY8dO+bBamKhZBkQVJme2sMvjj4m30uFYoaPz76NujFz8D5mZu9ibX2F37z8qscY+PUvj94UsHCjN7oEYIu19VW2LnzMR+++Ra+5jI1GlGXJiy+d9FOvvOa3rEIeHEWxOMHGpTUklSz9422ubK5x5MhRUpEZpooXT55yRXj6qV9JqxUiCBFh7ra9rKxcpEo1OWc6RWBx8S+c//BvVKuf0pQj6qri1G9f8eefe8Fbq1CRIUmHT5YW6XYDWjhmDVubFf2BU9sKS+f+xeTsHdxz70Nc+GKdf3/+WXsVsu0GFBqo6xLLdi2JQ6EFNjTyxibv//2v9PvTZMvtAYk57hlV2PeDfaQmETTQ5IacEphjNeRGWF1ZJWqHqLE9oKRQmCFuzN02R24yTWoQlFGVqVMmWWYwt8AoJHIOVFXVoqiBgJElgkdydsyFGCPuzrCqyRL455kP8KpBzAkh8MADD3prQHjg4KHDQCDqBEGEoOCeIRueM0W/h6tjbpRlibu3pCFRviqHbFU1Z86c3XlUZPxC97GAb9+/j4mig5kRNDA5mGxn7IerW9SeuHz+LKryrV+em/+fKo3aDhAaCRLpRKXX7ZIz5Jxxl+1KCdkSW8OrBIQQI5YNEWmnZS4gPhb2wu37ca+pqorRsBpDaaToTjA/c5BkJSZjSDNrzxj1ui65O2aGByXLOI1qJPkIM6NwoU71/xjoTZ8yxRkl48raJrnx7SNOEDfcHBFh6eyHNI0gIlRVxcbGRntAg/4kd919Pzk7vd4AEUVEcDIShJwq9t+5QIhC0ECQwLmlRWlH1EAT4NPlC7C1QVEoM3umMGtQnBiEbrdLXVb0Oj02NzcpOkV7Tl1kaNTw0Zc4FUENMFQVEcXNKMshZonvcKZ+N1GLB0JQ5ufnKYpi3C73nWlKTUKks20BtmtB73rsgxviAVXdmbSvYUSEEDssLBwmWY0E2bUH7QooxEiUzGDQv+44kW1zHIN1YsHiuffG195yy5aXl1HJ9PozECJlamjsGpi7E1VRS3jK7WsIQM2YnNrPFyuXSY1TVRUpN5gYMUbMGqZnZ+l0e5g7Mba4oIkITTPN0vkPCKoQFJdraZqmYVSWYy3ptmG2qaGuBi7VW4gImhLqDYKNU3i4tsJZxqwZb5NtAg2m+8zO/ZBDdx9hoj+HiO7sQcnqsZ40sm/vYYzA+ldX2DO7pz2gEy8dl2eefZ6rtbL34IN0p+4k1VPgkbpOlHVFCIHY6eM+Frnb7kdtV6o7cODATg8effynnsoR1cYqw7Ul4oSTy2kWl94hZScE3XbzFoGujz+8/jsBeOSxnzszXfLny3Qm1gmxSzksAQO5hUBfxxu/Py0ATzz8E0/5Khf/8xlTA8X8MlF01/lu+k+nHz3yY+91emBjsf/pj2/KLa3QN+PPb4wBHn/0Z25h9479XzZua32qaJ6qAAAAAElFTkSuQmCC" alt="OP" class="protected-asset"> OP
@@ -485,7 +536,7 @@
                         📘 Гайд
                     </button>
                     <button class="nav-icon-btn" id="btn-links" data-tooltip="Discord и Telegram каналы" onclick="openPage('links')">
-                        🔗 Ссылки
+                        <img src="data:image/png;base64,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" alt="Discord" class="protected-asset" style="width:16px;height:16px;object-fit:contain;border-radius:4px;"> Discord
                     </button>
                 </div>
             </div>
@@ -505,26 +556,8 @@
                     <div class="hero-sub">Соревновательная экосистема &amp; PvP Tier List платформа</div>
                 </div>
 
-                <div class="new-kits-poll-banner">
-                    <div>
-                        <div style="font-size: 14px; font-weight: 900; color: #fff;">📊 Опрос по новым китам и каналам Discord</div>
-                        <div style="font-size: 12px; color: #94a3b8;">Голосуйте за добавление новых дисциплин в тир-лист и каналы Discord:</div>
-                        <div class="new-kits-pills">
-                            <span class="new-kit-chip"><img src="data:image/png;base64,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" width="12" height="12" alt="" class="protected-asset"> SMP</span>
-                            <span class="new-kit-chip"><img src="data:image/png;base64,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" width="12" height="12" alt="" class="protected-asset"> UHC</span>
-                            <span class="new-kit-chip"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=" width="12" height="12" alt="" class="protected-asset"> AXE</span>
-                            <span class="new-kit-chip"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEwklEQVR42sWYXW8d5RHHf/PMs+f4nOOXGDtpDCKKgoAIKF8gn4CvUEoFRbSpWlG45gopIIVQFBoBygV9A1VIlfoR6A2oEkKoCMWJVRrKi5vExHaM43N299lnphfHOCnlIkbZMHcr7c7+duY//2e0cINx4vjL/trp152WI97ojRcvXWTW5zl56rTjFU89+aS0AXTDSY8dO+bBamKhZBkQVJme2sMvjj4m30uFYoaPz76NujFz8D5mZu9ibX2F37z8qscY+PUvj94UsHCjN7oEYIu19VW2LnzMR+++Ra+5jI1GlGXJiy+d9FOvvOa3rEIeHEWxOMHGpTUklSz9422ubK5x5MhRUpEZpooXT55yRXj6qV9JqxUiCBFh7ra9rKxcpEo1OWc6RWBx8S+c//BvVKuf0pQj6qri1G9f8eefe8Fbq1CRIUmHT5YW6XYDWjhmDVubFf2BU9sKS+f+xeTsHdxz70Nc+GKdf3/+WXsVsu0GFBqo6xLLdi2JQ6EFNjTyxibv//2v9PvTZMvtAYk57hlV2PeDfaQmETTQ5IacEphjNeRGWF1ZJWqHqLE9oKRQmCFuzN02R24yTWoQlFGVqVMmWWYwt8AoJHIOVFXVoqiBgJElgkdydsyFGCPuzrCqyRL455kP8KpBzAkh8MADD3prQHjg4KHDQCDqBEGEoOCeIRueM0W/h6tjbpRlibu3pCFRviqHbFU1Z86c3XlUZPxC97GAb9+/j4mig5kRNDA5mGxn7IerW9SeuHz+LKryrV+em/+fKo3aDhAaCRLpRKXX7ZIz5Jxxl+1KCdkSW8OrBIQQI5YNEWmnZS4gPhb2wu37ca+pqorRsBpDaaToTjA/c5BkJSZjSDNrzxj1ui65O2aGByXLOI1qJPkIM6NwoU71/xjoTZ8yxRkl48raJrnx7SNOEDfcHBFh6eyHNI0gIlRVxcbGRntAg/4kd919Pzk7vd4AEUVEcDIShJwq9t+5QIhC0ECQwLmlRWlH1EAT4NPlC7C1QVEoM3umMGtQnBiEbrdLXVb0Oj02NzcpOkV7Tl1kaNTw0Zc4FUENMFQVEcXNKMshZonvcKZ+N1GLB0JQ5ufnKYpi3C73nWlKTUKks20BtmtB73rsgxviAVXdmbSvYUSEEDssLBwmWY0E2bUH7QooxEiUzGDQv+44kW1zHIN1YsHiuffG195yy5aXl1HJ9PozECJlamjsGpi7E1VRS3jK7WsIQM2YnNrPFyuXSY1TVRUpN5gYMUbMGqZnZ+l0e5g7Mba4oIkITTPN0vkPCKoQFJdraZqmYVSWYy3ptmG2qaGuBi7VW4gImhLqDYKNU3i4tsJZxqwZb5NtAg2m+8zO/ZBDdx9hoj+HiO7sQcnqsZ40sm/vYYzA+ldX2DO7pz2gEy8dl2eefZ6rtbL34IN0p+4k1VPgkbpOlHVFCIHY6eM+Frnb7kdtV6o7cODATg8effynnsoR1cYqw7Ul4oSTy2kWl94hZScE3XbzFoGujz+8/jsBeOSxnzszXfLny3Qm1gmxSzksAQO5hUBfxxu/Py0ATzz8E0/5Khf/8xlTA8X8MlF01/lu+k+nHz3yY+91emBjsf/pj2/KLa3QN+PPb4wBHn/0Z25h9479XzZua32qaJ6qAAAAAElFTkSuQmCC" width="12" height="12" alt="" class="protected-asset"> OP</span>
-                            <span class="new-kit-chip"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEo0lEQVR42sWX7W9TdRTHv7/z621HH9Z1dJQxxx6AGVbmJgxEI2xlAaKMJxMTjfrC+NYY4sMfYOJf4CuJ+sL3AlkkJpBlYkhQg7Cy4Qq0PKxs68M6dtuu7bp7e36+QkUMMtZ25+2953c/93zO79z7E1ilONC5Ux3Z/5r5y08/Y63XS1+OnJIAQKsF9PrAfnP00iVomgUQ4Jc7thkAYKkmxOcffFy8feUaCanQ8+ZBdL9xgL777As2TROKFaoOZHfUkNQAm7QASuHbr0/yhXCQQGBXjb06QB8df9fI3I9BKYW8x4aWQ3soEOjHN1+dZCIBr7uOZzM6ZYsFrgpQ04ZGZNI62vfuRGBgHylmjIyMQN5IgCRBQGBaT8mH91cEaGdzxx2/b2OzgEIoOYWSzwlWTBYp2VRMUgomSSABQDyaWxEgk7kNik2CpPUbm9lW60B/IIDz58+TEOBw6CZinMONO2FAPLrTKwI0Oh0Rs3ndGGjvYgWF7Tu2Y3h4GOFQiDWrBmskhTUWG62r8/DovbD8Z27F5tDUfEqbmLuOvQMBuN0eIiKWkgBWgFCw2qwshHgsT1QKqN/fahzrbsT3v93GolHC1lcPQN5MQoLo3N0goBQ31HowOhnWKl4hSQSlFBaNEna91It7cwvQwkkIAbBQ3OByMytwJDG959+5Ze+hV7Y0GdIicbhrPX4Yj8PgBDSrBosQgNWKth4/gmejmNFTtv/KL6uyE28PFltVikgKnArOYCKahCQB5xorInFda/J4jYcPnZpPaRUH6tvaYhzvaYSUhElah3MXfsV4NK4tZ42yKPM3rZ311jrqDm3z4cy1GCQRTaZCnM0XeblrrbipP33vuFFf564f7G7CjxNJFAzGxP0k2202JDN5W9WBLl8ZhUbMgkvYvauX8kUD8XROG59cnqqyKOvrbDEOd/nAEBgaiyFdiHIqk1nRCz4T0IvtPtW3e5e5kWcxNB5H2+bnKRIb5zqnA3E9r60E6JmU2a1Wvnw1CAGgVCohm83yUkm9H5pKaittgWVv+z5/i3GsewOggNOj00gXiog/yCJvmB0Li0t3Vwr01Mo2r3PNHx7ot7cihdPBGLZs3oRwbA7NDW4ks3mtXLPsqZX1but0Xh0bJ4MVIAC7fQ3W19ficmSmbDBPrazP32Yc7fIBChgai2EuW8DcQg6eWhdPROO2cgL9r7KtG+rPSGJcvDuPRLqAe4kHqHc5ENNzWkzPlf9P4UkXP3xr0CgsZDoG/Y0Ym06DSECSxLMOvRVVqL+rzdgkUmj3+zA0FoOeKyKhp7HW7aroKeU/geocNT6zxNCXSnTxVopvzczC63Yhns5r8XS+okCPKTvxztEiFvOfHOnyYfhGShlmiSwWTf0RTdgUoCp9jnukQgMvtBmtnERjpw9nr8ehF5YQn0uzx+1gVopRhRAA0NfRrQ7u22/WZC7h9LUYLAII3U/CWaPhdkLXUMUgAGivbTAjv48RQUEjgEuMBrez6jB/KxOAYoXgLSfSWRum56OVb5YnVajG4UBvoJ837eiBAoOE7UQynddWA+ivT8dz9V5DMQAhoBeyzbnFxfhqAP0Jjaj0xIKfncMAAAAASUVORK5CYII=" width="12" height="12" alt="" class="protected-asset"> SPEARMACE</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button class="btn-action-sm" style="background: rgba(168,85,247,0.2); border-color: #a855f7; color: #fff;" onclick="switchKit('smp')">Открыть новые киты</button>
-                        <button class="btn-action-sm" onclick="openPage('links')">Перейти в Discord</button>
-                    </div>
-                </div>
-
-                <div class="kit-stats-bar">
-                    <div class="kit-stat-card">
+                <div class="kit-stats-bar" id="prizKitStatsBar">
+                    <div class="kit-stat-card" data-stat-kit="beast">
                         <div class="kit-stat-info">
                             <div class="kit-stat-title">
                                 <img src="https://minecraft.wiki/images/Diamond_Sword_JE3_BE3.png" width="16" height="16" alt="" class="protected-asset"> BEAST DISCIPLINE
@@ -533,6 +566,37 @@
                             <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordBeastOnline">...</span> в сети</div>
                         </div>
                     </div>
+
+                    <div class="kit-stat-card" data-stat-kit="mace">
+                        <div class="kit-stat-info">
+                            <div class="kit-stat-title">
+                                <img src="https://minecraft.wiki/images/Mace_JE1_BE1.png" width="16" height="16" alt="" class="protected-asset"> MACE DISCIPLINE
+                            </div>
+                            <div class="kit-stat-count" id="statCountMace">... участников</div>
+                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordMaceOnline">...</span> в сети</div>
+                        </div>
+                    </div>
+
+                    <div class="kit-stat-card" data-stat-kit="carts">
+                        <div class="kit-stat-info">
+                            <div class="kit-stat-title">
+                                <img src="https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png" width="16" height="16" alt="" class="protected-asset"> CARTS DISCIPLINE
+                            </div>
+                            <div class="kit-stat-count" id="statCountCarts">... участников</div>
+                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordCartsOnline">...</span> в сети</div>
+                        </div>
+                    </div>
+
+                    <div class="kit-stat-card" data-stat-kit="axe">
+                        <div class="kit-stat-info">
+                            <div class="kit-stat-title">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=" width="16" height="16" alt="" class="protected-asset"> AXE DISCIPLINE
+                            </div>
+                            <div class="kit-stat-count" id="statCountAxe">... участников</div>
+                            <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="statDiscordAxeOnline">...</span> в сети</div>
+                        </div>
+                    </div>
+                </div>
 
                     <div class="kit-stat-card">
                         <div class="kit-stat-info">
@@ -600,10 +664,47 @@
                             <div class="lb-sum-val" id="lbTotalCarts">0</div>
                             <div class="lb-sum-lbl"><img src="https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png" alt="" class="protected-asset"> Carts</div>
                         </div>
+                        <div class="lb-sum-item">
+                            <div class="lb-sum-val" id="lbTotalAxe">0</div>
+                            <div class="lb-sum-lbl"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=" alt="" class="protected-asset"> Axe</div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="lb-podium-grid" id="leaderboardPodium"></div>
+
+
+
+                <div class="lb-table-card">
+                    <div class="lb-table-toolbar">
+                        <span style="font-size: 13px; color: #94a3b8;">Нажмите на игрока, чтобы открыть его карточку.</span>
+                        <input type="text" id="lbSearchInput" class="search-input-box" placeholder="🔍 Поиск по никнейму..." oninput="renderLeaderboard()">
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="lb-list-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">#</th>
+                                    <th>ИГРОК</th>
+                                    <th>ТИРЫ</th>
+                                    <th style="text-align: right;">ОЧКИ</th>
+                                    <th style="text-align: right; width: 140px;" id="adminColHead"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- СТРАНИЦА: ГАЙД -->
+            <div id="page-guide" class="page-view">
+                <div class="guide-hero-card">
+                    <div class="guide-badge-pill">📘 Гайд по тестированию</div>
+                    <h2 style="color: #fff; font-size: 26px; font-weight: 900; margin-bottom: 8px;">Всё, что нужно знать о тестировании в PrizTiers</h2>
+                    <p style="color: #94a3b8; font-size: 14px; max-width: 620px; margin: 0 auto;">Пошаговый порядок получения тира по дисциплинам Beast, Mace, Carts и новым китам, шкала тиров и ответы на частые вопросы.</p>
+                </div>
 
                 <div class="lb-table-card" style="margin-bottom: 16px; padding: 14px 18px;">
                     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -716,37 +817,6 @@
                             </select>
                         </div>
                     </div>
-                </div>
-
-                <div class="lb-table-card">
-                    <div class="lb-table-toolbar">
-                        <span style="font-size: 13px; color: #94a3b8;">Нажмите на игрока, чтобы открыть его карточку.</span>
-                        <input type="text" id="lbSearchInput" class="search-input-box" placeholder="🔍 Поиск по никнейму..." oninput="renderLeaderboard()">
-                    </div>
-
-                    <div style="overflow-x: auto;">
-                        <table class="lb-list-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 60px;">#</th>
-                                    <th>ИГРОК</th>
-                                    <th>ТИРЫ</th>
-                                    <th style="text-align: right;">ОЧКИ</th>
-                                    <th style="text-align: right; width: 140px;" id="adminColHead"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="leaderboardTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- СТРАНИЦА: ГАЙД -->
-            <div id="page-guide" class="page-view">
-                <div class="guide-hero-card">
-                    <div class="guide-badge-pill">📘 Гайд по тестированию</div>
-                    <h2 style="color: #fff; font-size: 26px; font-weight: 900; margin-bottom: 8px;">Всё, что нужно знать о тестировании в PrizTiers</h2>
-                    <p style="color: #94a3b8; font-size: 14px; max-width: 620px; margin: 0 auto;">Пошаговый порядок получения тира по дисциплинам Beast, Mace, Carts и новым китам, шкала тиров и ответы на частые вопросы.</p>
                 </div>
 
                 <div class="info-block">
@@ -890,15 +960,15 @@
                 </div>
             </div>
 
-            <!-- СТРАНИЦА: ССЫЛКИ НА ДИСКОРД КАНАЛЫ И ТГ КАНАЛ -->
+            <!-- СТРАНИЦА: DISCORD И КАНАЛЫ СВЯЗИ -->
             <div id="page-links" class="page-view">
                 <div class="guide-hero-card">
-                    <div class="guide-badge-pill">Официальные каналы связи</div>
+                    <div class="guide-badge-pill"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAIB0lEQVR42u1Xa2xc1RH+Zs659+76ETtrrx/JJk7iJcGJnZBXaXltAg00UCilOEV9oaISlUoghEpVUKXF/yBVKwRqK1RIftBKbUJ5tECSNk0T0pJSRGLyIC+nsWM7dhzbiZ111nfvPWf6Y3fBCeZR9U+ldqT5c+8czTdn5puZA/yvi/qUdgS0qlSqVXV1gYEumdysaFNDwHsEQP4TcASAW1s3KqZJcTKQ0nkFF/SDn8RIp4ULQdLHOZn0OxELIBARAIiX8tyVyeTS5T0DRxQ7Q+sGB0/2QwoBUt53oubGW2trZrYc7th5NJM9shfAcRCBQBCxDMBe6kh/lHMRWw7gsuXJe38wb9aKFV4JaofOd6Or7wCGznW9BqAccG8GyEL8PwIYzwT9bUvqb1ncPOfzyF7IBB0ndr38TseGjQLZQsSZyUDQRzgvvXz6iu0rl3+/eYo3s2Tf0VfR1feuYdeR+th8k6httm4YiXjWIQHBclYMsvbUQJffefaQa02GGqbPU/Nn3ISM34W3Dv366T0nfr+eiNpF5CIQEwGwiAgR1V+z8IdbVi17oKW/pxNHOv9k6qrmcGPNjRQrrQEAWAu4BnAtQgFguXCTCjAMDGX6cOL0X9AzsN80JVejrr5RvfLmE+ff7ng6lU6n321ra0MRxPsA0khzm7RJIrbk5bWr/nDbhXORMON3qhk188lzIjAhEAYWJADB5uuDiAQAgQUABIYYBIZGxAN8yeKfve2IV7TkbCTjPrftS9t6Rv6xKg3hNtBFAJiJrRXbcvPitn2rFzxixkZyynFKYazAwodWCgSGCBWOTVa/FqAQAgtrBYocOEojDMfhRl2zef8T6vX9j95ARNuLqShQJ8VWLNWUtNy2aPa3JOc7QqwQhBYCAZOGCCN/hj6RvQQFxRoggR/mYIVgApYrZn8NNdGFXxARAlKMIndFdhgA0jj9ljuqy2dRYAImdkDEIKKCGUFgC71lIgi5SKVITWFAGEwKRA5yPrh6ykw0zliRAiAFn2AAipkFUCsapi1q0QSb7yMMVgIq8tiyOKQM5Wv1Q3GLCAhKHHKNtSQCgVABFhEMG2Ymm6htWQLgqrxPKAZSJCJUXXL5A43xpU6QhTApTMy0EMEpAZ0zvSpQGSKHxIot5NzCiAG7LIEapXNht3KimoQUbBEEGbC2sDnYZE1KTy1f+tl8EGuZJb3DApCFM1f0x9wE4EM4D7t41RY6i60HHu99dvft9/x81x2nO0d3kBuBgAyILJSCnMz8nX7xxjeO/fJvtz249b3HM8rNiVgRK7ZwO4AJQDVeEg0VTV/Pt+vnAr1m60MegKCiKr4qqqK4YMAEBgiwYsXzmNp7XrFb9j3SCmA3gINv7KVNyeuXJYCoWAgJZ7F5948yXcN/fhTAC72D7bnLqhf9rLF6tc36gSJSgBAEljQYianzprX3oOzGxp8GvPnAa6WAXhrzFtXZEJZoQoUJQBrU0b9HorFY9913b4iUqHhsaOSkOT82DIEiJi1jY8PIZHqPRHTizDPPiOO6bu+BE3+VPG9JPqgTMBPs1JLGOKCu2537SQlnMkcHPZWorIjMLwt9CLElUD4DwgIjQH38cmSHh/Wvnv/O+AVzZku8ovGliFfJAhhrgPLSKirxIt542LPrvvs4yOVyp+qq5sKaS/s8EAaQutgCVabnnB85efIsA8C0ePWwp7XwhwYDU+DDLk58RV3f9NAGI+5jVdErtixL3nc/2zKx1miBsLJl9rqWx5pjkSUvkXKfXJn83sYrG+4kk4MQKcpTMs8mGCDieqiIuPFiJ3QWNX75qbs+s+G7kWyFFRgmBViEMAVuk1EIVBb9uf0ocepQrZOwOQGIwJTPlSiSwaCDLIZQ5ywEBVEEsBAArA3ydSXQRpvQG1LP7/rmpn09m+/SANxsQGtYl8CIJa0s/MAHOETEq4RvxhEggLLlMjt6jckJKBdYpcGFuZC/29AIVeukVZSUIABZMUxQiHjA+fGzUOzBcVyE1rCjSyFccjWAKAMQRVDadUSMiIiFozR6+7rR0bcD0KMoLS0FMWPcD9nmDLOFQGxerRExRpS1ImFIQWCUUuCyKQoUGcax01vQP3gAEIIJA1hjrdIRsWwFgFWtra12z55233Erb2pMLCYEFAYBc+WUOPpH38UbB9djKDeM8mgF1ZRXkraKPEWkHSLWRMpl0g6T0nnVZGUk6KK3u36DPYc3oLKsEvMSX0QYaDhKQi/m6R2H19PB7m23j+f6jxXqnQSofXj14gcfTjV9O+5RrQQ+jMPggdEO2nXkKQycfWugtrqppzq6oHFqrErAUdK6HAIgNAF862PwdB+GRvZVjo4dN/XxZr7qsrWojzVb39eiPFCWxtSbB58dfH1veh0w8mMgzQXOL3WAdwIATbNqr316eXLNDXOn3YQydybKxUPUBfaP/i735It3NgM4U+zQk2zYRlHpuvvvWH/v/Io1dtwH+yQYDTpx6NRW7D3+2gvHT716PxH6RVoVsMlMGGspTbQrFLEA8LlplVcvaZi+4J6onr2oLt4k7Ud/O9Y3sLNlNDfQLflRc9FkJBBAhPLy6ZXL5311faLqylsH+jvPZPzOfd39B189Mbz9FIAXiRgi12pgZzjpME+nhfMjuLh6o6Gg8Qlr3MdpURoAVE5YNotrOn2aNwGnkNJMCkw8YS/4xHcEgNrZrtvQRJTfBTa2ikrl3w7q33kX4JJoJ24enxLI+3Ui+L/8N8u/AOOwuiSM20tOAAAAAElFTkSuQmCC" alt="Discord" class="protected-asset" style="width:16px;height:16px;object-fit:contain;border-radius:4px;"> Discord и каналы связи</div>
                     <h2 style="color: #fff; font-size: 26px; font-weight: 900; margin-bottom: 8px;">Discord-серверы и Telegram-канал PrizTiers</h2>
                     <p style="color: #94a3b8; font-size: 14px; max-width: 620px; margin: 0 auto;">Переходи в нужную дисциплину для записи на тест или подпишись на Telegram, чтобы следить за обновлениями.</p>
                 </div>
 
-                <div class="links-grid">
+                <div class="links-grid" id="prizCustomLinksGrid">
                     <div class="social-hub-card">
                         <div>
                             <div class="social-hub-title">
@@ -1343,6 +1413,53 @@
             </div>
 
             <div id="admTab-tools" class="c-panel">
+                <div style="background: rgba(15,23,42,0.65); border: 1px solid rgba(192,132,252,0.3); border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+                    <div style="font-size: 12px; font-weight: 800; color: #e9d5ff; margin-bottom: 8px;">➕ Добавить Kit Discipline на главную (по ссылке с онлайном и иконкой кита)</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Кит (иконка оружия MC):</label>
+                            <select id="admHomeKitType" class="form-input" style="margin-top: 4px; margin-bottom: 0;">
+                                <option value="beast">BEAST (Sword)</option>
+                                <option value="mace">MACE (Mace)</option>
+                                <option value="carts">CARTS (Minecart TNT)</option>
+                                <option value="axe">AXE (Axe)</option>
+                                <option value="smp">SMP</option>
+                                <option value="uhc">UHC</option>
+                                <option value="op">OP</option>
+                                <option value="spearmace">SPEARMACE</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Место на главной:</label>
+                            <select id="admHomeKitPos" class="form-input" style="margin-top: 4px; margin-bottom: 0;">
+                                <option value="start">В начало списка</option>
+                                <option value="after-beast">После BEAST</option>
+                                <option value="after-mace">После MACE</option>
+                                <option value="after-carts">После CARTS</option>
+                                <option value="after-axe">После AXE</option>
+                                <option value="end">В конец списка</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="text" id="admHomeKitLabel" class="form-input" placeholder="Название дисциплины (например: AXE / SMP DISCIPLINE)" style="margin-bottom: 8px;">
+                    <input type="text" id="admHomeKitInvite" class="form-input" placeholder="Ссылка-приглашение Discord (https://discord.gg/... или код)" style="margin-bottom: 8px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-purple" style="flex: 2; padding: 9px;" onclick="adminAddHomeKitDiscipline()">Добавить на главную</button>
+                        <button class="btn-action-sm" style="flex: 1;" onclick="adminClearCustomHomeKits()">Очистить свои</button>
+                    </div>
+                </div>
+
+                <div style="background: rgba(15,23,42,0.65); border: 1px solid rgba(56,189,248,0.3); border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+                    <div style="font-size: 12px; font-weight: 800; color: #bae6fd; margin-bottom: 8px;">🔗 Добавить ссылку на страницу Discord</div>
+                    <input type="text" id="admLinkTitle" class="form-input" placeholder="Название карточки (например: Discord • Clan)" style="margin-bottom: 8px;">
+                    <input type="text" id="admLinkUrl" class="form-input" placeholder="Ссылка (https://discord.gg/... или https://t.me/...)" style="margin-bottom: 8px;">
+                    <input type="text" id="admLinkDesc" class="form-input" placeholder="Краткое описание (опционально)" style="margin-bottom: 8px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-action-sm" style="flex: 2; padding: 9px; background: rgba(56,189,248,0.18); border-color: #38bdf8; color: #e0f2fe;" onclick="adminAddDiscordPageLink()">Добавить в Discord</button>
+                        <button class="btn-action-sm" style="flex: 1;" onclick="adminClearCustomDiscordLinks()">Очистить свои</button>
+                    </div>
+                </div>
+
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(192,132,252,0.18); border-color: #c084fc; color: #f3e8ff;" onclick="adminSyncFromBotDatabase()">🔄 Принудительно синхронизировать с БД бота</button>
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(168,85,247,0.2); border-color: #a855f7;" onclick="adminGenerateDemoPlayers()">✨ Сгенерировать демо-игроков</button>
@@ -1456,8 +1573,8 @@
         const ADMIN_DM_TARGET_USERNAME = "bigkeks";
         const ADMIN_DM_TARGET_ID = "bigkeks";
 
-        const ACTIVE_KITS = ["beast", "mace", "carts"];
-        const SOON_KITS = ["smp", "uhc", "axe", "op", "spearmace"];
+        const ACTIVE_KITS = ["beast", "mace", "carts", "axe"];
+        const SOON_KITS = ["smp", "uhc", "op", "spearmace"];
         const ALL_KITS = [...ACTIVE_KITS, ...SOON_KITS];
 
         const DISCORD_KITS_WIDGETS = {
@@ -1484,6 +1601,200 @@
             'HT4': 5,  'LT4': 4,
             'HT5': 3,  'LT5': 2
         };
+
+
+        const DISCORD_DEFAULT_PNG = "data:image/png;base64,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";
+        window.customHomeKits = [];
+        window.customDiscordLinks = [];
+        try {
+            window.customHomeKits = JSON.parse(localStorage.getItem('priz_custom_home_kits') || '[]');
+        } catch (e) { window.customHomeKits = []; }
+        try {
+            window.customDiscordLinks = JSON.parse(localStorage.getItem('priz_custom_discord_links') || '[]');
+        } catch (e) { window.customDiscordLinks = []; }
+
+        function extractInviteCode(raw) {
+            const s = String(raw || '').trim();
+            if (!s) return '';
+            const m = s.match(/(?:discord\.gg|discord\.com\/invite|discordapp\.com\/invite)\/([A-Za-z0-9-]+)/i);
+            return m ? m[1] : s.replace(/^\/+|\/+$/g, '');
+        }
+
+        function saveCustomHomeKits() {
+            try {
+                localStorage.setItem('priz_custom_home_kits', JSON.stringify(window.customHomeKits || []));
+            } catch (e) {}
+        }
+
+        function saveCustomDiscordLinks() {
+            try {
+                localStorage.setItem('priz_custom_discord_links', JSON.stringify(window.customDiscordLinks || []));
+            } catch (e) {}
+        }
+
+        function renderCustomHomeKits() {
+            const bar = document.getElementById('prizKitStatsBar');
+            if (!bar) return;
+            bar.querySelectorAll('.kit-stat-card[data-custom-kit="1"]').forEach(el => el.remove());
+
+            const items = Array.isArray(window.customHomeKits) ? window.customHomeKits : [];
+            items.forEach((item, idx) => {
+                const kitKey = (KIT_ICONS[item.kit] ? item.kit : 'beast');
+                const iconSrc = KIT_ICONS[kitKey];
+                const labelText = escapeHTML(item.label || `${kitKey.toUpperCase()} DISCIPLINE`);
+                const card = document.createElement('div');
+                card.className = 'kit-stat-card';
+                card.setAttribute('data-custom-kit', '1');
+                card.setAttribute('data-custom-id', item.id || String(idx));
+                card.innerHTML = `
+                    <div class="kit-stat-info">
+                        <div class="kit-stat-title">
+                            <img src="${iconSrc}" width="16" height="16" alt="" class="protected-asset"> ${labelText}
+                        </div>
+                        <div class="kit-stat-count" id="customStatCount_${escapeHTML(item.id)}">... участников</div>
+                        <div class="kit-online-tag"><span class="online-dot"></span> Discord: <span id="customStatOnline_${escapeHTML(item.id)}">...</span> в сети</div>
+                    </div>
+                `;
+
+                const pos = item.position || 'end';
+                const anchorMap = {
+                    'after-beast': bar.querySelector('[data-stat-kit="beast"]'),
+                    'after-mace': bar.querySelector('[data-stat-kit="mace"]'),
+                    'after-carts': bar.querySelector('[data-stat-kit="carts"]'),
+                    'after-axe': bar.querySelector('[data-stat-kit="axe"]')
+                };
+
+                if (pos === 'start') {
+                    bar.insertBefore(card, bar.firstChild);
+                } else if (anchorMap[pos] && anchorMap[pos].parentNode === bar) {
+                    anchorMap[pos].insertAdjacentElement('afterend', card);
+                } else {
+                    bar.appendChild(card);
+                }
+
+                fetchCustomInviteStats(item);
+            });
+        }
+
+        async function fetchCustomInviteStats(item) {
+            const code = extractInviteCode(item.invite);
+            if (!code) return;
+            try {
+                const res = await fetch(`https://discord.com/api/v9/invites/${encodeURIComponent(code)}?with_counts=true&_t=${Date.now()}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const countEl = document.getElementById(`customStatCount_${item.id}`);
+                const onlineEl = document.getElementById(`customStatOnline_${item.id}`);
+                if (countEl && data.approximate_member_count !== undefined) {
+                    countEl.innerText = `${data.approximate_member_count} участников`;
+                }
+                if (onlineEl && data.approximate_presence_count !== undefined) {
+                    onlineEl.innerText = data.approximate_presence_count;
+                }
+            } catch (e) {}
+        }
+
+        function adminAddHomeKitDiscipline() {
+            if (!hasActiveAdminBypass()) return;
+            const kitSel = document.getElementById('admHomeKitType');
+            const posSel = document.getElementById('admHomeKitPos');
+            const lblInp = document.getElementById('admHomeKitLabel');
+            const invInp = document.getElementById('admHomeKitInvite');
+
+            const kit = kitSel ? kitSel.value : 'beast';
+            const position = posSel ? posSel.value : 'end';
+            const label = lblInp ? lblInp.value.trim() : '';
+            const inviteRaw = invInp ? invInp.value.trim() : '';
+            const code = extractInviteCode(inviteRaw);
+
+            if (!code) {
+                showToast('Введите ссылку-приглашение Discord или код!');
+                return;
+            }
+
+            const id = 'ck_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6);
+            window.customHomeKits.push({
+                id,
+                kit,
+                position,
+                label: label || `${kit.toUpperCase()} DISCIPLINE`,
+                invite: code
+            });
+            saveCustomHomeKits();
+            renderCustomHomeKits();
+            if (lblInp) lblInp.value = '';
+            if (invInp) invInp.value = '';
+            showToast('✅ Дисциплина добавлена на главную страницу!');
+        }
+
+        function adminClearCustomHomeKits() {
+            if (!hasActiveAdminBypass()) return;
+            window.customHomeKits = [];
+            saveCustomHomeKits();
+            renderCustomHomeKits();
+            showToast('Пользовательские дисциплины на главной очищены');
+        }
+
+        function renderCustomDiscordLinks() {
+            const grid = document.getElementById('prizCustomLinksGrid');
+            if (!grid) return;
+            grid.querySelectorAll('.social-hub-card[data-custom-link="1"]').forEach(el => el.remove());
+
+            const list = Array.isArray(window.customDiscordLinks) ? window.customDiscordLinks : [];
+            list.forEach(item => {
+                const safeTitle = escapeHTML(item.title || 'Discord');
+                const safeDesc = escapeHTML(item.desc || 'Официальный канал сообщества PrizTiers.');
+                const rawUrl = String(item.url || '#').trim();
+                const safeHref = /^https?:\/\//i.test(rawUrl) ? escapeHTML(rawUrl) : '#';
+
+                const card = document.createElement('div');
+                card.className = 'social-hub-card';
+                card.setAttribute('data-custom-link', '1');
+                card.innerHTML = `
+                    <div>
+                        <div class="social-hub-title">
+                            <img src="${DISCORD_DEFAULT_PNG}" alt="Discord" class="protected-asset" style="border-radius:4px;">
+                            <span>${safeTitle}</span>
+                        </div>
+                        <div class="social-hub-desc">${safeDesc}</div>
+                    </div>
+                    <a class="social-hub-btn" href="${safeHref}" target="_blank" rel="noopener noreferrer">Открыть</a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function adminAddDiscordPageLink() {
+            if (!hasActiveAdminBypass()) return;
+            const titleInp = document.getElementById('admLinkTitle');
+            const urlInp = document.getElementById('admLinkUrl');
+            const descInp = document.getElementById('admLinkDesc');
+
+            const title = titleInp ? titleInp.value.trim() : '';
+            const url = urlInp ? urlInp.value.trim() : '';
+            const desc = descInp ? descInp.value.trim() : '';
+
+            if (!title || !url) {
+                showToast('Введите название и ссылку!');
+                return;
+            }
+
+            window.customDiscordLinks.push({ title, url, desc });
+            saveCustomDiscordLinks();
+            renderCustomDiscordLinks();
+            if (titleInp) titleInp.value = '';
+            if (urlInp) urlInp.value = '';
+            if (descInp) descInp.value = '';
+            showToast('✅ Ссылка добавлена на страницу Discord!');
+        }
+
+        function adminClearCustomDiscordLinks() {
+            if (!hasActiveAdminBypass()) return;
+            window.customDiscordLinks = [];
+            saveCustomDiscordLinks();
+            renderCustomDiscordLinks();
+            showToast('Пользовательские ссылки на странице Discord очищены');
+        }
 
         let currentKit = 'beast';
         let isBotOnline = true;
@@ -2102,6 +2413,8 @@
             }
 
             openPage('home');
+            renderCustomHomeKits();
+            renderCustomDiscordLinks();
 
             if (isAdminMode) {
                 applyAdminUI(true);
@@ -2144,7 +2457,7 @@
             refreshBotKitTiersStatus();
             setInterval(refreshBotKitTiersStatus, 15000);
             fetchDiscordStats();
-            setInterval(fetchDiscordStats, 15000);
+            setInterval(() => { fetchDiscordStats(); (window.customHomeKits || []).forEach(fetchCustomInviteStats); }, 15000);
         });
 
         function findNickByDiscordId(discordId) {
@@ -2825,6 +3138,9 @@
             } else if (currentKit === 'carts') {
                 if (wrapper) wrapper.classList.add('theme-carts');
                 if (title) title.innerText = 'CARTS TIER LIST';
+            } else if (currentKit === 'axe') {
+                if (wrapper) wrapper.classList.add('theme-beast');
+                if (title) title.innerText = 'AXE TIER LIST';
             } else {
                 if (wrapper) wrapper.classList.add('theme-beast');
                 if (title) title.innerText = `${currentKit.toUpperCase()} TIER LIST`;
@@ -2928,7 +3244,9 @@
             if (totalEl) totalEl.innerText = allKeys.length.toLocaleString('ru-RU');
             if (beastEl) beastEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].beast || '').toUpperCase()]).length.toLocaleString('ru-RU');
             if (maceEl) maceEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].mace || '').toUpperCase()]).length.toLocaleString('ru-RU');
+            const axeEl = document.getElementById('lbTotalAxe');
             if (cartsEl) cartsEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].carts || '').toUpperCase()]).length.toLocaleString('ru-RU');
+            if (axeEl) axeEl.innerText = allKeys.filter(k => TIER_WEIGHTS[(visibleParticipants[k].axe || '').toUpperCase()]).length.toLocaleString('ru-RU');
 
             let searchInput = document.getElementById('lbSearchInput');
             let searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
@@ -3924,12 +4242,27 @@
                 }, 360);
             }
 
+            let activeHoldEl = null;
+            function clearHoldState() {
+                if (activeHoldEl) {
+                    activeHoldEl.classList.remove('priz-ui-holding');
+                    activeHoldEl = null;
+                }
+            }
+
             document.addEventListener('pointerdown', (event) => {
                 if (event.button !== undefined && event.button !== 0) return;
                 const targetEl = event.target && event.target.closest ? event.target.closest(PRESS_SELECTOR) : null;
                 if (!targetEl) return;
+                clearHoldState();
+                activeHoldEl = targetEl;
+                targetEl.classList.add('priz-ui-holding');
                 triggerPressAnimation(targetEl);
             }, { passive: true });
+
+            document.addEventListener('pointerup', clearHoldState, { passive: true });
+            document.addEventListener('pointercancel', clearHoldState, { passive: true });
+            window.addEventListener('blur', clearHoldState, { passive: true });
         })();
     </script>
 </body>
