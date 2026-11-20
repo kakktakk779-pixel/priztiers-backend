@@ -685,39 +685,39 @@
     <div class="page-overlay">
         <header id="prizMainHeader">
             <div class="header-left">
-                <div class="brand-logo" onclick="openPage('home')">PrizTiers</div>
+                <div class="brand-logo" data-nav-page="home">PrizTiers</div>
                 <div class="nav-icons-bar" id="prizNavIconsBar">
-                    <button class="nav-icon-btn" data-tooltip="Лидерборд" onclick="openPage('leaderboard')">
+                    <button class="nav-icon-btn" data-tooltip="Лидерборд" data-nav-page="leaderboard">
                         🏆 Лидерборд
                     </button>
-                    <button class="nav-icon-btn btn-beast" id="btn-beast" data-tooltip="Beast (Sword PvP)" onclick="switchKit('beast')">
+                    <button class="nav-icon-btn btn-beast" id="btn-beast" data-tooltip="Beast (Sword PvP)" data-nav-kit="beast">
                         <img src="https://minecraft.wiki/images/Diamond_Sword_JE3_BE3.png" alt="Beast" class="protected-asset"> BEAST
                     </button>
-                    <button class="nav-icon-btn btn-mace" id="btn-mace" data-tooltip="Mace (Smash PvP)" onclick="switchKit('mace')">
+                    <button class="nav-icon-btn btn-mace" id="btn-mace" data-tooltip="Mace (Smash PvP)" data-nav-kit="mace">
                         <img src="https://minecraft.wiki/images/Mace_JE1_BE1.png" alt="Mace" class="protected-asset"> MACE
                     </button>
-                    <button class="nav-icon-btn btn-carts" id="btn-carts" data-tooltip="Carts (Minecart TNT)" onclick="switchKit('carts')">
+                    <button class="nav-icon-btn btn-carts" id="btn-carts" data-tooltip="Carts (Minecart TNT)" data-nav-kit="carts">
                         <img src="https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png" alt="Carts" class="protected-asset"> CARTS
                     </button>
-                    <button class="nav-icon-btn btn-axe" id="btn-axe" data-tooltip="Axe PvP" onclick="switchKit('axe')">
+                    <button class="nav-icon-btn btn-axe" id="btn-axe" data-tooltip="Axe PvP" data-nav-kit="axe">
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=" alt="Axe" class="protected-asset"> AXE
                     </button>
-                    <button class="nav-icon-btn" id="btn-smp" data-tooltip="SMP PvP" onclick="switchKit('smp')">
+                    <button class="nav-icon-btn" id="btn-smp" data-tooltip="SMP PvP" data-nav-kit="smp">
                         <img src="data:image/png;base64,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" alt="SMP" class="protected-asset"> SMP
                     </button>
-                    <button class="nav-icon-btn" id="btn-uhc" data-tooltip="UHC PvP" onclick="switchKit('uhc')">
+                    <button class="nav-icon-btn" id="btn-uhc" data-tooltip="UHC PvP" data-nav-kit="uhc">
                         <img src="data:image/png;base64,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" alt="UHC" class="protected-asset"> UHC
                     </button>
-                    <button class="nav-icon-btn" id="btn-op" data-tooltip="OP PvP" onclick="switchKit('op')">
+                    <button class="nav-icon-btn" id="btn-op" data-tooltip="OP PvP" data-nav-kit="op">
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEwklEQVR42sWYXW8d5RHHf/PMs+f4nOOXGDtpDCKKgoAIKF8gn4CvUEoFRbSpWlG45gopIIVQFBoBygV9A1VIlfoR6A2oEkKoCMWJVRrKi5vExHaM43N299lnphfHOCnlIkbZMHcr7c7+duY//2e0cINx4vjL/trp152WI97ojRcvXWTW5zl56rTjFU89+aS0AXTDSY8dO+bBamKhZBkQVJme2sMvjj4m30uFYoaPz76NujFz8D5mZu9ibX2F37z8qscY+PUvj94UsHCjN7oEYIu19VW2LnzMR+++Ra+5jI1GlGXJiy+d9FOvvOa3rEIeHEWxOMHGpTUklSz9422ubK5x5MhRUpEZpooXT55yRXj6qV9JqxUiCBFh7ra9rKxcpEo1OWc6RWBx8S+c//BvVKuf0pQj6qri1G9f8eefe8Fbq1CRIUmHT5YW6XYDWjhmDVubFf2BU9sKS+f+xeTsHdxz70Nc+GKdf3/+WXsVsu0GFBqo6xLLdi2JQ6EFNjTyxibv//2v9PvTZMvtAYk57hlV2PeDfaQmETTQ5IacEphjNeRGWF1ZJWqHqLE9oKRQmCFuzN02R24yTWoQlFGVqVMmWWYwt8AoJHIOVFXVoqiBgJElgkdydsyFGCPuzrCqyRL455kP8KpBzAkh8MADD3prQHjg4KHDQCDqBEGEoOCeIRueM0W/h6tjbpRlibu3pCFRviqHbFU1Z86c3XlUZPxC97GAb9+/j4mig5kRNDA5mGxn7IerW9SeuHz+LKryrV+em/+fKo3aDhAaCRLpRKXX7ZIz5Jxxl+1KCdkSW8OrBIQQI5YNEWmnZS4gPhb2wu37ca+pqorRsBpDaaToTjA/c5BkJSZjSDNrzxj1ui65O2aGByXLOI1qJPkIM6NwoU71/xjoTZ8yxRkl48raJrnx7SNOEDfcHBFh6eyHNI0gIlRVxcbGRntAg/4kd919Pzk7vd4AEUVEcDIShJwq9t+5QIhC0ECQwLmlRWlH1EAT4NPlC7C1QVEoM3umMGtQnBiEbrdLXVb0Oj02NzcpOkV7Tl1kaNTw0Zc4FUENMFQVEcXNKMshZonvcKZ+N1GLB0JQ5ufnKYpi3C73nWlKTUKks20BtmtB73rsgxviAVXdmbSvYUSEEDssLBwmWY0E2bUH7QooxEiUzGDQv+44kW1zHIN1YsHiuffG195yy5aXl1HJ9PozECJlamjsGpi7E1VRS3jK7WsIQM2YnNrPFyuXSY1TVRUpN5gYMUbMGqZnZ+l0e5g7Mba4oIkITTPN0vkPCKoQFJdraZqmYVSWYy3ptmG2qaGuBi7VW4gImhLqDYKNU3i4tsJZxqwZb5NtAg2m+8zO/ZBDdx9hoj+HiO7sQcnqsZ40sm/vYYzA+ldX2DO7pz2gEy8dl2eefZ6rtbL34IN0p+4k1VPgkbpOlHVFCIHY6eM+Frnb7kdtV6o7cODATg8effynnsoR1cYqw7Ul4oSTy2kWl94hZScE3XbzFoGujz+8/jsBeOSxnzszXfLny3Qm1gmxSzksAQO5hUBfxxu/Py0ATzz8E0/5Khf/8xlTA8X8MlF01/lu+k+nHz3yY+91emBjsf/pj2/KLa3QN+PPb4wBHn/0Z25h9479XzZua32qaJ6qAAAAAElFTkSuQmCC" alt="OP" class="protected-asset"> OP
                     </button>
-                    <button class="nav-icon-btn" id="btn-spearmace" data-tooltip="SpearMace PvP" onclick="switchKit('spearmace')">
+                    <button class="nav-icon-btn" id="btn-spearmace" data-tooltip="SpearMace PvP" data-nav-kit="spearmace">
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEo0lEQVR42sWX7W9TdRTHv7/z621HH9Z1dJQxxx6AGVbmJgxEI2xlAaKMJxMTjfrC+NYY4sMfYOJf4CuJ+sL3AlkkJpBlYkhQg7Cy4Qq0PKxs68M6dtuu7bp7e36+QkUMMtZ25+2953c/93zO79z7E1ilONC5Ux3Z/5r5y08/Y63XS1+OnJIAQKsF9PrAfnP00iVomgUQ4Jc7thkAYKkmxOcffFy8feUaCanQ8+ZBdL9xgL777As2TROKFaoOZHfUkNQAm7QASuHbr0/yhXCQQGBXjb06QB8df9fI3I9BKYW8x4aWQ3soEOjHN1+dZCIBr7uOZzM6ZYsFrgpQ04ZGZNI62vfuRGBgHylmjIyMQN5IgCRBQGBaT8mH91cEaGdzxx2/b2OzgEIoOYWSzwlWTBYp2VRMUgomSSABQDyaWxEgk7kNik2CpPUbm9lW60B/IIDz58+TEOBw6CZinMONO2FAPLrTKwI0Oh0Rs3ndGGjvYgWF7Tu2Y3h4GOFQiDWrBmskhTUWG62r8/DovbD8Z27F5tDUfEqbmLuOvQMBuN0eIiKWkgBWgFCw2qwshHgsT1QKqN/fahzrbsT3v93GolHC1lcPQN5MQoLo3N0goBQ31HowOhnWKl4hSQSlFBaNEna91It7cwvQwkkIAbBQ3OByMytwJDG959+5Ze+hV7Y0GdIicbhrPX4Yj8PgBDSrBosQgNWKth4/gmejmNFTtv/KL6uyE28PFltVikgKnArOYCKahCQB5xorInFda/J4jYcPnZpPaRUH6tvaYhzvaYSUhElah3MXfsV4NK4tZ42yKPM3rZ311jrqDm3z4cy1GCQRTaZCnM0XeblrrbipP33vuFFf564f7G7CjxNJFAzGxP0k2202JDN5W9WBLl8ZhUbMgkvYvauX8kUD8XROG59cnqqyKOvrbDEOd/nAEBgaiyFdiHIqk1nRCz4T0IvtPtW3e5e5kWcxNB5H2+bnKRIb5zqnA3E9r60E6JmU2a1Wvnw1CAGgVCohm83yUkm9H5pKaittgWVv+z5/i3GsewOggNOj00gXiog/yCJvmB0Li0t3Vwr01Mo2r3PNHx7ot7cihdPBGLZs3oRwbA7NDW4ks3mtXLPsqZX1but0Xh0bJ4MVIAC7fQ3W19ficmSmbDBPrazP32Yc7fIBChgai2EuW8DcQg6eWhdPROO2cgL9r7KtG+rPSGJcvDuPRLqAe4kHqHc5ENNzWkzPlf9P4UkXP3xr0CgsZDoG/Y0Ym06DSECSxLMOvRVVqL+rzdgkUmj3+zA0FoOeKyKhp7HW7aroKeU/geocNT6zxNCXSnTxVopvzczC63Yhns5r8XS+okCPKTvxztEiFvOfHOnyYfhGShlmiSwWTf0RTdgUoCp9jnukQgMvtBmtnERjpw9nr8ehF5YQn0uzx+1gVopRhRAA0NfRrQ7u22/WZC7h9LUYLAII3U/CWaPhdkLXUMUgAGivbTAjv48RQUEjgEuMBrez6jB/KxOAYoXgLSfSWRum56OVb5YnVajG4UBvoJ837eiBAoOE7UQynddWA+ivT8dz9V5DMQAhoBeyzbnFxfhqAP0Jjaj0xIKfncMAAAAASUVORK5CYII=" alt="SPEARMACE" class="protected-asset"> SPEARMACE
                     </button>
-                    <button class="nav-icon-btn" id="btn-guide" data-tooltip="Гайд по тестированию" onclick="openPage('guide')">
+                    <button class="nav-icon-btn" id="btn-guide" data-tooltip="Гайд по тестированию" data-nav-page="guide">
                         📘 Гайд
                     </button>
-                    <button class="nav-icon-btn" id="btn-links" data-tooltip="Discord и Telegram каналы" onclick="openPage('links')">
+                    <button class="nav-icon-btn" id="btn-links" data-tooltip="Discord и Telegram каналы" data-nav-page="links">
                         <img src="data:image/png;base64,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" alt="Discord" class="protected-asset" style="width:16px;height:16px;object-fit:contain;border-radius:4px;"> Discord
                     </button>
                 </div>
@@ -1898,18 +1898,20 @@
             }
 
             const id = 'ck_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6);
-            window.customHomeKits.push({
+            const newItem = {
                 id,
                 kit,
                 position,
                 label: label || `${kit.toUpperCase()} DISCIPLINE`,
                 invite: code
-            });
+            };
+            window.customHomeKits.push(newItem);
             saveCustomHomeKits();
             renderCustomHomeKits();
+            fetchCustomInviteStats(newItem);
             if (lblInp) lblInp.value = '';
             if (invInp) invInp.value = '';
-            showToast('✅ Дисциплина добавлена на главную страницу!');
+            showToast('✅ Дисциплина добавлена на главную страницу и онлайн загружается!');
         }
 
         function adminClearCustomHomeKits() {
@@ -2855,7 +2857,22 @@
         }
 
         let pageTransitionTimer = null;
-        function openPage(pageId) {
+        let pageEnterRaf = null;
+
+        function syncHeaderActiveNav(pageId, kitName = null) {
+            document.querySelectorAll('#prizNavIconsBar .nav-icon-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (pageId === 'tier' && kitName) {
+                const kitBtn = document.getElementById(`btn-${kitName}`);
+                if (kitBtn) kitBtn.classList.add('active');
+            } else if (pageId === 'leaderboard' || pageId === 'guide' || pageId === 'links') {
+                const navBtn = document.querySelector(`#prizNavIconsBar [data-nav-page="${pageId}"]`);
+                if (navBtn) navBtn.classList.add('active');
+            }
+        }
+
+        function openPage(pageId, kitContext = null) {
             const targetPage = document.getElementById(`page-${pageId}`);
             if (!targetPage) return;
 
@@ -2864,6 +2881,11 @@
             } else {
                 document.body.className = 'site-bg-' + currentCustomSiteBg;
             }
+            if (typeof enforceAdminOnlyDevPanel === 'function') {
+                enforceAdminOnlyDevPanel();
+            }
+
+            syncHeaderActiveNav(pageId, kitContext);
 
             const applyPageContent = () => {
                 if (pageId === 'tier') {
@@ -2871,7 +2893,25 @@
                 } else if (pageId === 'leaderboard') {
                     updatePointsCalculator();
                     renderLeaderboard();
+                } else if (pageId === 'home') {
+                    renderCustomHomeKits();
+                    fetchDiscordStats();
+                } else if (pageId === 'links') {
+                    renderCustomDiscordLinks();
+                    syncAxeDiscordUI();
                 }
+            };
+
+            const animateIn = (el) => {
+                el.classList.remove('page-leaving');
+                el.classList.add('active', 'page-entering');
+                if (pageEnterRaf) cancelAnimationFrame(pageEnterRaf);
+                pageEnterRaf = requestAnimationFrame(() => {
+                    pageEnterRaf = requestAnimationFrame(() => {
+                        el.classList.remove('page-entering');
+                        pageEnterRaf = null;
+                    });
+                });
             };
 
             if (pageTransitionTimer) {
@@ -2883,38 +2923,59 @@
             if (currentActive === targetPage) {
                 document.querySelectorAll('.page-view').forEach(p => {
                     if (p !== targetPage) {
-                        p.classList.remove('active');
-                        p.classList.remove('page-leaving');
+                        p.classList.remove('active', 'page-leaving', 'page-entering');
                     }
                 });
-                targetPage.classList.remove('page-leaving');
+                targetPage.classList.remove('page-leaving', 'page-entering');
+                targetPage.classList.add('active');
                 applyPageContent();
                 return;
             }
 
             if (!currentActive) {
                 document.querySelectorAll('.page-view').forEach(p => {
-                    p.classList.remove('active');
-                    p.classList.remove('page-leaving');
+                    p.classList.remove('active', 'page-leaving', 'page-entering');
                 });
-                targetPage.classList.add('active');
                 applyPageContent();
+                animateIn(targetPage);
                 return;
             }
 
             currentActive.classList.add('page-leaving');
             pageTransitionTimer = setTimeout(() => {
                 document.querySelectorAll('.page-view').forEach(p => {
-                    p.classList.remove('active');
-                    p.classList.remove('page-leaving');
+                    if (p !== targetPage) {
+                        p.classList.remove('active', 'page-leaving', 'page-entering');
+                    }
                 });
-                targetPage.classList.add('active');
                 applyPageContent();
+                animateIn(targetPage);
                 pageTransitionTimer = null;
-            }, 120);
+            }, 130);
         }
 
-        function setSiteBg(style, saveToAccount = true) {
+        function triggerNavButtonAnim(el) {
+            if (!el || !el.classList) return;
+            el.classList.remove('is-nav-switching');
+            void el.offsetWidth;
+            el.classList.add('is-nav-switching');
+            window.setTimeout(() => el.classList.remove('is-nav-switching'), 220);
+        }
+
+        document.addEventListener('click', (event) => {
+            const target = event.target && event.target.closest ? event.target.closest('[data-nav-page], [data-nav-kit]') : null;
+            if (!target) return;
+            triggerNavButtonAnim(target);
+            const kitTarget = target.getAttribute('data-nav-kit');
+            const pageTarget = target.getAttribute('data-nav-page');
+            if (kitTarget) {
+                if (typeof switchKit === 'function') switchKit(kitTarget);
+            } else if (pageTarget) {
+                openPage(pageTarget);
+            }
+        });
+
+function setSiteBg(style, saveToAccount = true) {
             currentCustomSiteBg = style;
             document.body.className = 'site-bg-' + style;
 
@@ -3364,7 +3425,7 @@
 
         function switchKit(kit) {
             currentKit = String(kit || 'beast').toLowerCase();
-            openPage('tier');
+            openPage('tier', currentKit);
 
             document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById(`btn-${currentKit}`);
