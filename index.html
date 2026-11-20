@@ -3,25 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PrizTiers • Competitive PvP Tier List</title>
+  <title>PrizTiers — Competitive PvP Tier List Platform</title>
   <style>
     :root {
-      --bg-base: #06070c;
-      --bg-card: rgba(16, 19, 31, 0.88);
-      --bg-card-hover: rgba(23, 27, 44, 0.96);
-      --border-subtle: rgba(255, 255, 255, 0.07);
-      --border-active: rgba(139, 92, 246, 0.45);
-      --text-main: #f3f5ff;
-      --text-muted: #9da4c0;
-      --text-dim: #666e8b;
-      --purple: #8b5cf6;
-      --purple-light: #a78bfa;
-      --cyan: #22d3ee;
-      --green: #10b981;
-      --amber: #f59e0b;
-      --radius-lg: 14px;
-      --radius-md: 10px;
-      --radius-sm: 7px;
+      --bg-base: #07080d;
+      --bg-elevated: #0d1018;
+      --bg-card: rgba(16, 19, 30, 0.86);
+      --bg-card-hover: rgba(24, 28, 44, 0.96);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(139, 92, 246, 0.42);
+      --text-primary: #f5f7ff;
+      --text-secondary: #a2a9c4;
+      --text-muted: #6e7591;
+      --accent-purple: #8b5cf6;
+      --accent-purple-bright: #a78bfa;
+      --accent-cyan: #22d3ee;
+      --accent-pink: #ec4899;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --shadow-glow: 0 12px 36px rgba(109, 40, 217, 0.22);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --transition: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     * {
@@ -33,13 +38,14 @@
     html, body {
       min-height: 100%;
       background-color: var(--bg-base);
-      color: var(--text-main);
+      color: var(--text-primary);
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      line-height: 1.45;
+      line-height: 1.5;
       overflow-x: hidden;
       background-image:
-        radial-gradient(ellipse 75% 45% at 50% -8%, rgba(124, 58, 237, 0.18), transparent 65%),
-        radial-gradient(ellipse 40% 30% at 88% 18%, rgba(34, 211, 238, 0.07), transparent 60%);
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 58, 237, 0.22), transparent 65%),
+        radial-gradient(ellipse 45% 35% at 85% 20%, rgba(34, 211, 238, 0.10), transparent 60%),
+        radial-gradient(ellipse 40% 35% at 15% 25%, rgba(236, 72, 153, 0.09), transparent 60%);
     }
 
     a {
@@ -52,40 +58,40 @@
       color: inherit;
     }
 
-    /* Top Header */
+    /* Top Navigation Bar */
     .topbar {
       position: sticky;
       top: 0;
       z-index: 100;
-      height: 50px;
-      background: rgba(7, 8, 13, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(9, 11, 18, 0.88);
       border-bottom: 1px solid var(--border-subtle);
     }
 
     .topbar-inner {
-      max-width: 1520px;
-      height: 100%;
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 0 18px;
+      padding: 0 20px;
+      height: 58px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .brand {
+    .brand-logo {
       display: inline-flex;
       align-items: center;
+      gap: 8px;
       font-weight: 800;
-      font-size: 1.02rem;
+      font-size: 1.12rem;
       letter-spacing: -0.02em;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
-    .brand .tiers {
+    .brand-logo span.accent {
       background: linear-gradient(90deg, #c084fc, #60a5fa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -94,9 +100,10 @@
     .nav-tabs {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
       overflow-x: auto;
       scrollbar-width: none;
+      padding: 4px 0;
     }
 
     .nav-tabs::-webkit-scrollbar {
@@ -106,532 +113,615 @@
     .nav-btn {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 5px 10px;
-      border-radius: 7px;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: var(--radius-sm);
       border: 1px solid transparent;
       background: transparent;
-      color: var(--text-muted);
-      font-size: 0.72rem;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       cursor: pointer;
       white-space: nowrap;
-      transition: 0.16s ease;
+      transition: var(--transition);
     }
 
     .nav-btn:hover {
-      color: var(--text-main);
+      color: var(--text-primary);
       background: rgba(255, 255, 255, 0.05);
     }
 
     .nav-btn.active {
       color: #ffffff;
-      background: rgba(139, 92, 246, 0.30);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.34), rgba(109, 40, 217, 0.24));
       border-color: rgba(167, 139, 250, 0.55);
+      box-shadow: 0 0 18px rgba(139, 92, 246, 0.25);
     }
 
-    .user-badge {
+    .user-chip {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 4px 11px;
+      gap: 8px;
+      padding: 5px 12px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border-subtle);
-      font-size: 0.76rem;
+      font-size: 0.82rem;
       font-weight: 600;
       white-space: nowrap;
       flex-shrink: 0;
       cursor: pointer;
+      transition: var(--transition);
     }
 
-    .user-badge .dot {
-      width: 7px;
-      height: 7px;
+    .user-chip:hover {
+      border-color: var(--border-strong);
+      background: rgba(139, 92, 246, 0.14);
+    }
+
+    .user-dot {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 6px var(--green);
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald);
     }
 
-    /* Main Container */
-    .main-wrap {
-      max-width: 1080px;
+    /* Main Container — lifted spacing & tight top alignment */
+    .page-shell {
+      max-width: 1220px;
       margin: 0 auto;
-      padding: 28px 20px 56px;
-    }
-
-    /* Lifted spacing for kit pages & Discord links page */
-    .main-wrap.lifted {
-      padding-top: 10px;
+      padding: 20px 24px 56px;
     }
 
     .view {
       display: none;
+      animation: fadeIn 0.22s ease;
     }
 
     .view.active {
       display: block;
     }
 
-    /* Hero */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero Header — lifted upward */
     .hero {
       text-align: center;
-      margin-top: 6px;
-      margin-bottom: 24px;
+      margin-top: 2px;
+      margin-bottom: 22px;
     }
 
     .hero-title {
-      font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+      font-size: clamp(2.1rem, 4.5vw, 3.25rem);
       font-weight: 900;
-      letter-spacing: 0.05em;
-      line-height: 1.06;
+      letter-spacing: 0.04em;
+      line-height: 1.08;
       text-transform: uppercase;
-      color: #ffffff;
+      background: linear-gradient(180deg, #ffffff 10%, #c4b5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-bottom: 6px;
     }
 
-    .hero-sub {
-      font-size: 0.88rem;
-      color: var(--text-muted);
+    .hero-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.96rem;
+      font-weight: 500;
     }
 
-    /* Leaderboard Discipline Cards (3 per row, no duplicate MACE/CARTS cards) */
-    .disc-grid {
+    /* Discipline Cards Grid on Leaderboard (3 top + 1 bottom-left = 4 unique disciplines, NO duplicates) */
+    .disciplines-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-bottom: 24px;
+      gap: 16px;
+      margin-bottom: 28px;
     }
 
-    .disc-card {
+    .discipline-card {
+      position: relative;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 16px 18px;
+      padding: 18px 20px;
       cursor: pointer;
-      transition: 0.16s ease;
-      min-height: 108px;
+      transition: var(--transition);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      min-height: 122px;
+      overflow: hidden;
     }
 
-    .disc-card:hover {
+    .discipline-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.14), transparent 65%);
+      opacity: 0;
+      transition: var(--transition);
+      pointer-events: none;
+    }
+
+    .discipline-card:hover {
+      transform: translateY(-3px);
       background: var(--bg-card-hover);
-      border-color: var(--border-active);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-glow);
     }
 
-    .disc-card.active {
-      border-color: rgba(167, 139, 250, 0.55);
+    .discipline-card:hover::before {
+      opacity: 1;
     }
 
-    .disc-top {
+    .discipline-card-top {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
       margin-bottom: 8px;
     }
 
-    .disc-icon {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      background: rgba(139, 92, 246, 0.16);
-      border: 1px solid rgba(167, 139, 250, 0.25);
+    .discipline-badge-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.84rem;
+      font-size: 0.95rem;
+      background: rgba(139, 92, 246, 0.16);
+      border: 1px solid rgba(167, 139, 250, 0.28);
       flex-shrink: 0;
     }
 
-    .disc-title {
-      font-size: 0.84rem;
+    .discipline-name {
+      font-size: 0.92rem;
       font-weight: 800;
       letter-spacing: 0.04em;
       text-transform: uppercase;
+      color: var(--text-primary);
     }
 
-    .disc-count {
-      font-size: 1.12rem;
+    .discipline-count {
+      font-size: 1.25rem;
       font-weight: 800;
       color: #ffffff;
       margin-bottom: 6px;
     }
 
-    .disc-foot {
+    .discipline-footer {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.74rem;
-      color: var(--text-muted);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
     }
 
-    .disc-foot .dot {
-      width: 6px;
-      height: 6px;
+    .status-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: var(--green);
+      background: var(--accent-emerald);
       display: inline-block;
     }
 
-    /* Section Header */
-    .sec-head {
+    /* Section Header — lifted */
+    .section-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 0;
-      margin-bottom: 14px;
+      margin-top: 6px;
+      margin-bottom: 16px;
     }
 
-    .sec-title {
-      font-size: 1.12rem;
+    .section-title {
+      font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
 
+    .section-subtitle {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Tier Columns (TIER 1 .. TIER 5) */
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+
+    .tier-column {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .tier-header {
+      padding: 11px 14px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tier-1 .tier-header { background: rgba(245, 158, 11, 0.14); color: #fbbf24; }
+    .tier-2 .tier-header { background: rgba(168, 85, 247, 0.14); color: #c084fc; }
+    .tier-3 .tier-header { background: rgba(59, 130, 246, 0.14); color: #60a5fa; }
+    .tier-4 .tier-header { background: rgba(16, 185, 129, 0.14); color: #34d399; }
+    .tier-5 .tier-header { background: rgba(148, 163, 184, 0.12); color: #cbd5e1; }
+
+    .tier-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 180px;
+    }
+
+    .player-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-sm);
+      padding: 9px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .player-card:hover {
+      background: rgba(139, 92, 246, 0.14);
+      border-color: rgba(167, 139, 250, 0.35);
+    }
+
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .player-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #6d28d9, #2563eb);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .player-name {
+      font-size: 0.86rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .player-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .tier-pill {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+
+    /* Search Input */
     .search-box {
       position: relative;
-      width: 220px;
+      width: 250px;
     }
 
     .search-box input {
       width: 100%;
-      padding: 7px 11px 7px 30px;
-      border-radius: 8px;
+      padding: 8px 12px 8px 34px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--border-subtle);
-      background: rgba(255, 255, 255, 0.035);
-      font-size: 0.82rem;
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 0.84rem;
       outline: none;
+      transition: var(--transition);
     }
 
     .search-box input:focus {
-      border-color: var(--purple);
+      border-color: var(--accent-purple);
+      background: rgba(255, 255, 255, 0.07);
     }
 
-    .search-box .icon {
+    .search-icon {
       position: absolute;
-      left: 10px;
+      left: 11px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 0.78rem;
-      color: var(--text-dim);
+      font-size: 0.82rem;
+      color: var(--text-muted);
       pointer-events: none;
     }
 
-    /* Tier Rows Stack (matching video layout: HT1, LT1, HT2, LT2, HT3, LT3, HT4, LT4, HT5, LT5) */
-    .tier-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .tier-row-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 11px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 46px;
-    }
-
-    .tier-code-label {
-      font-size: 0.84rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      min-width: 46px;
-    }
-
-    .t-ht1 { color: #facc15; }
-    .t-lt1 { color: #fde047; }
-    .t-ht2 { color: #c084fc; }
-    .t-lt2 { color: #d8b4fe; }
-    .t-ht3 { color: #60a5fa; }
-    .t-lt3 { color: #93c5fd; }
-    .t-ht4 { color: #34d399; }
-    .t-lt4 { color: #6ee7b7; }
-    .t-ht5 { color: #cbd5e1; }
-    .t-lt5 { color: #94a3b8; }
-
-    .tier-players-inline {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      flex: 1;
-    }
-
-    .player-chip {
-      padding: 3px 9px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .player-chip:hover {
-      background: rgba(139, 92, 246, 0.18);
-      border-color: rgba(167, 139, 250, 0.4);
-    }
-
-    .tier-count-right {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      white-space: nowrap;
-    }
-
-    /* Soon Card (lifted upward) */
+    /* Coming Soon / Developing Kit View — lifted */
     .soon-card {
-      max-width: 660px;
-      margin: 4px auto 0;
+      max-width: 680px;
+      margin: 12px auto 0;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 32px 24px;
+      padding: 36px 28px;
       text-align: center;
+      box-shadow: var(--shadow-glow);
     }
 
-    .soon-pill {
+    .soon-badge {
       display: inline-block;
-      padding: 4px 12px;
+      padding: 5px 12px;
       border-radius: 999px;
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 800;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       background: rgba(139, 92, 246, 0.18);
-      border: 1px solid rgba(167, 139, 250, 0.36);
-      color: var(--purple-light);
-      margin-bottom: 10px;
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      color: var(--accent-purple-bright);
+      margin-bottom: 12px;
     }
 
     .soon-title {
-      font-size: 1.85rem;
+      font-size: 1.9rem;
       font-weight: 900;
       margin-bottom: 8px;
     }
 
     .soon-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 20px;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      margin-bottom: 22px;
     }
 
-    .btn-purple {
+    .btn-primary {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 9px 16px;
-      border-radius: 8px;
-      border: 1px solid rgba(167, 139, 250, 0.45);
-      background: rgba(124, 58, 237, 0.78);
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(167, 139, 250, 0.5);
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
       color: #ffffff;
-      font-size: 0.82rem;
+      font-size: 0.86rem;
       font-weight: 700;
       cursor: pointer;
+      transition: var(--transition);
     }
 
-    .btn-purple:hover {
-      background: rgba(139, 92, 246, 0.92);
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(124, 58, 237, 0.35);
     }
 
-    /* Guide View */
-    .guide-head {
+    /* Guide / FAQ View — lifted cleanly */
+    .guide-hero {
       text-align: center;
       margin-top: 0;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
-    .badge-tag {
+    .guide-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 999px;
-      background: rgba(139, 92, 246, 0.15);
-      border: 1px solid rgba(167, 139, 250, 0.32);
-      color: var(--purple-light);
-      font-size: 0.74rem;
+      background: rgba(139, 92, 246, 0.16);
+      border: 1px solid rgba(167, 139, 250, 0.35);
+      font-size: 0.8rem;
       font-weight: 700;
+      color: var(--accent-purple-bright);
+      margin-bottom: 10px;
+    }
+
+    .guide-h1 {
+      font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+      font-weight: 900;
+      line-height: 1.18;
       margin-bottom: 8px;
     }
 
-    .h1-main {
-      font-size: clamp(1.55rem, 3vw, 2.15rem);
-      font-weight: 900;
-      line-height: 1.15;
-      margin-bottom: 6px;
-    }
-
-    .sub-main {
-      font-size: 0.86rem;
-      color: var(--text-muted);
+    .guide-sub {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
       max-width: 720px;
       margin: 0 auto;
     }
 
-    .card-box {
+    .panel-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 18px 20px;
-      margin-bottom: 16px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
     }
 
-    .calc-top {
+    .panel-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
-    .calc-score {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(34, 211, 238, 0.12);
-      border: 1px solid rgba(34, 211, 238, 0.28);
-      color: var(--cyan);
-      font-size: 0.76rem;
+    .panel-title {
+      font-size: 1.05rem;
       font-weight: 800;
     }
 
-    .calc-8-grid {
+    .points-badge {
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(34, 211, 238, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.32);
+      color: var(--accent-cyan);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .calc-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
+      gap: 12px;
     }
 
-    .calc-cell {
-      background: rgba(255, 255, 255, 0.025);
+    .calc-item {
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 9px 11px;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
     }
 
-    .calc-cell-label {
+    .calc-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
-      font-size: 0.74rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 6px;
     }
 
-    .calc-cell select {
+    .calc-item select {
       width: 100%;
-      padding: 6px 8px;
+      padding: 7px 10px;
       border-radius: 6px;
       border: 1px solid var(--border-subtle);
-      background: #101422;
-      font-size: 0.78rem;
+      background: #121624;
+      font-size: 0.84rem;
       outline: none;
     }
 
-    .steps-3 {
+    .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
     .step-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 16px;
+      padding: 18px;
     }
 
-    .step-badge {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      background: rgba(139, 92, 246, 0.2);
-      border: 1px solid rgba(167, 139, 250, 0.4);
-      color: var(--purple-light);
-      font-size: 0.75rem;
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(139, 92, 246, 0.22);
+      border: 1px solid rgba(167, 139, 250, 0.45);
+      color: var(--accent-purple-bright);
       font-weight: 800;
+      font-size: 0.86rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
-    .step-card h3 {
-      font-size: 0.9rem;
+    .step-title {
+      font-size: 0.96rem;
       font-weight: 800;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
-    .step-card p {
-      font-size: 0.78rem;
-      color: var(--text-muted);
+    .step-desc {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
     }
 
-    .bar-row {
+    .tier-scale-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
+      gap: 14px;
+      margin-bottom: 12px;
     }
 
-    .bar-row:last-child {
+    .tier-scale-row:last-child {
       margin-bottom: 0;
     }
 
-    .bar-tier {
-      width: 44px;
-      font-size: 0.78rem;
+    .tier-scale-tag {
+      width: 56px;
       font-weight: 800;
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
       flex-shrink: 0;
     }
 
-    .bar-track {
+    .tier-bar-track {
       flex: 1;
-      height: 7px;
+      height: 10px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.06);
       overflow: hidden;
     }
 
-    .bar-fill {
+    .tier-bar-fill {
       height: 100%;
       border-radius: 999px;
       background: linear-gradient(90deg, #8b5cf6, #22d3ee);
     }
 
-    .bar-pts {
-      width: 68px;
+    .tier-scale-pts {
+      width: 72px;
       text-align: right;
-      font-size: 0.76rem;
+      font-size: 0.82rem;
       font-weight: 700;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       flex-shrink: 0;
     }
 
     .faq-item {
       border-bottom: 1px solid var(--border-subtle);
-      padding: 12px 0;
+      padding: 14px 0;
     }
 
     .faq-item:last-child {
       border-bottom: none;
-      padding-bottom: 2px;
+      padding-bottom: 4px;
     }
 
-    .faq-trigger {
+    .faq-q {
       width: 100%;
       background: transparent;
       border: none;
@@ -639,117 +729,157 @@
       align-items: center;
       justify-content: space-between;
       text-align: left;
-      font-size: 0.88rem;
+      font-size: 0.94rem;
       font-weight: 700;
       cursor: pointer;
+      padding: 2px 0;
     }
 
-    .faq-body {
+    .faq-a {
       display: none;
-      margin-top: 6px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      margin-top: 8px;
+      font-size: 0.86rem;
+      color: var(--text-secondary);
     }
 
-    .faq-item.open .faq-body {
+    .faq-item.open .faq-a {
       display: block;
     }
 
-    /* Links / Discord View (lifted cleanly at top) */
-    .links-head {
+    /* Links / Discord View — lifted cleanly */
+    .links-header {
       text-align: center;
       margin-top: 0;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
-    .links-2col {
+    .links-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 16px;
     }
 
-    .link-item-card {
+    .link-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 18px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 14px;
+      transition: var(--transition);
     }
 
-    .link-item-card h3 {
-      font-size: 0.96rem;
+    .link-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+    }
+
+    .link-card-title {
+      font-size: 1.02rem;
       font-weight: 800;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
-    .link-item-card p {
+    .link-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .link-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(139, 92, 246, 0.18);
+      border: 1px solid rgba(167, 139, 250, 0.38);
+      font-size: 0.84rem;
+      font-weight: 700;
+      transition: var(--transition);
+    }
+
+    .link-action:hover {
+      background: rgba(139, 92, 246, 0.3);
+    }
+
+    /* Footer */
+    .site-footer {
+      max-width: 1220px;
+      margin: 28px auto 0;
+      padding: 16px 24px 28px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
       font-size: 0.8rem;
       color: var(--text-muted);
     }
 
-    .link-btn-box {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 14px;
-      border-radius: 8px;
-      background: rgba(139, 92, 246, 0.16);
-      border: 1px solid rgba(167, 139, 250, 0.34);
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .link-btn-box:hover {
-      background: rgba(139, 92, 246, 0.28);
-    }
-
-    /* Footer */
-    .footer {
-      max-width: 1080px;
-      margin: 20px auto 0;
-      padding: 14px 20px 24px;
-      border-top: 1px solid var(--border-subtle);
-      font-size: 0.74rem;
-      color: var(--text-dim);
-    }
-
     /* Modal */
-    .modal-bg {
+    .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(3, 4, 8, 0.75);
-      backdrop-filter: blur(5px);
+      background: rgba(4, 6, 11, 0.76);
+      backdrop-filter: blur(6px);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 200;
-      padding: 16px;
+      padding: 18px;
     }
 
-    .modal-bg.open {
+    .modal-backdrop.open {
       display: flex;
     }
 
-    .modal-card {
+    .modal-box {
       width: 100%;
-      max-width: 400px;
-      background: #0e121f;
-      border: 1px solid var(--border-active);
+      max-width: 440px;
+      background: #101422;
+      border: 1px solid var(--border-strong);
       border-radius: var(--radius-lg);
-      padding: 20px;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
     }
 
-    @media (max-width: 960px) {
-      .disc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .calc-8-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
     }
 
-    @media (max-width: 640px) {
-      .disc-grid, .calc-8-grid, .steps-3, .links-2col {
+    .modal-close {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 1024px) {
+      .disciplines-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tiers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .calc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .disciplines-grid,
+      .tiers-grid,
+      .calc-grid,
+      .steps-grid,
+      .links-grid {
         grid-template-columns: 1fr;
+      }
+      .page-shell {
+        padding: 16px 14px 44px;
       }
       .search-box {
         width: 100%;
@@ -760,11 +890,11 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <a href="#leaderboard" class="brand" data-nav="leaderboard">
-        <span>Priz</span><span class="tiers">Tiers</span>
+      <a href="#leaderboard" class="brand-logo" data-nav="leaderboard">
+        <span>Priz</span><span class="accent">Tiers</span>
       </a>
 
-      <nav class="nav-tabs" aria-label="Навигация">
+      <nav class="nav-tabs" aria-label="Основная навигация">
         <button class="nav-btn active" data-nav="leaderboard">🏆 Лидерборд</button>
         <button class="nav-btn" data-nav="kit-beast">⚔️ BEAST</button>
         <button class="nav-btn" data-nav="kit-mace">🔨 MACE</button>
@@ -778,466 +908,524 @@
         <button class="nav-btn" data-nav="links">💬 Discord</button>
       </nav>
 
-      <button class="user-badge" id="userBadgeBtn" type="button">
-        <span class="dot"></span>
+      <button class="user-chip" id="userChipBtn" type="button">
+        <span class="user-dot"></span>
         <span>KingErgo</span>
       </button>
     </div>
   </header>
 
-  <main class="main-wrap" id="mainWrap">
-    <!-- Leaderboard -->
+  <main class="page-shell">
+    <!-- 1. LEADERBOARD VIEW (No duplicate Mace/Carts cards) -->
     <section id="view-leaderboard" class="view active">
       <div class="hero">
         <h1 class="hero-title">PRIZTIERS</h1>
-        <p class="hero-sub">Соревновательная экосистема &amp; PvP Tier List платформа</p>
+        <p class="hero-subtitle">Соревновательная экосистема &amp; PvP Tier List платформа</p>
       </div>
 
-      <!-- Unique discipline cards (no duplicate MACE / CARTS cards) -->
-      <div class="disc-grid" id="discGrid"></div>
+      <div class="disciplines-grid" id="disciplinesGrid"></div>
 
-      <div class="sec-head">
-        <h2 class="sec-title" id="lbTitle">BEAST TIER LIST</h2>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="activeKitTitle">BEAST TIER LIST</h2>
+          <p class="section-subtitle" id="activeKitSubtitle">Распределение игроков по тирам дисциплины</p>
+        </div>
         <div class="search-box">
-          <span class="icon">🔍</span>
-          <input type="search" id="lbSearch" placeholder="Поиск игрока..." autocomplete="off" />
+          <span class="search-icon">🔍</span>
+          <input type="search" id="playerSearchInput" placeholder="Поиск игрока по нику..." autocomplete="off" />
         </div>
       </div>
 
-      <div class="tier-stack" id="lbTierStack"></div>
+      <div class="tiers-grid" id="tiersGrid"></div>
     </section>
 
-    <!-- Individual Kit Page -->
+    <!-- 2. INDIVIDUAL KIT VIEW (Active kits or Coming Soon) -->
     <section id="view-kit" class="view">
-      <div id="kitMount"></div>
+      <div id="kitContentMount"></div>
     </section>
 
-    <!-- Guide Page -->
+    <!-- 3. GUIDE & FAQ VIEW (Lifted cleanly at top) -->
     <section id="view-guide" class="view">
-      <div class="guide-head">
-        <div class="badge-tag">📘 Гайд по тестированию</div>
-        <h1 class="h1-main">Всё, что нужно знать о тестировании в PrizTiers</h1>
-        <p class="sub-main">Пошаговый порядок получения тира по дисциплинам Beast, Mace, Carts, Axe, SMP, UHC, OP и SpearMace, правила и ответы на частые вопросы.</p>
+      <div class="guide-hero">
+        <div class="guide-pill">📘 Гайд по тестированию</div>
+        <h1 class="guide-h1">Всё, что нужно знать о тестировании в PrizTiers</h1>
+        <p class="guide-sub">Пошаговый порядок получения тира по дисциплинам Beast, Mace, Carts, Axe, SMP, UHC, OP и SpearMace, правила и ответы на частые вопросы.</p>
       </div>
 
-      <div class="card-box">
-        <div class="calc-top">
-          <h2 style="font-size:0.96rem;font-weight:800;">🧮 Калькулятор очков по дисциплинам</h2>
-          <span class="calc-score" id="calcScoreBadge">Итого: 0 очков</span>
+      <div class="panel-card">
+        <div class="panel-top">
+          <h2 class="panel-title">🧮 Калькулятор очков по дисциплинам</h2>
+          <span class="points-badge" id="totalCalcPoints">Итого: 0 очков</span>
         </div>
-        <div class="calc-8-grid" id="calc8Grid"></div>
+        <div class="calc-grid" id="calcGrid"></div>
       </div>
 
-      <div class="steps-3">
+      <div class="steps-grid">
         <div class="step-card">
-          <div class="step-badge">1</div>
-          <h3>Зайди в каналы связи</h3>
-          <p>Подключись к очереди выбранной дисциплины в официальном Discord PrizTiers и следи за статусом тестеров.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-badge">2</div>
-          <h3>Авторизуйся на сайте</h3>
-          <p>Нажми кнопку «Войти» или проверь свой профиль и историю матчей в таблице PrizTiers.</p>
+          <div class="step-num">1</div>
+          <h3 class="step-title">Зайди в каналы связи</h3>
+          <p class="step-desc">Подключись к очереди выбранной дисциплины в официальном Discord PrizTiers и следи за статусом тестеров.</p>
         </div>
         <div class="step-card">
-          <div class="step-badge">3</div>
-          <h3>Пройди тест</h3>
-          <p>После проверки тестер занесёт твой тир в базу, и он появится в профиле и лидерборде.</p>
+          <div class="step-num">2</div>
+          <h3 class="step-title">Авторизуйся на сайте</h3>
+          <p class="step-desc">Войди через аккаунт Discord или проверь свой профиль и историю матчей в таблице PrizTiers.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h3 class="step-title">Пройди тест</h3>
+          <p class="step-desc">После завершения серии боёв тестер выставит итоговый тир, а очки автоматически обновят общий рейтинг.</p>
         </div>
       </div>
 
-      <div class="card-box">
-        <h2 style="font-size:0.96rem;font-weight:800;margin-bottom:10px;">📊 Как устроены тиры</h2>
-        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">От LT5 и HT5 до HT1 (высший ранг). Чем выше ступень, тем больше за неё очков.</p>
-        <div id="tierBarsMount"></div>
+      <div class="panel-card">
+        <h2 class="panel-title" style="margin-bottom: 14px;">📊 Как устроены тиры</h2>
+        <div id="tierScaleList"></div>
       </div>
 
-      <div class="card-box">
-        <h2 style="font-size:0.96rem;font-weight:800;margin-bottom:4px;">❓ Часто задаваемые вопросы</h2>
-        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;">Ответы на самые популярные вопросы.</p>
-        <div id="faqMount"></div>
+      <div class="panel-card">
+        <h2 class="panel-title" style="margin-bottom: 8px;">❓ Часто задаваемые вопросы</h2>
+        <div id="faqList"></div>
       </div>
     </section>
 
-    <!-- Discord / Links Page -->
+    <!-- 4. DISCORD & LINKS VIEW (Lifted cleanly at top) -->
     <section id="view-links" class="view">
-      <div class="links-head">
-        <div class="badge-tag">💬 Discord и каналы связи</div>
-        <h1 class="h1-main">Discord-серверы и Telegram-канал PrizTiers</h1>
-        <p class="sub-main">Переходи в нужную дисциплину для записи на тест или подпишись на Telegram, чтобы следить за обновлениями.</p>
+      <div class="links-header">
+        <div class="guide-pill">💬 Discord и каналы связи</div>
+        <h1 class="guide-h1">Discord-серверы и каналы PrizTiers</h1>
+        <p class="guide-sub">Переходи в нужный раздел для записи на тест, общения с сообществом и отслеживания обновлений платформы.</p>
       </div>
 
-      <div class="links-2col" id="linksMount"></div>
+      <div class="links-grid" id="linksGrid"></div>
     </section>
   </main>
 
-  <footer class="footer">
+  <footer class="site-footer">
     <span>© 2026 PrizTiers. All rights reserved.</span>
+    <span>Competitive PvP Tier List Platform</span>
   </footer>
 
-  <div class="modal-bg" id="infoModal">
-    <div class="modal-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-        <strong id="modalTitle" style="font-size:1rem;"></strong>
-        <button id="modalClose" type="button" style="background:rgba(255,255,255,0.06);border:1px solid var(--border-subtle);border-radius:6px;width:26px;height:26px;cursor:pointer;">✕</button>
+  <!-- Player Details Modal -->
+  <div class="modal-backdrop" id="playerModal" role="dialog" aria-modal="true" aria-labelledby="modalPlayerName">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <div id="modalPlayerName" style="font-size: 1.15rem; font-weight: 800;"></div>
+          <div id="modalPlayerMeta" style="font-size: 0.8rem; color: var(--text-secondary);"></div>
+        </div>
+        <button class="modal-close" id="closeModalBtn" type="button" aria-label="Закрыть">✕</button>
       </div>
-      <div id="modalBody" style="font-size:0.84rem;color:var(--text-muted);"></div>
+      <div id="modalPlayerBody" style="font-size: 0.88rem; color: var(--text-secondary);"></div>
     </div>
   </div>
 
   <script>
     const KITS = [
-      { id: "beast", name: "BEAST", icon: "⚔️", active: true, countText: "44 участников", meta: "Discord • 3 в сети" },
-      { id: "mace", name: "MACE", icon: "🔨", active: true, countText: "... участников", meta: "Discord • 2 в сети" },
-      { id: "carts", name: "CARTS", icon: "💣", active: true, countText: "16 участников", meta: "Discord • 3 в сети" },
-      { id: "axe", name: "AXE", icon: "🪓", active: true, countText: "... участников", meta: "Discord • 2 в сети" },
-      { id: "smp", name: "SMP", icon: "🛡️", active: false, countText: "Скоро", meta: "В разработке" },
-      { id: "uhc", name: "UHC", icon: "❤️", active: false, countText: "Скоро", meta: "В разработке" },
-      { id: "op", name: "OP", icon: "⚡", active: false, countText: "Скоро", meta: "В разработке" },
-      { id: "spearmace", name: "SPEARMACE", icon: "🔱", active: false, countText: "Скоро", meta: "В разработке" }
+      { id: "beast", name: "BEAST", icon: "⚔️", active: true, playersCount: 44, queueLabel: "3 в сети" },
+      { id: "mace", name: "MACE", icon: "🔨", active: true, playersCount: 31, queueLabel: "2 в сети" },
+      { id: "carts", name: "CARTS", icon: "💣", active: true, playersCount: 16, queueLabel: "3 в сети" },
+      { id: "axe", name: "AXE", icon: "🪓", active: true, playersCount: 27, queueLabel: "2 в сети" },
+      { id: "smp", name: "SMP", icon: "🛡️", active: false, playersCount: 0, queueLabel: "Скоро" },
+      { id: "uhc", name: "UHC", icon: "❤️", active: false, playersCount: 0, queueLabel: "Скоро" },
+      { id: "op", name: "OP", icon: "⚡", active: false, playersCount: 0, queueLabel: "Скоро" },
+      { id: "spearmace", name: "SPEARMACE", icon: "🔱", active: false, playersCount: 0, queueLabel: "Скоро" }
     ];
 
-    const LB_CARDS = [
-      { id: "beast", title: "BEAST DISCIPLINE", icon: "⚔️", count: "44 участников", meta: "Discord • 3 в сети" },
-      { id: "mace", title: "MACE DISCIPLINE", icon: "🔨", count: "... участников", meta: "Discord • 2 в сети" },
-      { id: "carts", title: "CARTS DISCIPLINE", icon: "💣", count: "16 участников", meta: "Discord • 3 в сети" },
-      { id: "axe", title: "AXE DISCIPLINE", icon: "🪓", count: "... участников", meta: "Discord • 2 в сети" }
+    // Unique discipline cards on the main leaderboard (strictly NO duplicates)
+    const LEADERBOARD_DISCIPLINES = [
+      { kitId: "beast", title: "BEAST DISCIPLINE", countText: "44 участников", meta: "Discord • 3 в сети", icon: "⚔️" },
+      { kitId: "mace", title: "MACE DISCIPLINE", countText: "31 участников", meta: "Discord • 2 в сети", icon: "🔨" },
+      { kitId: "carts", title: "CARTS DISCIPLINE", countText: "16 участников", meta: "Discord • 3 в сети", icon: "💣" },
+      { kitId: "axe", title: "AXE DISCIPLINE", countText: "27 участников", meta: "Discord • 2 в сети", icon: "🪓" }
     ];
 
-    const TIER_CODES = ["HT1", "LT1", "HT2", "LT2", "HT3", "LT3", "HT4", "LT4", "HT5", "LT5"];
-
-    const TIER_DATA = {
+    const SAMPLE_PLAYERS = {
       beast: {
-        HT1: ["KingErgo"],
-        LT1: ["VortexPvP"],
-        HT2: ["KuroAxe", "Nexon_"],
-        LT2: ["AresAim"],
-        HT3: ["zxc_blade", "Moriarty"],
-        LT3: ["RivenX"],
-        HT4: ["ShadowHit"],
-        LT4: ["KainFlow"],
-        HT5: ["NovaLite"],
-        LT5: []
+        1: [{ nick: "KingErgo", region: "CIS", pts: 60 }, { nick: "VortexPvP", region: "EU", pts: 60 }],
+        2: [{ nick: "KuroAxe", region: "CIS", pts: 45 }, { nick: "Nexon_", region: "CIS", pts: 45 }, { nick: "AresAim", region: "EU", pts: 45 }],
+        3: [{ nick: "zxc_blade", region: "CIS", pts: 30 }, { nick: "Moriarty", region: "CIS", pts: 30 }, { nick: "RivenX", region: "EU", pts: 30 }],
+        4: [{ nick: "ShadowHit", region: "CIS", pts: 15 }, { nick: "KainFlow", region: "CIS", pts: 15 }],
+        5: [{ nick: "NovaLite", region: "CIS", pts: 5 }]
       },
       mace: {
-        HT1: [], LT1: [], HT2: [], LT2: [], HT3: [], LT3: [], HT4: [], LT4: [], HT5: [], LT5: []
+        1: [{ nick: "KingErgo", region: "CIS", pts: 60 }, { nick: "SkyMace", region: "CIS", pts: 60 }],
+        2: [{ nick: "StormDrop", region: "EU", pts: 45 }, { nick: "DanteHit", region: "CIS", pts: 45 }],
+        3: [{ nick: "FuryJump", region: "CIS", pts: 30 }, { nick: "ZedCrits", region: "CIS", pts: 30 }],
+        4: [{ nick: "EchoPulse", region: "EU", pts: 15 }],
+        5: [{ nick: "RookieWind", region: "CIS", pts: 5 }]
       },
       carts: {
-        HT1: ["CartKing"],
-        LT1: [],
-        HT2: ["TntMaster", "BlastLine"],
-        LT2: [],
-        HT3: ["PixelCart"],
-        LT3: ["NoxBoom"],
-        HT4: ["Sparky99"],
-        LT4: [],
-        HT5: ["StarterTNT"],
-        LT5: []
+        1: [{ nick: "CartKing", region: "CIS", pts: 60 }],
+        2: [{ nick: "TntMaster", region: "CIS", pts: 45 }, { nick: "BlastLine", region: "EU", pts: 45 }],
+        3: [{ nick: "PixelCart", region: "CIS", pts: 30 }, { nick: "NoxBoom", region: "CIS", pts: 30 }],
+        4: [{ nick: "Sparky99", region: "CIS", pts: 15 }],
+        5: [{ nick: "StarterTNT", region: "CIS", pts: 5 }]
       },
       axe: {
-        HT1: ["KingErgo"],
-        LT1: [],
-        HT2: ["CleaverPro"],
-        LT2: ["HectorShield"],
-        HT3: ["TimberX"],
-        LT3: ["BramAxe"],
-        HT4: ["LumenPvP"],
-        LT4: [],
-        HT5: ["WoodCut"],
-        LT5: []
+        1: [{ nick: "KingErgo", region: "CIS", pts: 60 }],
+        2: [{ nick: "CleaverPro", region: "CIS", pts: 45 }, { nick: "HectorShield", region: "EU", pts: 45 }],
+        3: [{ nick: "TimberX", region: "CIS", pts: 30 }, { nick: "BramAxe", region: "CIS", pts: 30 }],
+        4: [{ nick: "LumenPvP", region: "CIS", pts: 15 }],
+        5: [{ nick: "WoodCut", region: "CIS", pts: 5 }]
       }
     };
 
-    const TIER_SCALE_BARS = [
-      { code: "HT1", pts: 60, pct: "100%" },
-      { code: "LT1", pts: 45, pct: "75%" },
-      { code: "HT2", pts: 30, pct: "50%" },
-      { code: "LT2", pts: 20, pct: "34%" },
-      { code: "HT3", pts: 10, pct: "18%" },
-      { code: "LT3", pts: 6, pct: "12%" },
-      { code: "HT4", pts: 4, pct: "9%" },
-      { code: "LT4", pts: 3, pct: "7%" },
-      { code: "HT5", pts: 2, pct: "5%" },
-      { code: "LT5", pts: 1, pct: "3%" }
+    const TIER_POINTS = {
+      none: 0,
+      t5: 5,
+      t4: 15,
+      t3: 30,
+      t2: 45,
+      t1: 60
+    };
+
+    const TIER_SCALE = [
+      { tag: "TIER 1", label: "Элита дисциплины", pts: 60, width: "100%" },
+      { tag: "TIER 2", label: "Высокий уровень", pts: 45, width: "78%" },
+      { tag: "TIER 3", label: "Уверенный соревновательный", pts: 30, width: "54%" },
+      { tag: "TIER 4", label: "Базовый ранг", pts: 15, width: "30%" },
+      { tag: "TIER 5", label: "Начальный тир", pts: 5, width: "14%" }
     ];
 
-    const CALC_OPTS = [
-      { val: "none", label: "Без тира (0)", pts: 0 },
-      { val: "lt5", label: "LT5 (1)", pts: 1 },
-      { val: "ht5", label: "HT5 (2)", pts: 2 },
-      { val: "lt4", label: "LT4 (3)", pts: 3 },
-      { val: "ht4", label: "HT4 (4)", pts: 4 },
-      { val: "lt3", label: "LT3 (6)", pts: 6 },
-      { val: "ht3", label: "HT3 (10)", pts: 10 },
-      { val: "lt2", label: "LT2 (20)", pts: 20 },
-      { val: "ht2", label: "HT2 (30)", pts: 30 },
-      { val: "lt1", label: "LT1 (45)", pts: 45 },
-      { val: "ht1", label: "HT1 (60)", pts: 60 }
-    ];
-
-    const FAQ_LIST = [
+    const FAQ_ITEMS = [
       {
         q: "Что такое Tier List в PrizTiers?",
-        a: "Tier List — это рейтинг игроков по уровню навыков в PvP-дисциплинах от LT5 (начальный уровень) до HT1 (высший уровень мастерства)."
+        a: "Tier List — это рейтинг игроков по уровню навыков в PvP-дисциплинах от Tier 5 (начальный уровень) до Tier 1 (высший уровень мастерства)."
       },
       {
         q: "Как часто можно проходить тест?",
-        a: "Повторное тестирование по дисциплине доступно после прохождения установленного кулдауна."
+        a: "Повторное тестирование по одной дисциплине доступно после прохождения кулдауна (обычно 14 дней), чтобы прогресс в тренировках успевал отражаться на результате."
       },
       {
         q: "Сколько китов есть для тестирования?",
-        a: "В системе представлены Beast, Mace, Carts, Axe, а также разделы SMP, UHC, OP и SpearMace."
+        a: "На платформе представлены дисциплины Beast, Mace, Carts, Axe, а также готовящиеся к запуску разделы SMP, UHC, OP и SpearMace."
       },
       {
         q: "Как считаются очки?",
-        a: "Каждый тир даёт фиксированные очки (от LT5 — 1 очко до HT1 — 60 очков), которые суммируются по дисциплинам."
+        a: "Каждый полученный тир приносит фиксированное количество очков (Tier 1 — 60, Tier 2 — 45, Tier 3 — 30, Tier 4 — 15, Tier 5 — 5), которые суммируются по дисциплинам."
       }
     ];
 
-    const LINKS_CARDS = [
+    const LINKS_DATA = [
       {
-        title: "💬 Discord • Beast (Sword)",
-        desc: "Очереди на тестирование, правила и новости по дисциплине Beast PvP.",
-        btn: "Открыть Discord Beast"
+        title: "💬 Основной Discord-сервер PrizTiers",
+        desc: "Очереди на тестирование, тикеты, оповещения о тестерах и новости по дисциплинам Beast, Mace, Carts и Axe.",
+        cta: "Открыть Discord",
+        href: "#links"
       },
       {
-        title: "💬 Discord • Mace",
-        desc: "Тестирования и обсуждения по дисциплине Mace PvP.",
-        btn: "Открыть Discord Mace"
+        title: "📢 Оповещения и анонсы турниров",
+        desc: "Следи за открытием очередей, обновлением правил и запуском новых PvP-дисциплин в режиме реального времени.",
+        cta: "Перейти к анонсам",
+        href: "#guide"
       },
       {
-        title: "💬 Discord • Carts",
-        desc: "Тестирования и матчи по дисциплине Carts.",
-        btn: "Открыть Discord Carts"
+        title: "🛡️ Подача апелляций и модерация",
+        desc: "Вопросы по результатам теста, проверкам и спорным ситуациям рассматриваются через официальную систему тикетов.",
+        cta: "Открыть правила",
+        href: "#guide"
       },
       {
-        title: "📣 Telegram • PrizTiers",
-        desc: "Анонсы обновлений сайта и бота, важные объявления и новости проекта.",
-        btn: "Перейти в Telegram"
+        title: "🏆 Общий лидерборд сезона",
+        desc: "Сравнивай свой суммарный счёт по всем доступным дисциплинам и отслеживай позиции игроков.",
+        cta: "К лидерборду",
+        href: "#leaderboard"
       }
     ];
 
-    let state = { view: "leaderboard", kit: "beast", query: "" };
+    let state = {
+      activeNav: "leaderboard",
+      selectedKit: "beast",
+      searchQuery: ""
+    };
 
-    function setView(v) {
-      state.view = v;
-      document.querySelectorAll(".nav-btn").forEach((b) => b.classList.toggle("active", b.dataset.nav === v));
-      document.querySelectorAll(".view").forEach((s) => s.classList.remove("active"));
+    function setActiveView(navKey) {
+      state.activeNav = navKey;
 
-      const wrap = document.getElementById("mainWrap");
-      wrap.classList.toggle("lifted", v.startsWith("kit-") || v === "links");
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.nav === navKey);
+      });
 
-      if (v === "leaderboard") {
+      document.querySelectorAll(".view").forEach((sec) => sec.classList.remove("active"));
+
+      if (navKey === "leaderboard") {
         document.getElementById("view-leaderboard").classList.add("active");
         renderLeaderboard();
-      } else if (v === "guide") {
+      } else if (navKey === "guide") {
         document.getElementById("view-guide").classList.add("active");
-      } else if (v === "links") {
+      } else if (navKey === "links") {
         document.getElementById("view-links").classList.add("active");
-      } else if (v.startsWith("kit-")) {
+      } else if (navKey.startsWith("kit-")) {
+        const kitId = navKey.replace("kit-", "");
         document.getElementById("view-kit").classList.add("active");
-        renderKit(v.replace("kit-", ""));
+        renderKitView(kitId);
       }
     }
 
-    function renderDiscCards() {
-      const grid = document.getElementById("discGrid");
-      grid.innerHTML = LB_CARDS.map((c) => `
-        <div class="disc-card ${state.kit === c.id ? "active" : ""}" data-pick-kit="${c.id}">
-          <div>
-            <div class="disc-top">
-              <span class="disc-icon">${c.icon}</span>
-              <span class="disc-title">${c.title}</span>
+    function renderDisciplinesGrid() {
+      const grid = document.getElementById("disciplinesGrid");
+      grid.innerHTML = LEADERBOARD_DISCIPLINES.map((item) => {
+        const isSelected = state.selectedKit === item.kitId;
+        return `
+          <div class="discipline-card" data-kit-select="${item.kitId}" style="${isSelected ? "border-color: rgba(167, 139, 250, 0.55);" : ""}">
+            <div>
+              <div class="discipline-card-top">
+                <span class="discipline-badge-icon">${item.icon}</span>
+                <span class="discipline-name">${item.title}</span>
+              </div>
+              <div class="discipline-count">${item.countText}</div>
             </div>
-            <div class="disc-count">${c.count}</div>
+            <div class="discipline-footer">
+              <span class="status-dot"></span>
+              <span>${item.meta}</span>
+            </div>
           </div>
-          <div class="disc-foot">
-            <span class="dot"></span>
-            <span>${c.meta}</span>
-          </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
 
-      grid.querySelectorAll("[data-pick-kit]").forEach((el) => {
-        el.addEventListener("click", () => {
-          state.kit = el.dataset.pickKit;
+      grid.querySelectorAll("[data-kit-select]").forEach((card) => {
+        card.addEventListener("click", () => {
+          state.selectedKit = card.dataset.kitSelect;
           renderLeaderboard();
         });
       });
     }
 
-    function renderTierStack(kitId, filter = "") {
-      const map = TIER_DATA[kitId] || TIER_DATA.beast;
-      const q = filter.trim().toLowerCase();
+    function buildTierColumnsHtml(kitId, filterText = "") {
+      const kitData = SAMPLE_PLAYERS[kitId] || SAMPLE_PLAYERS.beast;
+      const q = filterText.trim().toLowerCase();
 
-      return TIER_CODES.map((code) => {
-        const list = map[code] || [];
-        const matched = q ? list.filter((n) => n.toLowerCase().includes(q)) : list;
-        const cls = "t-" + code.toLowerCase();
-        const chips = matched
-          .map((nick) => `<span class="player-chip" data-p-nick="${nick}" data-p-tier="${code}">${nick}</span>`)
-          .join("");
+      return [1, 2, 3, 4, 5].map((tierNum) => {
+        const rawList = kitData[tierNum] || [];
+        const filtered = q
+          ? rawList.filter((p) => p.nick.toLowerCase().includes(q) || p.region.toLowerCase().includes(q))
+          : rawList;
+
+        const cardsHtml = filtered.length
+          ? filtered.map((p) => `
+              <div class="player-card" data-player-nick="${p.nick}" data-player-tier="TIER ${tierNum}" data-player-pts="${p.pts}" data-player-region="${p.region}">
+                <div class="player-info">
+                  <div class="player-avatar">${p.nick.slice(0, 2).toUpperCase()}</div>
+                  <div>
+                    <div class="player-name">${p.nick}</div>
+                    <div class="player-sub">${p.region} • +${p.pts} pts</div>
+                  </div>
+                </div>
+                <span class="tier-pill">T${tierNum}</span>
+              </div>
+            `).join("")
+          : `<div style="font-size: 0.78rem; color: var(--text-muted); text-align: center; padding: 18px 6px;">Нет игроков</div>`;
 
         return `
-          <div class="tier-row-card">
-            <span class="tier-code-label ${cls}">${code}</span>
-            <div class="tier-players-inline">${chips}</div>
-            <span class="tier-count-right">${matched.length} игроков</span>
+          <div class="tier-column tier-${tierNum}">
+            <div class="tier-header">
+              <span>TIER ${tierNum}</span>
+              <span>${filtered.length}</span>
+            </div>
+            <div class="tier-body">${cardsHtml}</div>
           </div>
         `;
       }).join("");
     }
 
-    function bindChips(container) {
-      container.querySelectorAll("[data-p-nick]").forEach((el) => {
+    function bindPlayerModals(container) {
+      container.querySelectorAll("[data-player-nick]").forEach((el) => {
         el.addEventListener("click", () => {
-          document.getElementById("modalTitle").textContent = el.dataset.pNick;
-          document.getElementById("modalBody").innerHTML = `<p>Тир: <strong style="color:#fff;">${el.dataset.pTier}</strong></p>`;
-          document.getElementById("infoModal").classList.add("open");
+          const nick = el.dataset.playerNick;
+          const tier = el.dataset.playerTier;
+          const pts = el.dataset.playerPts;
+          const region = el.dataset.playerRegion;
+          document.getElementById("modalPlayerName").textContent = nick;
+          document.getElementById("modalPlayerMeta").textContent = `${tier} • Регион: ${region}`;
+          document.getElementById("modalPlayerBody").innerHTML = `
+            <p style="margin-bottom: 8px;">Текущий рейтинг в выбранной дисциплине: <strong style="color: #fff;">${tier}</strong>.</p>
+            <p>Начислено очков за тир: <strong style="color: #22d3ee;">+${pts} очков</strong>.</p>
+          `;
+          document.getElementById("playerModal").classList.add("open");
         });
       });
     }
 
     function renderLeaderboard() {
-      renderDiscCards();
-      const kit = KITS.find((k) => k.id === state.kit) || KITS[0];
-      document.getElementById("lbTitle").textContent = `${kit.name} TIER LIST`;
-      const stack = document.getElementById("lbTierStack");
-      stack.innerHTML = renderTierStack(state.kit, state.query);
-      bindChips(stack);
+      renderDisciplinesGrid();
+      const kitObj = KITS.find((k) => k.id === state.selectedKit) || KITS[0];
+      document.getElementById("activeKitTitle").textContent = `${kitObj.name} TIER LIST`;
+      document.getElementById("activeKitSubtitle").textContent = `Распределение игроков по тирам дисциплины ${kitObj.name}`;
+
+      const tiersGrid = document.getElementById("tiersGrid");
+      tiersGrid.innerHTML = buildTierColumnsHtml(state.selectedKit, state.searchQuery);
+      bindPlayerModals(tiersGrid);
     }
 
-    function renderKit(kitId) {
-      const mount = document.getElementById("kitMount");
-      const kit = KITS.find((k) => k.id === kitId) || KITS[0];
+    function renderKitView(kitId) {
+      const mount = document.getElementById("kitContentMount");
+      const kitObj = KITS.find((k) => k.id === kitId) || KITS[0];
 
-      if (!kit.active) {
+      if (!kitObj.active) {
         mount.innerHTML = `
           <div class="soon-card">
-            <div class="soon-pill">${kit.name} PVP • SOON</div>
+            <div class="soon-badge">${kitObj.name} PVP • SOON</div>
             <h1 class="soon-title">Soon...</h1>
-            <p class="soon-desc">Дисциплина <strong>${kit.name}</strong> находится в разработке и скоро откроется для тестирований и тиров в PrizTiers.</p>
-            <button class="btn-purple" type="button" id="soonReturnBtn">Вернуться к доступным китам</button>
+            <p class="soon-desc">Дисциплина <strong>${kitObj.name}</strong> находится в разработке и скоро откроется для тестирований и тиров в PrizTiers.</p>
+            <button class="btn-primary" type="button" id="backToLeaderboardBtn">Вернуться к доступным китам</button>
           </div>
         `;
-        document.getElementById("soonReturnBtn").addEventListener("click", () => setView("leaderboard"));
+        document.getElementById("backToLeaderboardBtn").addEventListener("click", () => {
+          setActiveView("leaderboard");
+        });
         return;
       }
 
       mount.innerHTML = `
-        <div class="sec-head">
-          <h1 class="sec-title">${kit.name} TIER LIST</h1>
+        <div class="section-head">
+          <div>
+            <h1 class="section-title">${kitObj.icon} ${kitObj.name} TIER LIST</h1>
+            <p class="section-subtitle">Таблица тиров по дисциплине ${kitObj.name} • ${kitObj.playersCount} участников</p>
+          </div>
           <div class="search-box">
-            <span class="icon">🔍</span>
-            <input type="search" id="kitSearch" placeholder="Поиск игрока..." autocomplete="off" />
+            <span class="search-icon">🔍</span>
+            <input type="search" id="kitSearchInput" placeholder="Поиск в ${kitObj.name}..." autocomplete="off" />
           </div>
         </div>
-        <div class="tier-stack" id="kitStackMount">${renderTierStack(kitId, "")}</div>
+        <div class="tiers-grid" id="singleKitTiersGrid">${buildTierColumnsHtml(kitId, "")}</div>
       `;
 
-      const stackEl = document.getElementById("kitStackMount");
-      bindChips(stackEl);
+      const kitSearch = document.getElementById("kitSearchInput");
+      const singleGrid = document.getElementById("singleKitTiersGrid");
+      bindPlayerModals(singleGrid);
 
-      document.getElementById("kitSearch").addEventListener("input", (e) => {
-        stackEl.innerHTML = renderTierStack(kitId, e.target.value);
-        bindChips(stackEl);
+      kitSearch.addEventListener("input", (e) => {
+        singleGrid.innerHTML = buildTierColumnsHtml(kitId, e.target.value);
+        bindPlayerModals(singleGrid);
       });
     }
 
-    function initGuide() {
-      const calcGrid = document.getElementById("calc8Grid");
-      const optionsHtml = CALC_OPTS.map((o) => `<option value="${o.pts}">${o.label}</option>`).join("");
-
+    function renderGuidePanels() {
+      const calcGrid = document.getElementById("calcGrid");
       calcGrid.innerHTML = KITS.map((k) => `
-        <div class="calc-cell">
-          <div class="calc-cell-label">
+        <div class="calc-item">
+          <div class="calc-label">
             <span>${k.icon} ${k.name}</span>
-            <span data-cell-pts="${k.id}">0 pts</span>
+            <span data-kit-pts-label="${k.id}">0 pts</span>
           </div>
-          <select data-cell-sel="${k.id}">${optionsHtml}</select>
+          <select data-calc-select="${k.id}">
+            <option value="none">Без тира (0)</option>
+            <option value="t5">TIER 5 (5)</option>
+            <option value="t4">TIER 4 (15)</option>
+            <option value="t3">TIER 3 (30)</option>
+            <option value="t2">TIER 2 (45)</option>
+            <option value="t1">TIER 1 (60)</option>
+          </select>
         </div>
       `).join("");
 
-      const recalc = () => {
+      const updateCalculator = () => {
         let total = 0;
-        calcGrid.querySelectorAll("[data-cell-sel]").forEach((sel) => {
-          const pts = Number(sel.value) || 0;
+        calcGrid.querySelectorAll("[data-calc-select]").forEach((sel) => {
+          const pts = TIER_POINTS[sel.value] || 0;
           total += pts;
-          const lbl = calcGrid.querySelector(`[data-cell-pts="${sel.dataset.cellSel}"]`);
-          if (lbl) lbl.textContent = `${pts} pts`;
+          const labelEl = calcGrid.querySelector(`[data-kit-pts-label="${sel.dataset.calcSelect}"]`);
+          if (labelEl) labelEl.textContent = `${pts} pts`;
         });
-        document.getElementById("calcScoreBadge").textContent = `Итого: ${total} очков`;
+        document.getElementById("totalCalcPoints").textContent = `Итого: ${total} очков`;
       };
 
-      calcGrid.querySelectorAll("[data-cell-sel]").forEach((s) => s.addEventListener("change", recalc));
+      calcGrid.querySelectorAll("[data-calc-select]").forEach((sel) => {
+        sel.addEventListener("change", updateCalculator);
+      });
 
-      document.getElementById("tierBarsMount").innerHTML = TIER_SCALE_BARS.map((b) => `
-        <div class="bar-row">
-          <span class="bar-tier">${b.code}</span>
-          <div class="bar-track"><div class="bar-fill" style="width:${b.pct};"></div></div>
-          <span class="bar-pts">${b.pts} очков</span>
+      const scaleList = document.getElementById("tierScaleList");
+      scaleList.innerHTML = TIER_SCALE.map((row) => `
+        <div class="tier-scale-row">
+          <span class="tier-scale-tag">${row.tag}</span>
+          <div style="flex: 1; min-width: 140px;">
+            <div style="font-size: 0.84rem; font-weight: 700; margin-bottom: 5px;">${row.label}</div>
+            <div class="tier-bar-track">
+              <div class="tier-bar-fill" style="width: ${row.width};"></div>
+            </div>
+          </div>
+          <span class="tier-scale-pts">${row.pts} очков</span>
         </div>
       `).join("");
 
-      document.getElementById("faqMount").innerHTML = FAQ_LIST.map((item, idx) => `
+      const faqList = document.getElementById("faqList");
+      faqList.innerHTML = FAQ_ITEMS.map((item, idx) => `
         <div class="faq-item ${idx === 0 ? "open" : ""}">
-          <button class="faq-trigger" type="button">
+          <button class="faq-q" type="button">
             <span>${item.q}</span>
-            <span>${idx === 0 ? "−" : "+"}</span>
+            <span>+</span>
           </button>
-          <div class="faq-body">${item.a}</div>
+          <div class="faq-a">${item.a}</div>
         </div>
       `).join("");
 
-      document.querySelectorAll(".faq-trigger").forEach((btn) => {
+      faqList.querySelectorAll(".faq-q").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const item = btn.closest(".faq-item");
-          item.classList.toggle("open");
-          btn.querySelector("span:last-child").textContent = item.classList.contains("open") ? "−" : "+";
+          const parent = btn.closest(".faq-item");
+          parent.classList.toggle("open");
+          const sign = btn.querySelector("span:last-child");
+          if (sign) sign.textContent = parent.classList.contains("open") ? "−" : "+";
         });
       });
     }
 
-    function initLinks() {
-      document.getElementById("linksMount").innerHTML = LINKS_CARDS.map((card) => `
-        <div class="link-item-card">
+    function renderLinksGrid() {
+      const grid = document.getElementById("linksGrid");
+      grid.innerHTML = LINKS_DATA.map((item) => `
+        <div class="link-card">
           <div>
-            <h3>${card.title}</h3>
-            <p>${card.desc}</p>
+            <h3 class="link-card-title">${item.title}</h3>
+            <p class="link-card-desc">${item.desc}</p>
           </div>
-          <a class="link-btn-box" href="#links">${card.btn}</a>
+          <a class="link-action" href="${item.href}" data-link-nav="${item.href.replace("#", "")}">${item.cta} →</a>
         </div>
       `).join("");
+
+      grid.querySelectorAll("[data-link-nav]").forEach((a) => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          setActiveView(a.dataset.linkNav);
+        });
+      });
     }
 
+    // Event bindings
     document.querySelectorAll("[data-nav]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        setView(btn.dataset.nav);
+        setActiveView(btn.dataset.nav);
       });
     });
 
-    document.getElementById("lbSearch").addEventListener("input", (e) => {
-      state.query = e.target.value;
+    document.getElementById("playerSearchInput").addEventListener("input", (e) => {
+      state.searchQuery = e.target.value;
       renderLeaderboard();
     });
 
-    document.getElementById("modalClose").addEventListener("click", () => {
-      document.getElementById("infoModal").classList.remove("open");
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      document.getElementById("playerModal").classList.remove("open");
     });
 
-    document.getElementById("infoModal").addEventListener("click", (e) => {
-      if (e.target.id === "infoModal") e.currentTarget.classList.remove("open");
+    document.getElementById("playerModal").addEventListener("click", (e) => {
+      if (e.target.id === "playerModal") {
+        e.currentTarget.classList.remove("open");
+      }
     });
 
-    document.getElementById("userBadgeBtn").addEventListener("click", () => {
-      document.getElementById("modalTitle").textContent = "KingErgo";
-      document.getElementById("modalBody").innerHTML = `<p>Профиль участника <strong style="color:#fff;">PrizTiers</strong>.</p>`;
-      document.getElementById("infoModal").classList.add("open");
+    document.getElementById("userChipBtn").addEventListener("click", () => {
+      document.getElementById("modalPlayerName").textContent = "KingErgo";
+      document.getElementById("modalPlayerMeta").textContent = "Профиль участника • PrizTiers";
+      document.getElementById("modalPlayerBody").innerHTML = `
+        <p style="margin-bottom: 8px;">Активные тиры подтверждены в дисциплинах <strong style="color: #fff;">BEAST</strong>, <strong style="color: #fff;">MACE</strong> и <strong style="color: #fff;">AXE</strong>.</p>
+        <p>Используй вкладку <strong style="color: #a78bfa;">Гайд</strong> для расчёта очков по всем китам.</p>
+      `;
+      document.getElementById("playerModal").classList.add("open");
     });
 
-    initGuide();
-    initLinks();
+    // Initial render
+    renderGuidePanels();
+    renderLinksGrid();
     renderLeaderboard();
   </script>
 </body>
