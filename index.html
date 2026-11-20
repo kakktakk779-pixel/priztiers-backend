@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrizTiers • Competitive PvP Tier List</title>
-    <!-- Подключение внешнего файла стилей -->
     <link rel="stylesheet" href="style.css">
-    <!-- 3D Skin Viewer -->
     <script src="https://unpkg.com/skinview3d@3.0.0/bundles/skinview3d.bundle.js"></script>
     <style id="priz-btn-hold-wave-styles">
         .priz-ui-press-anim {
@@ -51,7 +49,6 @@
             }
         }
 
-        /* Плавные переходы между страницами и вкладками без нагрузки на глаза */
         .page-view {
             opacity: 0;
             transform: translateY(10px) scale(0.994);
@@ -70,7 +67,6 @@
             pointer-events: none !important;
         }
 
-        /* Новые детализированные фоны: GTA 6, Minecraft, Roblox */
         body.site-bg-gta6 {
             background:
                 radial-gradient(circle at 18% 18%, rgba(244, 114, 182, 0.26), transparent 46%),
@@ -130,7 +126,6 @@
             background-size: 28px 28px;
         }
 
-        /* Детализированные фоны карточки персонажа в стиле GTA 6 / Minecraft / Roblox */
         .left-profile-card.bg-gta6,
         .modal-box.bg-gta6 {
             background: linear-gradient(145deg, rgba(244, 114, 182, 0.22), rgba(56, 189, 248, 0.20) 55%, rgba(19, 11, 36, 0.92) 100%) !important;
@@ -150,7 +145,6 @@
             box-shadow: 0 12px 30px rgba(239, 68, 68, 0.15) !important;
         }
 
-        /* Детализированная страница Гайда и Ссылок */
         .guide-hero-card {
             background: rgba(15, 23, 42, 0.72);
             border: 1px solid rgba(255, 255, 255, 0.09);
@@ -311,7 +305,6 @@
             border: 1px solid rgba(216, 180, 254, 0.35);
         }
 
-        /* Статус бота виден только в админ-панели */
         .admin-bot-status-box {
             display: flex;
             align-items: center;
@@ -345,7 +338,6 @@
             background: #ef4444;
         }
 
-        /* Детализированные карточки профиля */
         .profile-rank-banner {
             display: flex;
             align-items: center;
@@ -374,6 +366,38 @@
             justify-content: space-between;
             gap: 8px;
         }
+
+        .new-kits-poll-banner {
+            margin: 18px auto 8px;
+            max-width: 820px;
+            background: rgba(15, 23, 42, 0.78);
+            border: 1px solid rgba(192, 132, 252, 0.35);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .new-kits-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .new-kit-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: rgba(168, 85, 247, 0.16);
+            border: 1px solid rgba(216, 180, 254, 0.32);
+            color: #e9d5ff;
+        }
     </style>
     <style id="priz-remove-bottom-nav-only">
         footer ~ nav,
@@ -393,7 +417,6 @@
 <body class="site-bg-hw-dungeon">
 
     <div class="page-overlay">
-        <!-- HEADER -->
         <header>
             <div class="header-left">
                 <div class="brand-logo" onclick="openPage('home')">PrizTiers</div>
@@ -409,6 +432,21 @@
                     </button>
                     <button class="nav-icon-btn btn-carts" id="btn-carts" data-tooltip="Carts (Minecart TNT)" onclick="switchKit('carts')">
                         <img src="https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png" alt="Carts" class="protected-asset"> CARTS
+                    </button>
+                    <button class="nav-icon-btn" id="btn-smp" data-tooltip="SMP PvP" onclick="switchKit('smp')">
+                        <img src="data:image/png;base64,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" alt="SMP" class="protected-asset"> SMP
+                    </button>
+                    <button class="nav-icon-btn" id="btn-uhc" data-tooltip="UHC PvP" onclick="switchKit('uhc')">
+                        <img src="data:image/png;base64,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" alt="UHC" class="protected-asset"> UHC
+                    </button>
+                    <button class="nav-icon-btn" id="btn-axe" data-tooltip="Axe PvP" onclick="switchKit('axe')">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=" alt="AXE" class="protected-asset"> AXE
+                    </button>
+                    <button class="nav-icon-btn" id="btn-op" data-tooltip="OP PvP" onclick="switchKit('op')">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEwklEQVR42sWYXW8d5RHHf/PMs+f4nOOXGDtpDCKKgoAIKF8gn4CvUEoFRbSpWlG45gopIIVQFBoBygV9A1VIlfoR6A2oEkKoCMWJVRrKi5vExHaM43N299lnphfHOCnlIkbZMHcr7c7+duY//2e0cINx4vjL/trp152WI97ojRcvXWTW5zl56rTjFU89+aS0AXTDSY8dO+bBamKhZBkQVJme2sMvjj4m30uFYoaPz76NujFz8D5mZu9ibX2F37z8qscY+PUvj94UsHCjN7oEYIu19VW2LnzMR+++Ra+5jI1GlGXJiy+d9FOvvOa3rEIeHEWxOMHGpTUklSz9422ubK5x5MhRUpEZpooXT55yRXj6qV9JqxUiCBFh7ra9rKxcpEo1OWc6RWBx8S+c//BvVKuf0pQj6qri1G9f8eefe8Fbq1CRIUmHT5YW6XYDWjhmDVubFf2BU9sKS+f+xeTsHdxz70Nc+GKdf3/+WXsVsu0GFBqo6xLLdi2JQ6EFNjTyxibv//2v9PvTZMvtAYk57hlV2PeDfaQmETTQ5IacEphjNeRGWF1ZJWqHqLE9oKRQmCFuzN02R24yTWoQlFGVqVMmWWYwt8AoJHIOVFXVoqiBgJElgkdydsyFGCPuzrCqyRL455kP8KpBzAkh8MADD3prQHjg4KHDQCDqBEGEoOCeIRueM0W/h6tjbpRlibu3pCFRviqHbFU1Z86c3XlUZPxC97GAb9+/j4mig5kRNDA5mGxn7IerW9SeuHz+LKryrV+em/+fKo3aDhAaCRLpRKXX7ZIz5Jxxl+1KCdkSW8OrBIQQI5YNEWmnZS4gPhb2wu37ca+pqorRsBpDaaToTjA/c5BkJSZjSDNrzxj1ui65O2aGByXLOI1qJPkIM6NwoU71/xjoTZ8yxRkl48raJrnx7SNOEDfcHBFh6eyHNI0gIlRVxcbGRntAg/4kd919Pzk7vd4AEUVEcDIShJwq9t+5QIhC0ECQwLmlRWlH1EAT4NPlC7C1QVEoM3umMGtQnBiEbrdLXVb0Oj02NzcpOkV7Tl1kaNTw0Zc4FUENMFQVEcXNKMshZonvcKZ+N1GLB0JQ5ufnKYpi3C73nWlKTUKks20BtmtB73rsgxviAVXdmbSvYUSEEDssLBwmWY0E2bUH7QooxEiUzGDQv+44kW1zHIN1YsHiuffG195yy5aXl1HJ9PozECJlamjsGpi7E1VRS3jK7WsIQM2YnNrPFyuXSY1TVRUpN5gYMUbMGqZnZ+l0e5g7Mba4oIkITTPN0vkPCKoQFJdraZqmYVSWYy3ptmG2qaGuBi7VW4gImhLqDYKNU3i4tsJZxqwZb5NtAg2m+8zO/ZBDdx9hoj+HiO7sQcnqsZ40sm/vYYzA+ldX2DO7pz2gEy8dl2eefZ6rtbL34IN0p+4k1VPgkbpOlHVFCIHY6eM+Frnb7kdtV6o7cODATg8effynnsoR1cYqw7Ul4oSTy2kWl94hZScE3XbzFoGujz+8/jsBeOSxnzszXfLny3Qm1gmxSzksAQO5hUBfxxu/Py0ATzz8E0/5Khf/8xlTA8X8MlF01/lu+k+nHz3yY+91emBjsf/pj2/KLa3QN+PPb4wBHn/0Z25h9479XzZua32qaJ6qAAAAAElFTkSuQmCC" alt="OP" class="protected-asset"> OP
+                    </button>
+                    <button class="nav-icon-btn" id="btn-spearmace" data-tooltip="SpearMace PvP" onclick="switchKit('spearmace')">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEo0lEQVR42sWX7W9TdRTHv7/z621HH9Z1dJQxxx6AGVbmJgxEI2xlAaKMJxMTjfrC+NYY4sMfYOJf4CuJ+sL3AlkkJpBlYkhQg7Cy4Qq0PKxs68M6dtuu7bp7e36+QkUMMtZ25+2953c/93zO79z7E1ilONC5Ux3Z/5r5y08/Y63XS1+OnJIAQKsF9PrAfnP00iVomgUQ4Jc7thkAYKkmxOcffFy8feUaCanQ8+ZBdL9xgL777As2TROKFaoOZHfUkNQAm7QASuHbr0/yhXCQQGBXjb06QB8df9fI3I9BKYW8x4aWQ3soEOjHN1+dZCIBr7uOZzM6ZYsFrgpQ04ZGZNI62vfuRGBgHylmjIyMQN5IgCRBQGBaT8mH91cEaGdzxx2/b2OzgEIoOYWSzwlWTBYp2VRMUgomSSABQDyaWxEgk7kNik2CpPUbm9lW60B/IIDz58+TEOBw6CZinMONO2FAPLrTKwI0Oh0Rs3ndGGjvYgWF7Tu2Y3h4GOFQiDWrBmskhTUWG62r8/DovbD8Z27F5tDUfEqbmLuOvQMBuN0eIiKWkgBWgFCw2qwshHgsT1QKqN/fahzrbsT3v93GolHC1lcPQN5MQoLo3N0goBQ31HowOhnWKl4hSQSlFBaNEna91It7cwvQwkkIAbBQ3OByMytwJDG959+5Ze+hV7Y0GdIicbhrPX4Yj8PgBDSrBosQgNWKth4/gmejmNFTtv/KL6uyE28PFltVikgKnArOYCKahCQB5xorInFda/J4jYcPnZpPaRUH6tvaYhzvaYSUhElah3MXfsV4NK4tZ42yKPM3rZ311jrqDm3z4cy1GCQRTaZCnM0XeblrrbipP33vuFFf564f7G7CjxNJFAzGxP0k2202JDN5W9WBLl8ZhUbMgkvYvauX8kUD8XROG59cnqqyKOvrbDEOd/nAEBgaiyFdiHIqk1nRCz4T0IvtPtW3e5e5kWcxNB5H2+bnKRIb5zqnA3E9r60E6JmU2a1Wvnw1CAGgVCohm83yUkm9H5pKaittgWVv+z5/i3GsewOggNOj00gXiog/yCJvmB0Li0t3Vwr01Mo2r3PNHx7ot7cihdPBGLZs3oRwbA7NDW4ks3mtXLPsqZX1but0Xh0bJ4MVIAC7fQ3W19ficmSmbDBPrazP32Yc7fIBChgai2EuW8DcQg6eWhdPROO2cgL9r7KtG+rPSGJcvDuPRLqAe4kHqHc5ENNzWkzPlf9P4UkXP3xr0CgsZDoG/Y0Ym06DSECSxLMOvRVVqL+rzdgkUmj3+zA0FoOeKyKhp7HW7aroKeU/geocNT6zxNCXSnTxVopvzczC63Yhns5r8XS+okCPKTvxztEiFvOfHOnyYfhGShlmiSwWTf0RTdgUoCp9jnukQgMvtBmtnERjpw9nr8ehF5YQn0uzx+1gVopRhRAA0NfRrQ7u22/WZC7h9LUYLAII3U/CWaPhdkLXUMUgAGivbTAjv48RQUEjgEuMBrez6jB/KxOAYoXgLSfSWRum56OVb5YnVajG4UBvoJ837eiBAoOE7UQynddWA+ivT8dz9V5DMQAhoBeyzbnFxfhqAP0Jjaj0xIKfncMAAAAASUVORK5CYII=" alt="SPEARMACE" class="protected-asset"> SPEARMACE
                     </button>
                     <button class="nav-icon-btn" id="btn-guide" data-tooltip="Гайд по тестированию" onclick="openPage('guide')">
                         📘 Гайд
@@ -432,6 +470,24 @@
                 <div class="hero-section">
                     <div class="hero-title">PRIZTIERS</div>
                     <div class="hero-sub">Соревновательная экосистема &amp; PvP Tier List платформа</div>
+                </div>
+
+                <div class="new-kits-poll-banner">
+                    <div>
+                        <div style="font-size: 14px; font-weight: 900; color: #fff;">📊 Опрос по новым китам и каналам Discord</div>
+                        <div style="font-size: 12px; color: #94a3b8;">Голосуйте за добавление новых дисциплин в тир-лист и каналы Discord:</div>
+                        <div class="new-kits-pills">
+                            <span class="new-kit-chip"><img src="data:image/png;base64,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" width="12" height="12" alt="" class="protected-asset"> SMP</span>
+                            <span class="new-kit-chip"><img src="data:image/png;base64,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" width="12" height="12" alt="" class="protected-asset"> UHC</span>
+                            <span class="new-kit-chip"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=" width="12" height="12" alt="" class="protected-asset"> AXE</span>
+                            <span class="new-kit-chip"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEwklEQVR42sWYXW8d5RHHf/PMs+f4nOOXGDtpDCKKgoAIKF8gn4CvUEoFRbSpWlG45gopIIVQFBoBygV9A1VIlfoR6A2oEkKoCMWJVRrKi5vExHaM43N299lnphfHOCnlIkbZMHcr7c7+duY//2e0cINx4vjL/trp152WI97ojRcvXWTW5zl56rTjFU89+aS0AXTDSY8dO+bBamKhZBkQVJme2sMvjj4m30uFYoaPz76NujFz8D5mZu9ibX2F37z8qscY+PUvj94UsHCjN7oEYIu19VW2LnzMR+++Ra+5jI1GlGXJiy+d9FOvvOa3rEIeHEWxOMHGpTUklSz9422ubK5x5MhRUpEZpooXT55yRXj6qV9JqxUiCBFh7ra9rKxcpEo1OWc6RWBx8S+c//BvVKuf0pQj6qri1G9f8eefe8Fbq1CRIUmHT5YW6XYDWjhmDVubFf2BU9sKS+f+xeTsHdxz70Nc+GKdf3/+WXsVsu0GFBqo6xLLdi2JQ6EFNjTyxibv//2v9PvTZMvtAYk57hlV2PeDfaQmETTQ5IacEphjNeRGWF1ZJWqHqLE9oKRQmCFuzN02R24yTWoQlFGVqVMmWWYwt8AoJHIOVFXVoqiBgJElgkdydsyFGCPuzrCqyRL455kP8KpBzAkh8MADD3prQHjg4KHDQCDqBEGEoOCeIRueM0W/h6tjbpRlibu3pCFRviqHbFU1Z86c3XlUZPxC97GAb9+/j4mig5kRNDA5mGxn7IerW9SeuHz+LKryrV+em/+fKo3aDhAaCRLpRKXX7ZIz5Jxxl+1KCdkSW8OrBIQQI5YNEWmnZS4gPhb2wu37ca+pqorRsBpDaaToTjA/c5BkJSZjSDNrzxj1ui65O2aGByXLOI1qJPkIM6NwoU71/xjoTZ8yxRkl48raJrnx7SNOEDfcHBFh6eyHNI0gIlRVxcbGRntAg/4kd919Pzk7vd4AEUVEcDIShJwq9t+5QIhC0ECQwLmlRWlH1EAT4NPlC7C1QVEoM3umMGtQnBiEbrdLXVb0Oj02NzcpOkV7Tl1kaNTw0Zc4FUENMFQVEcXNKMshZonvcKZ+N1GLB0JQ5ufnKYpi3C73nWlKTUKks20BtmtB73rsgxviAVXdmbSvYUSEEDssLBwmWY0E2bUH7QooxEiUzGDQv+44kW1zHIN1YsHiuffG195yy5aXl1HJ9PozECJlamjsGpi7E1VRS3jK7WsIQM2YnNrPFyuXSY1TVRUpN5gYMUbMGqZnZ+l0e5g7Mba4oIkITTPN0vkPCKoQFJdraZqmYVSWYy3ptmG2qaGuBi7VW4gImhLqDYKNU3i4tsJZxqwZb5NtAg2m+8zO/ZBDdx9hoj+HiO7sQcnqsZ40sm/vYYzA+ldX2DO7pz2gEy8dl2eefZ6rtbL34IN0p+4k1VPgkbpOlHVFCIHY6eM+Frnb7kdtV6o7cODATg8effynnsoR1cYqw7Ul4oSTy2kWl94hZScE3XbzFoGujz+8/jsBeOSxnzszXfLny3Qm1gmxSzksAQO5hUBfxxu/Py0ATzz8E0/5Khf/8xlTA8X8MlF01/lu+k+nHz3yY+91emBjsf/pj2/KLa3QN+PPb4wBHn/0Z25h9479XzZua32qaJ6qAAAAAElFTkSuQmCC" width="12" height="12" alt="" class="protected-asset"> OP</span>
+                            <span class="new-kit-chip"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEo0lEQVR42sWX7W9TdRTHv7/z621HH9Z1dJQxxx6AGVbmJgxEI2xlAaKMJxMTjfrC+NYY4sMfYOJf4CuJ+sL3AlkkJpBlYkhQg7Cy4Qq0PKxs68M6dtuu7bp7e36+QkUMMtZ25+2953c/93zO79z7E1ilONC5Ux3Z/5r5y08/Y63XS1+OnJIAQKsF9PrAfnP00iVomgUQ4Jc7thkAYKkmxOcffFy8feUaCanQ8+ZBdL9xgL777As2TROKFaoOZHfUkNQAm7QASuHbr0/yhXCQQGBXjb06QB8df9fI3I9BKYW8x4aWQ3soEOjHN1+dZCIBr7uOZzM6ZYsFrgpQ04ZGZNI62vfuRGBgHylmjIyMQN5IgCRBQGBaT8mH91cEaGdzxx2/b2OzgEIoOYWSzwlWTBYp2VRMUgomSSABQDyaWxEgk7kNik2CpPUbm9lW60B/IIDz58+TEOBw6CZinMONO2FAPLrTKwI0Oh0Rs3ndGGjvYgWF7Tu2Y3h4GOFQiDWrBmskhTUWG62r8/DovbD8Z27F5tDUfEqbmLuOvQMBuN0eIiKWkgBWgFCw2qwshHgsT1QKqN/fahzrbsT3v93GolHC1lcPQN5MQoLo3N0goBQ31HowOhnWKl4hSQSlFBaNEna91It7cwvQwkkIAbBQ3OByMytwJDG959+5Ze+hV7Y0GdIicbhrPX4Yj8PgBDSrBosQgNWKth4/gmejmNFTtv/KL6uyE28PFltVikgKnArOYCKahCQB5xorInFda/J4jYcPnZpPaRUH6tvaYhzvaYSUhElah3MXfsV4NK4tZ42yKPM3rZ311jrqDm3z4cy1GCQRTaZCnM0XeblrrbipP33vuFFf564f7G7CjxNJFAzGxP0k2202JDN5W9WBLl8ZhUbMgkvYvauX8kUD8XROG59cnqqyKOvrbDEOd/nAEBgaiyFdiHIqk1nRCz4T0IvtPtW3e5e5kWcxNB5H2+bnKRIb5zqnA3E9r60E6JmU2a1Wvnw1CAGgVCohm83yUkm9H5pKaittgWVv+z5/i3GsewOggNOj00gXiog/yCJvmB0Li0t3Vwr01Mo2r3PNHx7ot7cihdPBGLZs3oRwbA7NDW4ks3mtXLPsqZX1but0Xh0bJ4MVIAC7fQ3W19ficmSmbDBPrazP32Yc7fIBChgai2EuW8DcQg6eWhdPROO2cgL9r7KtG+rPSGJcvDuPRLqAe4kHqHc5ENNzWkzPlf9P4UkXP3xr0CgsZDoG/Y0Ym06DSECSxLMOvRVVqL+rzdgkUmj3+zA0FoOeKyKhp7HW7aroKeU/geocNT6zxNCXSnTxVopvzczC63Yhns5r8XS+okCPKTvxztEiFvOfHOnyYfhGShlmiSwWTf0RTdgUoCp9jnukQgMvtBmtnERjpw9nr8ehF5YQn0uzx+1gVopRhRAA0NfRrQ7u22/WZC7h9LUYLAII3U/CWaPhdkLXUMUgAGivbTAjv48RQUEjgEuMBrez6jB/KxOAYoXgLSfSWRum56OVb5YnVajG4UBvoJ837eiBAoOE7UQynddWA+ivT8dz9V5DMQAhoBeyzbnFxfhqAP0Jjaj0xIKfncMAAAAASUVORK5CYII=" width="12" height="12" alt="" class="protected-asset"> SPEARMACE</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn-action-sm" style="background: rgba(168,85,247,0.2); border-color: #a855f7; color: #fff;" onclick="switchKit('smp')">Открыть новые киты</button>
+                        <button class="btn-action-sm" onclick="openPage('links')">Перейти в Discord</button>
+                    </div>
                 </div>
 
                 <div class="kit-stats-bar">
@@ -508,16 +564,14 @@
                     </div>
                 </div>
 
-                <!-- Подиум Топ-3 -->
                 <div class="lb-podium-grid" id="leaderboardPodium"></div>
 
-                <!-- Калькулятор очков по дисциплинам -->
                 <div class="lb-table-card" style="margin-bottom: 16px; padding: 14px 18px;">
                     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px;">
-                        <span style="font-size: 13px; font-weight: 800; color: #fff;">🧮 Калькулятор очков по тирам</span>
+                        <span style="font-size: 13px; font-weight: 800; color: #fff;">🧮 Калькулятор очков по дисциплинам</span>
                         <span style="font-size: 12px; color: #c084fc; font-weight: 700;" id="ptsCalcResult">Итого: 0 очков</span>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;">
                         <div>
                             <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Beast</label>
                             <select id="calcBeastTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
@@ -557,10 +611,74 @@
                                 <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
                             </select>
                         </div>
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">SMP</label>
+                            <select id="calcSmpTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
+                                <option value="">Без тира (0)</option>
+                                <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
+                                <option value="LT1">LT1 (45)</option><option value="RLT1">RLT1 (40)</option>
+                                <option value="HT2">HT2 (30)</option><option value="RHT2">RHT2 (25)</option>
+                                <option value="LT2">LT2 (20)</option><option value="RLT2">RLT2 (15)</option>
+                                <option value="HT3">HT3 (10)</option><option value="LT3">LT3 (6)</option>
+                                <option value="HT4">HT4 (5)</option><option value="LT4">LT4 (4)</option>
+                                <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">UHC</label>
+                            <select id="calcUhcTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
+                                <option value="">Без тира (0)</option>
+                                <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
+                                <option value="LT1">LT1 (45)</option><option value="RLT1">RLT1 (40)</option>
+                                <option value="HT2">HT2 (30)</option><option value="RHT2">RHT2 (25)</option>
+                                <option value="LT2">LT2 (20)</option><option value="RLT2">RLT2 (15)</option>
+                                <option value="HT3">HT3 (10)</option><option value="LT3">LT3 (6)</option>
+                                <option value="HT4">HT4 (5)</option><option value="LT4">LT4 (4)</option>
+                                <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">AXE</label>
+                            <select id="calcAxeTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
+                                <option value="">Без тира (0)</option>
+                                <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
+                                <option value="LT1">LT1 (45)</option><option value="RLT1">RLT1 (40)</option>
+                                <option value="HT2">HT2 (30)</option><option value="RHT2">RHT2 (25)</option>
+                                <option value="LT2">LT2 (20)</option><option value="RLT2">RLT2 (15)</option>
+                                <option value="HT3">HT3 (10)</option><option value="LT3">LT3 (6)</option>
+                                <option value="HT4">HT4 (5)</option><option value="LT4">LT4 (4)</option>
+                                <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">OP</label>
+                            <select id="calcOpTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
+                                <option value="">Без тира (0)</option>
+                                <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
+                                <option value="LT1">LT1 (45)</option><option value="RLT1">RLT1 (40)</option>
+                                <option value="HT2">HT2 (30)</option><option value="RHT2">RHT2 (25)</option>
+                                <option value="LT2">LT2 (20)</option><option value="RLT2">RLT2 (15)</option>
+                                <option value="HT3">HT3 (10)</option><option value="LT3">LT3 (6)</option>
+                                <option value="HT4">HT4 (5)</option><option value="LT4">LT4 (4)</option>
+                                <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">SPEARMACE</label>
+                            <select id="calcSpearmaceTier" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="updatePointsCalculator()">
+                                <option value="">Без тира (0)</option>
+                                <option value="HT1">HT1 (60)</option><option value="RHT1">RHT1 (55)</option>
+                                <option value="LT1">LT1 (45)</option><option value="RLT1">RLT1 (40)</option>
+                                <option value="HT2">HT2 (30)</option><option value="RHT2">RHT2 (25)</option>
+                                <option value="LT2">LT2 (20)</option><option value="RLT2">RLT2 (15)</option>
+                                <option value="HT3">HT3 (10)</option><option value="LT3">LT3 (6)</option>
+                                <option value="HT4">HT4 (5)</option><option value="LT4">LT4 (4)</option>
+                                <option value="HT5">HT5 (3)</option><option value="LT5">LT5 (2)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Таблица остальных игроков -->
                 <div class="lb-table-card">
                     <div class="lb-table-toolbar">
                         <span style="font-size: 13px; color: #94a3b8;">Нажмите на игрока, чтобы открыть его карточку.</span>
@@ -589,7 +707,7 @@
                 <div class="guide-hero-card">
                     <div class="guide-badge-pill">📘 Гайд по тестированию</div>
                     <h2 style="color: #fff; font-size: 26px; font-weight: 900; margin-bottom: 8px;">Всё, что нужно знать о тестировании в PrizTiers</h2>
-                    <p style="color: #94a3b8; font-size: 14px; max-width: 620px; margin: 0 auto;">Пошаговый порядок получения тира по дисциплинам Beast, Mace и Carts, шкала тиров и ответы на частые вопросы.</p>
+                    <p style="color: #94a3b8; font-size: 14px; max-width: 620px; margin: 0 auto;">Пошаговый порядок получения тира по дисциплинам Beast, Mace, Carts и новым китам, шкала тиров и ответы на частые вопросы.</p>
                 </div>
 
                 <div class="info-block">
@@ -622,7 +740,6 @@
                     </div>
                 </div>
 
-                <!-- БЛОК С ТИРАМИ (ПЕРЕНЕСЁН С ГЛАВНОЙ НА ГАЙД) -->
                 <div class="home-tiers-section">
                     <div class="home-tiers-header">КАК УСТРОЕНЫ ТИРЫ</div>
                     <p class="home-tiers-sub">От LT5 внизу до HT1 наверху (включая редкие R-ранги). Чем выше ступень, тем больше за неё очков.</p>
@@ -722,7 +839,7 @@
                             <span>Сколько китов есть для тестирования?</span>
                             <span class="guide-faq-icon">+</span>
                         </button>
-                        <div class="guide-faq-body">На платформе представлены три основные дисциплины: Beast (Sword), Mace и Carts.</div>
+                        <div class="guide-faq-body">На платформе доступны основные дисциплины Beast, Mace и Carts, а также каналы для новых китов SMP, UHC, AXE, OP и SPEARMACE.</div>
                     </div>
                     <div class="guide-faq-item">
                         <button class="guide-faq-btn" onclick="toggleGuideFaq(this)">
@@ -1001,7 +1118,6 @@
 
     <div id="toast">Уведомление</div>
 
-    <!-- Модальное окно авторизации (Discord + Вход по коду) -->
     <div class="modal-overlay" id="authModal" onclick="closeModalOnBg(event, 'authModal')">
         <div class="modal-box">
             <h3 style="color: #fff; margin-bottom: 8px; font-size: 20px;">Авторизация</h3>
@@ -1011,7 +1127,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно ввода одноразового кода из бота -->
     <div class="modal-overlay" id="codeLoginModal" onclick="closeModalOnBg(event, 'codeLoginModal')">
         <div class="modal-box">
             <h3 style="color: #fff; margin-bottom: 8px; font-size: 20px;">Вход по коду из бота</h3>
@@ -1025,7 +1140,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно выбора никнейма после OAuth2 -->
     <div class="modal-overlay" id="postOAuthNickModal" onclick="closeModalOnBg(event, 'postOAuthNickModal')">
         <div class="modal-box" style="pointer-events: auto;">
             <h3 style="color: #fff; margin-bottom: 8px; font-size: 20px;">Выберите ваш никнейм</h3>
@@ -1049,7 +1163,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно входа в Админ-панель -->
     <div class="modal-overlay" id="adminLoginModal" onclick="closeModalOnBg(event, 'adminLoginModal')">
         <div class="modal-box">
             <h3 style="color: #fff; margin-bottom: 8px; font-size: 20px;">Панель Администратора</h3>
@@ -1067,7 +1180,6 @@
                 <span style="font-size: 11px; background: rgba(168,85,247,0.2); border: 1px solid #a855f7; color: #e9d5ff; padding: 3px 8px; border-radius: 6px;">Полный доступ</span>
             </div>
 
-            <!-- Статус бота доступен только в админ-панели -->
             <div class="admin-bot-status-box">
                 <div style="font-size: 12px; color: #cbd5e1; font-weight: 700;">Мониторинг Discord-бота (только админ):</div>
                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -1079,15 +1191,13 @@
                 </div>
             </div>
 
-            <!-- Вкладки админ-панели -->
             <div class="custom-nav-tabs" style="margin-bottom: 14px;">
                 <button class="c-tab-btn active" id="admTabBtn-issue" onclick="switchAdminTab('issue')">🏆 Выдача тира</button>
                 <button class="c-tab-btn" id="admTabBtn-profile" onclick="switchAdminTab('profile')">👤 Профиль / Ник</button>
                 <button class="c-tab-btn" id="admTabBtn-history" onclick="switchAdminTab('history')">📜 История матчей</button>
-                <button class="c-tab-btn" id="admTabBtn-tools" onclick="switchAdminTab('tools')">⚙️ База и Сезон</button>
+                <button class="c-tab-btn" id="admTabBtn-tools" onclick="switchAdminTab('tools')">⚙️ База игроков</button>
             </div>
 
-            <!-- ВКЛАДКА 1: ВЫДАЧА ТИРА -->
             <div id="admTab-issue" class="c-panel active">
                 <div style="display: flex; gap: 8px; margin-bottom: 10px;">
                     <input type="text" id="admPlayerNick" class="form-input" placeholder="Игровой ник (IGN)" style="margin-bottom: 0; flex: 2;" oninput="autoFillAdminPlayer()">
@@ -1098,9 +1208,14 @@
                     <div>
                         <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Дисциплина (Кит):</label>
                         <select id="admKitSelect" class="form-input" style="margin-top: 4px; margin-bottom: 0;" onchange="autoFillAdminPlayer()">
-                            <option value="beast">🗡️ Beast (Sword)</option>
-                            <option value="mace">🔨 Mace (Smash)</option>
-                            <option value="carts">🧨 Carts (Minecart)</option>
+                            <option value="beast">Beast (Sword)</option>
+                            <option value="mace">Mace (Smash)</option>
+                            <option value="carts">Carts (Minecart)</option>
+                            <option value="smp">SMP</option>
+                            <option value="uhc">UHC</option>
+                            <option value="axe">AXE</option>
+                            <option value="op">OP</option>
+                            <option value="spearmace">SPEARMACE</option>
                         </select>
                     </div>
                     <div>
@@ -1157,7 +1272,6 @@
                 <button class="btn-purple" onclick="adminSavePlayer()">✅ Выдать тир и записать результат</button>
             </div>
 
-            <!-- ВКЛАДКА 2: УПРАВЛЕНИЕ ПРОФИЛЕМ / RENAME / СКИН -->
             <div id="admTab-profile" class="c-panel">
                 <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">Принудительная смена никнейма (аналог Rename без КД) или удаление игрока:</p>
                 <label style="font-size: 11px; color: #94a3b8; font-weight: 700;">Текущий никнейм игрока:</label>
@@ -1171,7 +1285,6 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА 3: ИСТОРИЯ МАТЧЕЙ -->
             <div id="admTab-history" class="c-panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <span style="font-size: 12px; color: #94a3b8; font-weight: 700;">Последние выданные тиры и поединки:</span>
@@ -1182,7 +1295,6 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА 4: ИНСТРУМЕНТЫ БАЗЫ И СЕЗОНА -->
             <div id="admTab-tools" class="c-panel">
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(168,85,247,0.2); border-color: #a855f7;" onclick="adminGenerateDemoPlayers()">✨ Сгенерировать демо-игроков</button>
@@ -1190,7 +1302,6 @@
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(56,189,248,0.15); border-color: #38bdf8; color: #7dd3fc;" onclick="triggerAdminImportJson()">📤 Импортировать базу игроков (.json)</button>
                     <input type="file" id="admImportJsonInput" accept=".json,application/json" style="display: none;" onchange="adminImportDatabaseJson(event)">
                     <button class="btn-action-sm" style="width: 100%; padding: 10px; background: rgba(245,158,11,0.2); border-color: #f59e0b; color: #fcd34d;" onclick="adminResetViews()">🔄 Сбросить статистику просмотров</button>
-                    <button class="btn-action-sm btn-danger-sm" style="width: 100%; padding: 10px;" onclick="adminSeasonReset()">🏆 Завершить сезон (Сбросить все тиры у всех игроков)</button>
                 </div>
             </div>
 
@@ -1201,7 +1312,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно Панели разработчика -->
     <div class="modal-overlay" id="devModal" onclick="closeModalOnBg(event, 'devModal')">
         <div class="modal-box" style="width: 480px;">
             <h3 style="color: #c084fc; font-size: 20px; margin-bottom: 12px;">Панель разработчика (Мастер-код)</h3>
@@ -1225,7 +1335,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно редактора кода -->
     <div class="modal-overlay" id="codeEditorModal" onclick="closeModalOnBg(event, 'codeEditorModal')">
         <div class="modal-box" style="width: 700px;">
             <h3 style="color: #fff; font-size: 18px; margin-bottom: 10px;">Редактор кода сайта</h3>
@@ -1298,6 +1407,8 @@
         const ADMIN_DM_TARGET_USERNAME = "bigkeks";
         const ADMIN_DM_TARGET_ID = "bigkeks";
 
+        const ALL_KITS = ["beast", "mace", "carts", "smp", "uhc", "axe", "op", "spearmace"];
+
         const DISCORD_KITS_WIDGETS = {
             beast: "3U6TyVPwbV",
             mace: "auxRZMsrM",
@@ -1307,7 +1418,12 @@
         const KIT_ICONS = {
             beast: "https://minecraft.wiki/images/Diamond_Sword_JE3_BE3.png",
             mace: "https://minecraft.wiki/images/Mace_JE1_BE1.png",
-            carts: "https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png"
+            carts: "https://minecraft.wiki/images/Minecart_with_TNT_JE2_BE2.png",
+            smp: "data:image/png;base64,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",
+            uhc: "data:image/png;base64,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",
+            axe: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFTklEQVR42r2Yz29cVxXHP+fe++6b8XjGGY89iZM0URupgUpQ1OIQtUWwqBDsEOqeLWKDugKp/AMIZdEF/wEIuiGCDYIFCyhqUSqgcYL6gwqlbbBxbMfzw/N+3ntYjDRqCRQTj32kt7v33e/7fr/n3HOeMOc4t/5ZLeoIakAihhobYfPNt+Qw+928AYUQqTyUJiAamaTCytgcev9cAW1nmT7x9a8yWPYwLiEKaKBKDHuquizyP1mSeYFpP/Ok1nXghVd+xNvtFpUoAAs4zu4ecP2b30FsRfXqTTkRhpxtgRagDjFm9qUaA6oBMFNfHadkvc99SnPryWzK1evXGEXl1xu38ZXHqKG7fIphfcDqRIAIwK6q9j5BuqMxpA7BE9OErZanqAMSHYaIMM0wjQ5DMdsSj5Oh3dUEul1wjotDZagGbbWYDEdYsRRZjiVhMt7nQrGPiJJ9eBPNNlWaazI3U/euPqWDOvCNn/6Qd/ueNKTcubGBr4TaQIJgUYiKaJuzgzv4l3+AGOXiYo9OYtluKj++/u4D55uHUkoVlyQkmtCoHEbBWY9XIUGITDPeq4Id0q5TvApeDWkzgN0hVnF+kkUMOEcQQxSD1QQxQrPZhLKgFgUD9/6xhR4MuVlHnv3WiyA1r1x7mbXxPqbcmx+gYCIuRhZLUPWgntotkElKFgM1JZ3SwnAXS8LQeTZ6K6CGncUlLuwUjMoSCMxHMmc4yDJaRmgPdukMdmjf36NT5pwfT3ji3jZGt8ilJqSeUV0wscIgVUh6/LPbZdR/lL2sUID9/T2dS6XuXPmMjlOLiKAhIqHivBlyMWaYOqHx0kvclQStKjY/+BCj0H38Ep6CRqi5fe0n+LLk1qt/4JGkLUdOe69KEiMiFpUKtQFvS0xxQO4b1GmkqB24AhMNSYyUNlKoQ0QIqqgRko/AOBKgnRu3Zgyvr1/WRj3g8vkzLJaeXBb52be/yzDtEJcW+PT3vwdArgaoZtn6766Z2112yippXeGqEtGISM1KltMpPXdTKM30YKOAWFQDGi0aK4jxaKZ+wOT5PQ3VJnm1S8GECSmFBHrnHsFLk7RIWI2B1ajTJyjpnW3SsmApC5xJWzIXU3/52SfVFmMaFDyzvkZV7fHb379HNYbCGl776xbpYl/eyfb18a89/7FKRozwu7/IXO+yPBtxOt7Hk9GoW7SdY/8eOC/kcYl0sS8AS402rqw+IkiEoqL+D+98uDoUNlV1S30cEKgoRTigy7jqUQUYmza59bP1p8VKr1B6RaBXBLql0ql0fh3jV75wRhuhpH96eepSY3njxjvU6th4bxtZWH5oK/zfDOnB3zUpJsQ6J9YlSkVQJSsSYr1yJDCHZijkO/r8l65gqzFpzDnX72BNg9f/+DcmDpJGk1sfZHPpzw/FkG2siCvv04hjfGKxXvGJwVnAdchDOrfJ5VCANO5ooiUJOUGVSpuUJFSSEMQRZH7T1CfS/Nz6ZW1W+4iM+eLnH6MRxwzCGr/8zZ8oJeGtu6O5jVGHYsiYIZgxhhpRN1sexKHzH3r/O0PPXb2kViNdX9M/ZUic8sZr7yPASOD2JsIxhXmw6O1qo9qlVe2x7ByNGmw8IEYY4xnbZY4zHpTsoMbaDLEFta/JrcO6PiNgLA002mMFNKP+ylOP6lo9wdn7PP30JaxGfv6Lt6dtQ8Px5/dL4QRixtBCGhAZTZumOD273UqpNGUwbnNSMUuVhghnL/Sxrs31X21gUs/rG28SkmVc87ScFKAZQ/21VZSCsizJa2GYJZSme6JgPgYomDjtU3T626QST7p45kTBAPwLcpJ6vQQ6ChEAAAAASUVORK5CYII=",
+            op: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEwklEQVR42sWYXW8d5RHHf/PMs+f4nOOXGDtpDCKKgoAIKF8gn4CvUEoFRbSpWlG45gopIIVQFBoBygV9A1VIlfoR6A2oEkKoCMWJVRrKi5vExHaM43N299lnphfHOCnlIkbZMHcr7c7+duY//2e0cINx4vjL/trp152WI97ojRcvXWTW5zl56rTjFU89+aS0AXTDSY8dO+bBamKhZBkQVJme2sMvjj4m30uFYoaPz76NujFz8D5mZu9ibX2F37z8qscY+PUvj94UsHCjN7oEYIu19VW2LnzMR+++Ra+5jI1GlGXJiy+d9FOvvOa3rEIeHEWxOMHGpTUklSz9422ubK5x5MhRUpEZpooXT55yRXj6qV9JqxUiCBFh7ra9rKxcpEo1OWc6RWBx8S+c//BvVKuf0pQj6qri1G9f8eefe8Fbq1CRIUmHT5YW6XYDWjhmDVubFf2BU9sKS+f+xeTsHdxz70Nc+GKdf3/+WXsVsu0GFBqo6xLLdi2JQ6EFNjTyxibv//2v9PvTZMvtAYk57hlV2PeDfaQmETTQ5IacEphjNeRGWF1ZJWqHqLE9oKRQmCFuzN02R24yTWoQlFGVqVMmWWYwt8AoJHIOVFXVoqiBgJElgkdydsyFGCPuzrCqyRL455kP8KpBzAkh8MADD3prQHjg4KHDQCDqBEGEoOCeIRueM0W/h6tjbpRlibu3pCFRviqHbFU1Z86c3XlUZPxC97GAb9+/j4mig5kRNDA5mGxn7IerW9SeuHz+LKryrV+em/+fKo3aDhAaCRLpRKXX7ZIz5Jxxl+1KCdkSW8OrBIQQI5YNEWmnZS4gPhb2wu37ca+pqorRsBpDaaToTjA/c5BkJSZjSDNrzxj1ui65O2aGByXLOI1qJPkIM6NwoU71/xjoTZ8yxRkl48raJrnx7SNOEDfcHBFh6eyHNI0gIlRVxcbGRntAg/4kd919Pzk7vd4AEUVEcDIShJwq9t+5QIhC0ECQwLmlRWlH1EAT4NPlC7C1QVEoM3umMGtQnBiEbrdLXVb0Oj02NzcpOkV7Tl1kaNTw0Zc4FUENMFQVEcXNKMshZonvcKZ+N1GLB0JQ5ufnKYpi3C73nWlKTUKks20BtmtB73rsgxviAVXdmbSvYUSEEDssLBwmWY0E2bUH7QooxEiUzGDQv+44kW1zHIN1YsHiuffG195yy5aXl1HJ9PozECJlamjsGpi7E1VRS3jK7WsIQM2YnNrPFyuXSY1TVRUpN5gYMUbMGqZnZ+l0e5g7Mba4oIkITTPN0vkPCKoQFJdraZqmYVSWYy3ptmG2qaGuBi7VW4gImhLqDYKNU3i4tsJZxqwZb5NtAg2m+8zO/ZBDdx9hoj+HiO7sQcnqsZ40sm/vYYzA+ldX2DO7pz2gEy8dl2eefZ6rtbL34IN0p+4k1VPgkbpOlHVFCIHY6eM+Frnb7kdtV6o7cODATg8effynnsoR1cYqw7Ul4oSTy2kWl94hZScE3XbzFoGujz+8/jsBeOSxnzszXfLny3Qm1gmxSzksAQO5hUBfxxu/Py0ATzz8E0/5Khf/8xlTA8X8MlF01/lu+k+nHz3yY+91emBjsf/pj2/KLa3QN+PPb4wBHn/0Z25h9479XzZua32qaJ6qAAAAAElFTkSuQmCC",
+            spearmace: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEo0lEQVR42sWX7W9TdRTHv7/z621HH9Z1dJQxxx6AGVbmJgxEI2xlAaKMJxMTjfrC+NYY4sMfYOJf4CuJ+sL3AlkkJpBlYkhQg7Cy4Qq0PKxs68M6dtuu7bp7e36+QkUMMtZ25+2953c/93zO79z7E1ilONC5Ux3Z/5r5y08/Y63XS1+OnJIAQKsF9PrAfnP00iVomgUQ4Jc7thkAYKkmxOcffFy8feUaCanQ8+ZBdL9xgL777As2TROKFaoOZHfUkNQAm7QASuHbr0/yhXCQQGBXjb06QB8df9fI3I9BKYW8x4aWQ3soEOjHN1+dZCIBr7uOZzM6ZYsFrgpQ04ZGZNI62vfuRGBgHylmjIyMQN5IgCRBQGBaT8mH91cEaGdzxx2/b2OzgEIoOYWSzwlWTBYp2VRMUgomSSABQDyaWxEgk7kNik2CpPUbm9lW60B/IIDz58+TEOBw6CZinMONO2FAPLrTKwI0Oh0Rs3ndGGjvYgWF7Tu2Y3h4GOFQiDWrBmskhTUWG62r8/DovbD8Z27F5tDUfEqbmLuOvQMBuN0eIiKWkgBWgFCw2qwshHgsT1QKqN/fahzrbsT3v93GolHC1lcPQN5MQoLo3N0goBQ31HowOhnWKl4hSQSlFBaNEna91It7cwvQwkkIAbBQ3OByMytwJDG959+5Ze+hV7Y0GdIicbhrPX4Yj8PgBDSrBosQgNWKth4/gmejmNFTtv/KL6uyE28PFltVikgKnArOYCKahCQB5xorInFda/J4jYcPnZpPaRUH6tvaYhzvaYSUhElah3MXfsV4NK4tZ42yKPM3rZ311jrqDm3z4cy1GCQRTaZCnM0XeblrrbipP33vuFFf564f7G7CjxNJFAzGxP0k2202JDN5W9WBLl8ZhUbMgkvYvauX8kUD8XROG59cnqqyKOvrbDEOd/nAEBgaiyFdiHIqk1nRCz4T0IvtPtW3e5e5kWcxNB5H2+bnKRIb5zqnA3E9r60E6JmU2a1Wvnw1CAGgVCohm83yUkm9H5pKaittgWVv+z5/i3GsewOggNOj00gXiog/yCJvmB0Li0t3Vwr01Mo2r3PNHx7ot7cihdPBGLZs3oRwbA7NDW4ks3mtXLPsqZX1but0Xh0bJ4MVIAC7fQ3W19ficmSmbDBPrazP32Yc7fIBChgai2EuW8DcQg6eWhdPROO2cgL9r7KtG+rPSGJcvDuPRLqAe4kHqHc5ENNzWkzPlf9P4UkXP3xr0CgsZDoG/Y0Ym06DSECSxLMOvRVVqL+rzdgkUmj3+zA0FoOeKyKhp7HW7aroKeU/geocNT6zxNCXSnTxVopvzczC63Yhns5r8XS+okCPKTvxztEiFvOfHOnyYfhGShlmiSwWTf0RTdgUoCp9jnukQgMvtBmtnERjpw9nr8ehF5YQn0uzx+1gVopRhRAA0NfRrQ7u22/WZC7h9LUYLAII3U/CWaPhdkLXUMUgAGivbTAjv48RQUEjgEuMBrez6jB/KxOAYoXgLSfSWRum56OVb5YnVajG4UBvoJ837eiBAoOE7UQynddWA+ivT8dz9V5DMQAhoBeyzbnFxfhqAP0Jjaj0xIKfncMAAAAASUVORK5CYII="
         };
 
         const TIER_WEIGHTS = {
@@ -1323,7 +1439,6 @@
         let botKitTiersData = null;
         let loggedInUser = localStorage.getItem('priz_ign') || null;
         let lastNickChange = localStorage.getItem('priz_last_nick_change') || 0;
-        // Привязка 1 ник = 1 Discord аккаунт (и обратная привязка Discord ID -> ник)
         window.discordNickBindings = {};
         try {
             window.discordNickBindings = JSON.parse(localStorage.getItem('priz_discord_nick_bindings') || '{}');
@@ -1394,7 +1509,6 @@
                 return { ok: false, error: 'Не указан никнейм или Discord аккаунт.' };
             }
 
-            // Проверяем, не занят ли этот ник другим Discord аккаунтом
             const existingBinding = getNickBindingInfo(cleanNick);
             if (existingBinding && normalizeDiscordId(existingBinding.discord_id) !== dId) {
                 return {
@@ -1403,7 +1517,6 @@
                 };
             }
 
-            // Отвязываем старые ники этого же Discord аккаунта при смене ника на сайте
             Object.keys(window.discordNickBindings).forEach(key => {
                 if (normalizeDiscordId(window.discordNickBindings[key].discord_id) === dId && key !== nKey) {
                     delete window.discordNickBindings[key];
@@ -1423,13 +1536,9 @@
 
             if (!window.playersData[cleanNick]) {
                 window.playersData[cleanNick] = {
-                    beast: '0',
-                    mace: '0',
-                    carts: '0',
-                    title: '',
-                    server: '',
-                    ping: '',
-                    discord_id: dId
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: '', discord_id: dId
                 };
             } else {
                 window.playersData[cleanNick].discord_id = dId;
@@ -1439,7 +1548,6 @@
             return { ok: true, nickname: cleanNick, discord_id: dId };
         }
 
-        // Объединяет всех участников из лидерборда, китов и бота, чтобы участники видели друг друга всегда (даже без регистрации)
         function getAllLeaderboardParticipants() {
             const combined = {};
 
@@ -1450,41 +1558,32 @@
                 const targetKey = existingKey || nick;
                 if (!combined[targetKey]) {
                     combined[targetKey] = {
-                        beast: '0',
-                        mace: '0',
-                        carts: '0',
-                        title: '',
-                        server: '',
-                        ping: '',
-                        discord_id: ''
+                        beast: '0', mace: '0', carts: '0',
+                        smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                        title: '', server: '', ping: '', discord_id: ''
                     };
                 }
                 return targetKey;
             };
 
-            // 1. База игроков сайта (включая незарегистрированных / добавленных админом или ботом)
             if (window.playersData && typeof window.playersData === 'object') {
                 Object.keys(window.playersData).forEach(nick => {
                     const key = ensureEntry(nick);
                     if (!key) return;
                     const p = window.playersData[nick] || {};
-                    combined[key] = {
-                        ...combined[key],
-                        ...p,
-                        beast: (p.beast && p.beast !== '0') ? p.beast : (combined[key].beast || '0'),
-                        mace: (p.mace && p.mace !== '0') ? p.mace : (combined[key].mace || '0'),
-                        carts: (p.carts && p.carts !== '0') ? p.carts : (combined[key].carts || '0')
-                    };
+                    combined[key] = { ...combined[key], ...p };
+                    ALL_KITS.forEach(k => {
+                        combined[key][k] = (p[k] && p[k] !== '0') ? p[k] : (combined[key][k] || '0');
+                    });
                 });
             }
 
-            // 2. Данные из бота по китам (если есть)
             if (botKitTiersData && typeof botKitTiersData === 'object') {
                 Object.keys(botKitTiersData).forEach(nick => {
                     const key = ensureEntry(nick);
                     if (!key) return;
                     const bp = botKitTiersData[nick] || {};
-                    ['beast', 'mace', 'carts'].forEach(k => {
+                    ALL_KITS.forEach(k => {
                         if (bp[k] && bp[k] !== '0') {
                             combined[key][k] = bp[k];
                         }
@@ -1496,7 +1595,6 @@
                 });
             }
 
-            // 3. Привязанные ники по Discord ID
             if (window.discordNickBindings && typeof window.discordNickBindings === 'object') {
                 Object.keys(window.discordNickBindings).forEach(nKey => {
                     const bInfo = window.discordNickBindings[nKey];
@@ -1561,7 +1659,7 @@
         function calculatePlayerScore(playerData) {
             if (!playerData) return 0;
             let total = 0;
-            ['beast', 'mace', 'carts'].forEach(kit => {
+            ALL_KITS.forEach(kit => {
                 const tier = (playerData[kit] || '').toUpperCase();
                 if (tier && TIER_WEIGHTS[tier]) {
                     total += TIER_WEIGHTS[tier];
@@ -1579,10 +1677,16 @@
 
         function updatePointsCalculator() {
             try {
-                const b = (document.getElementById('calcBeastTier')?.value || '').toUpperCase();
-                const m = (document.getElementById('calcMaceTier')?.value || '').toUpperCase();
-                const c = (document.getElementById('calcCartsTier')?.value || '').toUpperCase();
-                const pts = (TIER_WEIGHTS[b] || 0) + (TIER_WEIGHTS[m] || 0) + (TIER_WEIGHTS[c] || 0);
+                const ids = [
+                    'calcBeastTier', 'calcMaceTier', 'calcCartsTier',
+                    'calcSmpTier', 'calcUhcTier', 'calcAxeTier',
+                    'calcOpTier', 'calcSpearmaceTier'
+                ];
+                let pts = 0;
+                ids.forEach(id => {
+                    const val = (document.getElementById(id)?.value || '').toUpperCase();
+                    if (val && TIER_WEIGHTS[val]) pts += TIER_WEIGHTS[val];
+                });
                 const el = document.getElementById('ptsCalcResult');
                 if (el) el.innerText = `Итого: ${pts} очков`;
             } catch (e) {}
@@ -1636,6 +1740,73 @@
             if (document.getElementById('page-tier')?.classList.contains('active')) {
                 renderTierGrid();
             }
+        }
+
+        function getAuthHeaders() {
+            const headers = { 'Content-Type': 'application/json' };
+            if (loggedInUser) headers['X-Priz-User'] = loggedInUser;
+            if (sessionAccountId) headers['X-Discord-Id'] = sessionAccountId;
+            return headers;
+        }
+
+        async function verifyAdminOnBackend(password) {
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 3000);
+                const res = await fetch(`${BACKEND_URL}/api/admin/auth`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({
+                        password,
+                        nickname: loggedInUser || null,
+                        discord_id: sessionAccountId || null
+                    }),
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+                if (res.status === 404 || res.status === 405) {
+                    return { checked: false, authorized: true };
+                }
+                if (!res.ok) {
+                    return { checked: true, authorized: false };
+                }
+                const data = await res.json().catch(() => ({}));
+                if (typeof data.authorized === 'boolean') {
+                    return { checked: true, authorized: data.authorized };
+                }
+                if (typeof data.success === 'boolean') {
+                    return { checked: true, authorized: data.success };
+                }
+                return { checked: true, authorized: true };
+            } catch (e) {
+                return { checked: false, authorized: true };
+            }
+        }
+
+        async function syncTierIssueToBackendAndBot(payload) {
+            const endpoints = ['/api/bot/set-tier', '/api/admin/issue-tier'];
+            for (const ep of endpoints) {
+                try {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 3500);
+                    const res = await fetch(`${BACKEND_URL}${ep}`, {
+                        method: 'POST',
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
+                    });
+                    clearTimeout(timer);
+                    if (res.ok) {
+                        const data = await res.json().catch(() => ({}));
+                        if (data && data.players && typeof data.players === 'object') {
+                            botKitTiersData = data.players;
+                        }
+                        refreshBotKitTiersStatus();
+                        return true;
+                    }
+                } catch (e) {}
+            }
+            return false;
         }
 
         function detectDeviceInfo() {
@@ -2279,9 +2450,9 @@
             try {
                 let localData = localStorage.getItem('priz_players_db');
                 window.playersData = localData ? JSON.parse(localData) : {
-                    "Prizrit": { beast: "HT1", mace: "HT1", carts: "LT2", title: "👑 Creator", server: "PriZriT", ping: "25ms" },
-                    "ShadowPvP": { beast: "LT2", mace: "HT1", carts: "LT3", title: "⚡ Legend", server: "PriZriT", ping: "40ms" },
-                    "BlockMaster": { beast: "LT3", mace: "LT2", carts: "HT1", title: "", server: "PriZriT", ping: "55ms" }
+                    "Prizrit": { beast: "HT1", mace: "HT1", carts: "LT2", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "👑 Creator", server: "PriZriT", ping: "25ms" },
+                    "ShadowPvP": { beast: "LT2", mace: "HT1", carts: "LT3", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "⚡ Legend", server: "PriZriT", ping: "40ms" },
+                    "BlockMaster": { beast: "LT3", mace: "LT2", carts: "HT1", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "", server: "PriZriT", ping: "55ms" }
                 };
                 window.playerViews = JSON.parse(localStorage.getItem('priz_views_db') || '{}');
                 window.playerBgTheme = JSON.parse(localStorage.getItem('priz_player_bgs') || '{}');
@@ -2317,7 +2488,7 @@
             try {
                 await fetch(`${BACKEND_URL}/api/data/save`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify({
                         players: window.playersData,
                         views: window.playerViews,
@@ -2444,7 +2615,11 @@
         function renamePlayerRecords(oldNick, newNick) {
             if (!oldNick || !newNick || oldNick === newNick) return;
             if (!window.playersData[oldNick]) {
-                window.playersData[newNick] = { beast: "0", mace: "0", carts: "0", title: '' };
+                window.playersData[newNick] = {
+                    beast: "0", mace: "0", carts: "0",
+                    smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0",
+                    title: ''
+                };
             } else {
                 window.playersData[newNick] = { ...window.playersData[oldNick] };
                 delete window.playersData[oldNick];
@@ -2500,20 +2675,30 @@
         }
 
         function switchKit(kit) {
-            currentKit = kit;
+            currentKit = String(kit || 'beast').toLowerCase();
             openPage('tier');
 
             document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById(`btn-${kit}`);
+            const btn = document.getElementById(`btn-${currentKit}`);
             if (btn) btn.classList.add('active');
 
             const wrapper = document.getElementById('tierWrapper');
             let title = document.getElementById('kitTitle');
             if (wrapper) wrapper.className = 'tier-table-wrapper';
 
-            if (kit === 'beast') { if(wrapper)wrapper.classList.add('theme-beast'); if(title)title.innerText = 'BEAST TIER LIST'; }
-            else if (kit === 'mace') { if(wrapper)wrapper.classList.add('theme-mace'); if(title)title.innerText = 'MACE TIER LIST'; }
-            else if (kit === 'carts') { if(wrapper)wrapper.classList.add('theme-carts'); if(title)title.innerText = 'CARTS TIER LIST'; }
+            if (currentKit === 'beast') {
+                if (wrapper) wrapper.classList.add('theme-beast');
+                if (title) title.innerText = 'BEAST TIER LIST';
+            } else if (currentKit === 'mace') {
+                if (wrapper) wrapper.classList.add('theme-mace');
+                if (title) title.innerText = 'MACE TIER LIST';
+            } else if (currentKit === 'carts') {
+                if (wrapper) wrapper.classList.add('theme-carts');
+                if (title) title.innerText = 'CARTS TIER LIST';
+            } else {
+                if (wrapper) wrapper.classList.add('theme-beast');
+                if (title) title.innerText = `${currentKit.toUpperCase()} TIER LIST`;
+            }
 
             renderTierGrid();
             refreshBotKitTiersStatus();
@@ -2567,14 +2752,14 @@
         }
 
         function buildKitPillsHtml(p) {
-            const kits = ['beast', 'mace', 'carts'];
             let html = '';
-            kits.forEach(k => {
+            ALL_KITS.forEach(k => {
                 const tierVal = (p[k] || '').toUpperCase();
                 if (tierVal && TIER_WEIGHTS[tierVal]) {
                     let tierNum = tierVal.replace(/[^0-9]/g, '') || '1';
                     const safeTier = escapeHTML(tierVal);
-                    html += `<span class="lb-kit-pill tier-${tierNum}"><img src="${KIT_ICONS[k]}" alt="" class="protected-asset">${safeTier}</span>`;
+                    const iconHtml = KIT_ICONS[k] ? `<img src="${KIT_ICONS[k]}" alt="" class="protected-asset">` : `<span>${k.toUpperCase()}:</span>`;
+                    html += `<span class="lb-kit-pill tier-${tierNum}">${iconHtml}${safeTier}</span>`;
                 }
             });
             return html || `<span style="font-size: 11px; color: #64748b;">—</span>`;
@@ -2776,7 +2961,7 @@
             let badgesContainer = document.getElementById('modalTierBadges');
             if (badgesContainer) {
                 badgesContainer.innerHTML = '';
-                ['beast', 'mace', 'carts'].forEach(k => {
+                ALL_KITS.forEach(k => {
                     const tierVal = (data[k] || '').toUpperCase();
                     if (tierVal && TIER_WEIGHTS[tierVal]) {
                         let tierNum = tierVal.replace(/[^0-9]/g, '') || '1';
@@ -2797,22 +2982,20 @@
         function renderProfileKitCards(data) {
             const grid = document.getElementById('profileKitSlotsGrid');
             if (!grid) return;
-            const kits = [
-                { key: 'beast', label: 'BEAST' },
-                { key: 'mace', label: 'MACE' },
-                { key: 'carts', label: 'CARTS' }
-            ];
-            grid.innerHTML = kits.map(k => {
-                const tierVal = ((data && data[k.key]) || '').toUpperCase();
+            grid.innerHTML = ALL_KITS.map(k => {
+                const tierVal = ((data && data[k]) || '').toUpperCase();
                 const hasTier = Boolean(tierVal && TIER_WEIGHTS[tierVal]);
                 const pts = hasTier ? TIER_WEIGHTS[tierVal] : 0;
                 const tierNum = hasTier ? (tierVal.replace(/[^0-9]/g, '') || '1') : '5';
+                const iconPart = KIT_ICONS[k]
+                    ? `<img src="${KIT_ICONS[k]}" width="20" height="20" alt="" class="protected-asset">`
+                    : `<span style="font-size:12px; font-weight:900; color:#c084fc;">#</span>`;
                 return `
                     <div class="profile-kit-slot">
                         <div style="display:flex; align-items:center; gap:8px;">
-                            <img src="${KIT_ICONS[k.key]}" width="20" height="20" alt="" class="protected-asset">
+                            ${iconPart}
                             <div>
-                                <div style="font-size:12px; font-weight:800; color:#fff;">${k.label}</div>
+                                <div style="font-size:12px; font-weight:800; color:#fff;">${k.toUpperCase()}</div>
                                 <div style="font-size:11px; color:#94a3b8;">${pts} очков</div>
                             </div>
                         </div>
@@ -2895,7 +3078,7 @@
                 badgesContainer.innerHTML = '';
                 let hasTiers = false;
 
-                ['beast', 'mace', 'carts'].forEach(k => {
+                ALL_KITS.forEach(k => {
                     const tierVal = (data[k] || '').toUpperCase();
                     if (tierVal && TIER_WEIGHTS[tierVal]) {
                         hasTiers = true;
@@ -3093,11 +3276,17 @@
             autoFillAdminPlayer();
         }
 
-        function loginAdmin() {
+        async function loginAdmin() {
             const inputEl = document.getElementById('adminPassInput');
             let input = inputEl ? inputEl.value.trim() : '';
             
             if (input === ADMIN_PASS) {
+                const backendAuth = await verifyAdminOnBackend(input);
+                if (backendAuth.checked && !backendAuth.authorized) {
+                    alert('Сервер отклонил права доступа администратора!');
+                    return;
+                }
+
                 const loginModal = document.getElementById('adminLoginModal');
                 if (loginModal) loginModal.style.display = 'none';
                 
@@ -3147,10 +3336,10 @@
         }
 
         function adminGenerateDemoPlayers() {
-            window.playersData["Prizrit"] = { beast: "HT1", mace: "HT1", carts: "LT2", title: "👑 Creator", server: "PriZriT", ping: "25ms" };
-            window.playersData["Notch"] = { beast: "RHT1", mace: "HT3", carts: "LT1", title: "⚡ Dev", server: "PriZriT", ping: "35ms" };
-            window.playersData["TechnoBlade"] = { beast: "HT1", mace: "RHT2", carts: "LT1", title: "🕊️ Legend", server: "PriZriT", ping: "40ms" };
-            window.playersData["Dream"] = { beast: "HT2", mace: "HT2", carts: "RLT2", title: "🔥 Pro", server: "PriZriT", ping: "50ms" };
+            window.playersData["Prizrit"] = { beast: "HT1", mace: "HT1", carts: "LT2", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "👑 Creator", server: "PriZriT", ping: "25ms" };
+            window.playersData["Notch"] = { beast: "RHT1", mace: "HT3", carts: "LT1", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "⚡ Dev", server: "PriZriT", ping: "35ms" };
+            window.playersData["TechnoBlade"] = { beast: "HT1", mace: "RHT2", carts: "LT1", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "🕊️ Legend", server: "PriZriT", ping: "40ms" };
+            window.playersData["Dream"] = { beast: "HT2", mace: "HT2", carts: "RLT2", smp: "0", uhc: "0", axe: "0", op: "0", spearmace: "0", title: "🔥 Pro", server: "PriZriT", ping: "50ms" };
             saveLocalDb();
             renderTierGrid();
             renderLeaderboard();
@@ -3165,7 +3354,7 @@
             }
         }
 
-        function adminSavePlayer() {
+        async function adminSavePlayer() {
             const nickEl = document.getElementById('admPlayerNick');
             const kitEl = document.getElementById('admKitSelect');
             const tierEl = document.getElementById('admTierSelect');
@@ -3190,7 +3379,11 @@
             const nick = existingKey || rawNick;
 
             if (!window.playersData[nick]) {
-                window.playersData[nick] = { beast: '0', mace: '0', carts: '0', title: '', server: '', ping: '' };
+                window.playersData[nick] = {
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: ''
+                };
             }
 
             const oldTier = window.playersData[nick][kit] || '0';
@@ -3199,7 +3392,7 @@
             if (server !== '') window.playersData[nick].server = server;
             if (ping !== '') window.playersData[nick].ping = ping;
 
-            window.matchHistory.unshift({
+            const historyEntry = {
                 ign: nick,
                 kit: kit,
                 old_tier: oldTier === '0' ? 'None' : oldTier,
@@ -3207,12 +3400,30 @@
                 score: score,
                 tester: tester,
                 date: new Date().toLocaleDateString('ru-RU')
-            });
+            };
+
+            window.matchHistory.unshift(historyEntry);
             if (window.matchHistory.length > 200) {
                 window.matchHistory = window.matchHistory.slice(0, 200);
             }
 
             saveLocalDb();
+            syncTierIssueToBackendAndBot({
+                ign: nick,
+                nickname: nick,
+                kit: kit,
+                tier: tier,
+                old_tier: oldTier,
+                score: score,
+                tester: tester,
+                server: window.playersData[nick].server || '',
+                ping: window.playersData[nick].ping || '',
+                title: window.playersData[nick].title || '',
+                discord_id: window.playersData[nick].discord_id || null,
+                issued_by_discord_id: sessionAccountId || null,
+                history_entry: historyEntry
+            });
+
             showToast(`✅ [${kit.toUpperCase()}] ${escapeHTML(nick)}: ${tier === '0' ? 'Тир снят' : tier} (${score})`);
             
             renderTierGrid();
@@ -3347,20 +3558,6 @@
                 }
             };
             reader.readAsText(file, 'utf-8');
-        }
-
-        function adminSeasonReset() {
-            if (confirm('ВНИМАНИЕ! Это сбросит все тиры (Beast, Mace, Carts) у ВСЕХ игроков до 0. Продолжить?')) {
-                Object.keys(window.playersData).forEach(nick => {
-                    window.playersData[nick].beast = '0';
-                    window.playersData[nick].mace = '0';
-                    window.playersData[nick].carts = '0';
-                });
-                saveLocalDb();
-                renderTierGrid();
-                renderLeaderboard();
-                showToast('🏆 Сезон завершен! Все тиры сброшены.');
-            }
         }
 
         function adminDeletePlayer() {
