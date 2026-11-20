@@ -611,49 +611,68 @@
     </style>
 
     <style id="priz-headings-and-admin-lock">
-        /* Поднимаем съехавшие заголовки и верхние блоки внутри страниц */
+        /* Поднимаем съехавшие заголовки, таблицы и верхние блоки внутри страниц (по видео-ориентирам) */
         .page-view {
-            padding-top: 4px !important;
+            padding-top: 0 !important;
         }
         #page-home .hero-section {
+            margin-top: 0 !important;
+            margin-bottom: 10px !important;
+            padding-top: 0 !important;
+        }
+        #page-home .kit-stats-bar {
             margin-top: 6px !important;
-            margin-bottom: 14px !important;
-            padding-top: 4px !important;
+        }
+        #page-tier .tier-table-wrapper,
+        #page-tier .tier-header-bar,
+        #page-tier .tier-grid,
+        #page-tier .kit-soon-box {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
         }
         #page-leaderboard .lb-header-section {
-            margin-top: 4px !important;
-            margin-bottom: 12px !important;
-            padding-top: 4px !important;
+            margin-top: 0 !important;
+            margin-bottom: 10px !important;
+            padding-top: 0 !important;
+        }
+        #page-leaderboard .lb-podium-grid,
+        #page-leaderboard .lb-table-card {
+            margin-top: 6px !important;
         }
         #page-guide .guide-hero-card,
         #page-links .guide-hero-card {
-            margin-top: 4px !important;
-            margin-bottom: 14px !important;
-            padding-top: 14px !important;
-            padding-bottom: 14px !important;
+            margin-top: 0 !important;
+            margin-bottom: 10px !important;
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+        }
+        #page-links .links-grid {
+            margin-top: 6px !important;
         }
         #page-guide .guide-section-heading,
         #page-guide .home-tiers-header,
         #page-guide .info-title {
-            margin-top: 10px !important;
+            margin-top: 6px !important;
         }
 
-        /* Строго скрываем админские элементы для не-админов */
-        body:not(.admin-authenticated) #devTriggerDot,
-        body:not(.admin-authenticated) #axeInviteEditorBox,
-        body:not(.admin-authenticated) .admin-only-axe-editor,
-        body:not(.admin-authenticated) .admin-only-item {
+        /* Панель разработчика и админские контролы скрыты для всех, пока участник не зашёл в админ-панель */
+        body:not(.admin-panel-active) #devTriggerDot,
+        body:not(.admin-panel-active) #devModal,
+        body:not(.admin-panel-active) #codeEditorModal,
+        body:not(.admin-panel-active) #axeInviteEditorBox,
+        body:not(.admin-panel-active) .admin-only-axe-editor,
+        body:not(.admin-panel-active) .admin-only-item {
             display: none !important;
             visibility: hidden !important;
             pointer-events: none !important;
         }
-        body.admin-authenticated #devTriggerDot {
+        body.admin-panel-active #devTriggerDot {
             display: inline-block !important;
             visibility: visible !important;
             pointer-events: auto !important;
         }
-        body.admin-authenticated #axeInviteEditorBox,
-        body.admin-authenticated .admin-only-axe-editor {
+        body.admin-panel-active #axeInviteEditorBox,
+        body.admin-panel-active .admin-only-axe-editor {
             display: flex !important;
             visibility: visible !important;
             pointer-events: auto !important;
@@ -2582,11 +2601,12 @@
             renderCustomHomeKits();
             renderCustomDiscordLinks();
 
+            if (document.body) {
+                document.body.classList.remove('admin-panel-active');
+                document.body.classList.remove('admin-authenticated');
+            }
             enforceAdminOnlyDevPanel();
             syncAxeDiscordUI();
-            if (isAdminMode) {
-                applyAdminUI(true);
-            }
 
             try {
                 const canvasEl = document.getElementById('skin_container');
@@ -2742,11 +2762,11 @@
             const countEl = document.getElementById(countId);
             const onlineEl = document.getElementById(onlineId);
 
-            if (countEl && memberCount !== undefined && memberCount !== null) {
-                countEl.innerText = `${memberCount} участников`;
+            if (countEl && memberCount !== undefined && memberCount !== null && !Number.isNaN(Number(memberCount))) {
+                countEl.innerText = `${Number(memberCount).toLocaleString('ru-RU')} участников`;
             }
-            if (onlineEl && onlineCount !== undefined && onlineCount !== null) {
-                onlineEl.innerText = onlineCount;
+            if (onlineEl && onlineCount !== undefined && onlineCount !== null && !Number.isNaN(Number(onlineCount))) {
+                onlineEl.innerText = Number(onlineCount).toLocaleString('ru-RU');
             }
         }
 
@@ -2762,10 +2782,12 @@
                     const res = await fetch(url, { cache: 'no-store' });
                     if (!res.ok) continue;
                     const data = await res.json();
-                    if (data && (data.approximate_presence_count !== undefined || data.approximate_member_count !== undefined)) {
+                    const members = data?.approximate_member_count ?? data?.guild?.member_count;
+                    const online = data?.approximate_presence_count ?? data?.guild?.presence_count;
+                    if (members !== undefined || online !== undefined) {
                         return {
-                            members: data.approximate_member_count,
-                            online: data.approximate_presence_count
+                            members: members !== undefined ? Number(members) : undefined,
+                            online: online !== undefined ? Number(online) : undefined
                         };
                     }
                 } catch (e) {}
@@ -3954,6 +3976,7 @@
         function deactivateAdminMode() {
             isAdminMode = false;
             localStorage.setItem('priz_admin_mode', 'false');
+            if (document.body) document.body.classList.remove('admin-panel-active');
             applyAdminUI(false);
             enforceAdminOnlyDevPanel();
             syncAxeDiscordUI();
@@ -3976,9 +3999,11 @@
 
         function openAdminPanel() {
             if (!isStrictlyAdmin()) {
+                if (document.body) document.body.classList.remove('admin-panel-active');
                 openAdminLoginModal();
                 return;
             }
+            if (document.body) document.body.classList.add('admin-panel-active');
             switchAdminTab('issue');
             const nickInput = document.getElementById('admPlayerNick');
             if (nickInput && !nickInput.value.trim() && loggedInUser) {
@@ -4472,9 +4497,11 @@
         }
 
         function enforceAdminOnlyDevPanel() {
-            const allowed = isStrictlyAdmin();
+            const adminModalOpen = Boolean(document.getElementById('adminPanelModal')?.style.display === 'flex');
+            const allowed = isStrictlyAdmin() && adminModalOpen;
             if (document.body) {
-                document.body.classList.toggle('admin-authenticated', allowed);
+                document.body.classList.toggle('admin-authenticated', isStrictlyAdmin());
+                document.body.classList.toggle('admin-panel-active', allowed);
             }
             const devDot = document.getElementById('devTriggerDot');
             const devModal = document.getElementById('devModal');
