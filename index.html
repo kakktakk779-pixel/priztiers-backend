@@ -2169,43 +2169,14 @@
             return `${num.toLocaleString('ru-RU')} ${word}`;
         }
 
-        function parseDiscordWidgetPayload(data) {
-            if (!data || typeof data !== 'object') return null;
-            const hasWidgetMembers = Array.isArray(data.members);
-            const presenceFromWidget = hasWidgetMembers
-                ? (typeof data.presence_count === 'number' ? data.presence_count : data.members.length)
-                : null;
-
-            const rawMembers = data.approximate_member_count ?? data.member_count ?? data.members_count ?? data.members;
-            const rawOnline = data.approximate_presence_count ?? data.presence_count ?? data.online_count ?? data.online ?? presenceFromWidget;
-
-            const membersNum = (typeof rawMembers === 'number' && Number.isFinite(rawMembers))
-                ? rawMembers
-                : (typeof rawMembers === 'string' && rawMembers.trim() !== '' && Number.isFinite(Number(rawMembers))
-                    ? Number(rawMembers)
-                    : null);
-
-            const onlineNum = (typeof rawOnline === 'number' && Number.isFinite(rawOnline))
-                ? rawOnline
-                : (typeof rawOnline === 'string' && rawOnline.trim() !== '' && Number.isFinite(Number(rawOnline))
-                    ? Number(rawOnline)
-                    : null);
-
-            if (membersNum === null && onlineNum === null) return null;
-            return {
-                members: membersNum !== null ? Math.max(0, Math.floor(membersNum)) : null,
-                online: onlineNum !== null ? Math.max(0, Math.floor(onlineNum)) : null
-            };
-        }
-
         async function fetchDiscordCountsLive(inviteCode) {
             const code = extractInviteCode(inviteCode);
             if (!code) return null;
 
             const endpoints = [
-                `${BACKEND_URL}/api/discord/invite-stats?code=${encodeURIComponent(code)}&_t=${Date.now()}`,
                 `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true`,
-                `https://discord.com/api/v9/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true`
+                `https://discord.com/api/v9/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true`,
+                `${BACKEND_URL}/api/discord/invite-stats?code=${encodeURIComponent(code)}`
             ];
 
             for (const url of endpoints) {
@@ -2219,36 +2190,16 @@
                     clearTimeout(timer);
                     if (!res.ok) continue;
                     const data = await res.json();
-                    const parsed = parseDiscordWidgetPayload(data);
-                    if (parsed) return parsed;
+                    const members = data.approximate_member_count ?? data.member_count ?? data.members;
+                    const online = data.approximate_presence_count ?? data.presence_count ?? data.online;
+                    if (members !== undefined || online !== undefined) {
+                        return {
+                            members: members !== undefined ? Number(members) : null,
+                            online: online !== undefined ? Number(online) : null
+                        };
+                    }
                 } catch (e) {}
             }
-
-            try {
-                const invRes = await fetch(`https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true`, {
-                    cache: 'no-store'
-                });
-                if (invRes.ok) {
-                    const invData = await invRes.json();
-                    const guildId = invData && invData.guild && invData.guild.id;
-                    if (guildId) {
-                        const widgetRes = await fetch(`https://discord.com/api/guilds/${encodeURIComponent(guildId)}/widget.json?_t=${Date.now()}`, {
-                            cache: 'no-store'
-                        });
-                        if (widgetRes.ok) {
-                            const wData = await widgetRes.json();
-                            const wParsed = parseDiscordWidgetPayload(wData);
-                            if (wParsed) {
-                                return {
-                                    members: invData.approximate_member_count ?? wParsed.members,
-                                    online: wParsed.online ?? invData.approximate_presence_count ?? null
-                                };
-                            }
-                        }
-                    }
-                }
-            } catch (e) {}
-
             return null;
         }
 
@@ -3226,74 +3177,27 @@
             }
         }
 
-        function mergePlayerEntry(existing, incoming, preferIncoming = false) {
-            if (!incoming || typeof incoming !== 'object') return existing;
-            if (!existing || typeof existing !== 'object') return { ...incoming };
-            const out = { ...existing };
-            ALL_KITS.forEach(kit => {
-                const incVal = incoming[kit];
-                const curVal = existing[kit];
-                if (incVal !== undefined && incVal !== null) {
-                    const normInc = String(incVal).toUpperCase();
-                    if (preferIncoming) {
-                        out[kit] = normInc;
-                    } else if (!curVal || curVal === '0' || (normInc !== '0')) {
-                        out[kit] = normInc;
-                    }
-                }
-            });
-            ['title', 'server', 'ping', 'discord_id'].forEach(field => {
-                if (incoming[field] !== undefined && incoming[field] !== null && String(incoming[field]).trim() !== '') {
-                    out[field] = incoming[field];
-                } else if (!out[field] && existing[field]) {
-                    out[field] = existing[field];
-                }
-            });
-            return out;
-        }
-
         function mergeServerStateIntoLocal(serverState, preserveLocalRecent = false) {
             if (!serverState || typeof serverState !== 'object') return;
-            const serverTs = Number(serverState.updatedAt || serverState.updated_at || 0);
-            const isRecentLocal = preserveLocalRecent && (Date.now() - lastLocalMutationTs < 5000) && (!serverTs || serverTs <= lastLocalMutationTs);
+            const isRecentLocal = preserveLocalRecent && (Date.now() - lastLocalMutationTs < 4000);
 
             if (serverState.players && typeof serverState.players === 'object') {
-                const nextPlayers = { ...window.playersData };
-                Object.keys(serverState.players).forEach(nick => {
-                    const incPlayer = serverState.players[nick];
-                    if (incPlayer === null) {
-                        if (!isRecentLocal) delete nextPlayers[nick];
-                        return;
-                    }
-                    const existingKey = Object.keys(nextPlayers).find(k => normalizeNickKey(k) === normalizeNickKey(nick));
-                    const targetKey = existingKey || nick;
-                    nextPlayers[targetKey] = mergePlayerEntry(nextPlayers[targetKey], incPlayer, !isRecentLocal);
-                });
-                window.playersData = nextPlayers;
+                if (!isRecentLocal) {
+                    window.playersData = { ...window.playersData, ...serverState.players };
+                    Object.keys(serverState.players).forEach(nick => {
+                        if (serverState.players[nick] === null) {
+                            delete window.playersData[nick];
+                        }
+                    });
+                } else {
+                    window.playersData = { ...serverState.players, ...window.playersData };
+                }
                 localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
             }
             if (serverState.views && typeof serverState.views === 'object') {
-                Object.keys(serverState.views).forEach(nick => {
-                    const sv = serverState.views[nick];
-                    const lv = window.playerViews[nick];
-                    if (!lv) {
-                        window.playerViews[nick] = sv;
-                    } else if (sv) {
-                        const mergedDays = { ...(sv.days || {}), ...(lv.days || {}) };
-                        Object.keys(sv.days || {}).forEach(d => {
-                            mergedDays[d] = Math.max(Number(sv.days[d] || 0), Number((lv.days && lv.days[d]) || 0));
-                        });
-                        const mergedMonths = { ...(sv.months || {}), ...(lv.months || {}) };
-                        Object.keys(sv.months || {}).forEach(m => {
-                            mergedMonths[m] = Math.max(Number(sv.months[m] || 0), Number((lv.months && lv.months[m]) || 0));
-                        });
-                        window.playerViews[nick] = {
-                            total: Math.max(Number(sv.total || 0), Number(lv.total || 0)),
-                            days: mergedDays,
-                            months: mergedMonths
-                        };
-                    }
-                });
+                window.playerViews = isRecentLocal
+                    ? { ...serverState.views, ...window.playerViews }
+                    : { ...window.playerViews, ...serverState.views };
                 localStorage.setItem('priz_views', JSON.stringify(window.playerViews));
             }
             if (serverState.bgThemes && typeof serverState.bgThemes === 'object') {
