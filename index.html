@@ -891,6 +891,60 @@
             cursor: pointer;
         }
     </style>
+
+    <style id="priz-top-gap-clean-fix">
+        header, #prizMainHeader {
+            position: relative !important;
+            margin-bottom: 0 !important;
+        }
+        .page-overlay {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+        .app-container {
+            margin-top: 0 !important;
+            padding-top: 10px !important;
+            min-height: 0 !important;
+        }
+        .page-view.active {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+            min-height: 0 !important;
+        }
+        #page-tier .tier-table-wrapper,
+        #page-tier #tierWrapper,
+        #page-tier .tier-header-bar,
+        #page-tier .tier-grid,
+        #page-tier .kit-soon-box {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+            transform: none !important;
+        }
+        #page-leaderboard .lb-header-section,
+        #page-leaderboard .lb-podium-grid,
+        #page-leaderboard .lb-table-card {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+            transform: none !important;
+        }
+        #page-links .guide-hero-card,
+        #page-links .links-grid {
+            margin-top: 0 !important;
+            padding-top: 16px !important;
+            transform: none !important;
+        }
+        #page-home .hero-section,
+        #page-home .kit-stats-bar {
+            margin-top: 0 !important;
+            padding-top: 8px !important;
+            transform: none !important;
+        }
+        #page-guide .guide-hero-card {
+            margin-top: 0 !important;
+            padding-top: 16px !important;
+            transform: none !important;
+        }
+    </style>
 </head>
 <body class="site-bg-hw-dungeon">
 
@@ -2318,6 +2372,16 @@
                 });
             }
 
+                        const currentLoggedNick = (typeof loggedInUser === 'string' && loggedInUser.trim())
+                ? loggedInUser.trim()
+                : (localStorage.getItem('priz_ign') || '').trim();
+            if (currentLoggedNick) {
+                const key = ensureEntry(currentLoggedNick);
+                if (key && sessionAccountId && !combined[key].discord_id) {
+                    combined[key].discord_id = normalizeDiscordId(sessionAccountId);
+                }
+            }
+
             return combined;
         }
 
@@ -3394,8 +3458,6 @@
                     ping: p?.ping || ''
                 };
             }).filter(item => {
-                const hasAnyTier = Object.keys(item.tiers).length > 0;
-                if (!hasAnyTier && !searchQuery) return false;
                 if (searchQuery && !item.nick.toLowerCase().includes(searchQuery)) return false;
                 return true;
             });
