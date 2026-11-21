@@ -1023,6 +1023,207 @@
         }
     </style>
 
+
+    <style id="priz-esports-ultra-smooth-motion">
+        :root {
+            --esports-ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --esports-spring: cubic-bezier(0.2, 1.18, 0.35, 1);
+            --esports-snap: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .priz-ui-press-anim {
+            animation: prizEsportsSnapPress 0.26s var(--esports-spring) both !important;
+            will-change: transform, filter, box-shadow;
+        }
+
+        .priz-ui-holding {
+            transform: scale(0.968) translateY(0.5px) !important;
+            filter: brightness(1.16) contrast(1.04) !important;
+            box-shadow: 0 0 22px rgba(192, 132, 252, 0.58), 0 0 8px rgba(56, 189, 248, 0.32), inset 0 0 10px rgba(255, 255, 255, 0.14) !important;
+            transition: transform 0.08s var(--esports-snap), filter 0.08s var(--esports-snap), box-shadow 0.08s var(--esports-snap) !important;
+        }
+
+        @keyframes prizEsportsSnapPress {
+            0% {
+                transform: scale(0.968) translateY(0.5px);
+                filter: brightness(1.16) contrast(1.04);
+            }
+            48% {
+                transform: scale(1.022) translateY(-1px);
+                filter: brightness(1.12) contrast(1.03);
+                box-shadow: 0 0 20px rgba(192, 132, 252, 0.52), 0 6px 18px rgba(0, 0, 0, 0.42);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                filter: brightness(1) contrast(1);
+                box-shadow: none;
+            }
+        }
+
+        .modal-overlay[style*="display: flex"] .modal-box,
+        .modal-overlay[style*="display:flex"] .modal-box {
+            animation: prizEsportsModalEntrance 0.22s var(--esports-ease) both !important;
+            will-change: transform, opacity;
+        }
+
+        @keyframes prizEsportsModalEntrance {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 12px, 0) scale(0.972);
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+        }
+
+        .page-view {
+            display: none;
+            opacity: 0;
+            transform: translate3d(0, 8px, 0) scale(0.994);
+            transition: opacity 0.22s var(--esports-ease), transform 0.24s var(--esports-ease);
+            will-change: opacity, transform;
+            pointer-events: none;
+        }
+
+        .page-view.active {
+            display: block;
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+            pointer-events: auto;
+        }
+
+        .page-view.page-leaving {
+            display: block;
+            opacity: 0 !important;
+            transform: translate3d(0, -6px, 0) scale(0.995) !important;
+            transition: opacity 0.14s var(--esports-snap), transform 0.14s var(--esports-snap) !important;
+            pointer-events: none !important;
+        }
+
+        .nav-icon-btn,
+        .profile-avatar-btn,
+        .btn-action-sm,
+        .btn-purple,
+        .c-tab-btn,
+        .social-hub-btn {
+            transition: transform 0.18s var(--esports-spring), border-color 0.18s var(--esports-ease), box-shadow 0.2s var(--esports-ease), background 0.2s var(--esports-ease), color 0.18s var(--esports-ease) !important;
+            will-change: transform, box-shadow;
+        }
+
+        .nav-icon-btn:hover,
+        .profile-avatar-btn:hover,
+        .btn-action-sm:hover,
+        .c-tab-btn:hover {
+            transform: translate3d(0, -1.5px, 0);
+        }
+
+        .btn-purple:hover,
+        .social-hub-btn:hover {
+            transform: translate3d(0, -2px, 0);
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.36);
+        }
+
+        .kit-stat-card,
+        .social-hub-card,
+        .guide-step-card,
+        .step-box,
+        .profile-kit-slot,
+        .lb-podium-card,
+        .player-card-mini {
+            transition: transform 0.2s var(--esports-spring), border-color 0.2s var(--esports-ease), box-shadow 0.22s var(--esports-ease), background 0.2s var(--esports-ease) !important;
+            will-change: transform, box-shadow;
+        }
+
+        .kit-stat-card:hover,
+        .social-hub-card:hover,
+        .guide-step-card:hover,
+        .step-box:hover,
+        .profile-kit-slot:hover {
+            transform: translate3d(0, -3px, 0);
+            border-color: rgba(192, 132, 252, 0.38);
+            box-shadow: 0 12px 28px rgba(2, 6, 23, 0.52), 0 0 0 1px rgba(192, 132, 252, 0.14);
+        }
+
+        .lb-podium-card:hover {
+            transform: translate3d(0, -4px, 0) scale(1.012);
+        }
+
+        .player-card-mini:hover {
+            transform: translate3d(2px, 0, 0);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(192, 132, 252, 0.34);
+        }
+
+        .lb-list-table tbody tr {
+            transition: background-color 0.16s var(--esports-ease), transform 0.16s var(--esports-ease);
+        }
+
+        .lb-list-table tbody tr:hover {
+            background-color: rgba(168, 85, 247, 0.09);
+        }
+
+        .guide-faq-body {
+            display: grid !important;
+            grid-template-rows: 0fr;
+            opacity: 0;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            transition: grid-template-rows 0.24s var(--esports-ease), opacity 0.2s var(--esports-ease), padding 0.24s var(--esports-ease) !important;
+        }
+
+        .guide-faq-body > * {
+            overflow: hidden;
+        }
+
+        .guide-faq-item.open .guide-faq-body {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            padding-top: 2px !important;
+            padding-bottom: 16px !important;
+        }
+
+        .guide-faq-icon {
+            transition: transform 0.22s var(--esports-spring), color 0.18s var(--esports-ease) !important;
+        }
+
+        .guide-faq-item.open .guide-faq-icon {
+            transform: rotate(45deg) scale(1.08);
+            color: #e9d5ff;
+        }
+
+        @keyframes prizEsportsLiveFlash {
+            0% {
+                transform: scale(1);
+                color: #4ade80;
+                text-shadow: 0 0 14px rgba(74, 222, 128, 0.8);
+            }
+            50% {
+                transform: scale(1.06);
+                color: #86efac;
+                text-shadow: 0 0 18px rgba(74, 222, 128, 0.9);
+            }
+            100% {
+                transform: scale(1);
+                color: inherit;
+                text-shadow: 0 0 0 rgba(74, 222, 128, 0);
+            }
+        }
+
+        .priz-live-pulse {
+            display: inline-block;
+            animation: prizEsportsLiveFlash 0.48s var(--esports-spring) !important;
+        }
+    </style>
+
 </head>
 <body class="site-bg-hw-dungeon">
 
@@ -2169,38 +2370,115 @@
             return `${num.toLocaleString('ru-RU')} ${word}`;
         }
 
+        function toSafeCount(val) {
+            if (typeof val === 'number' && Number.isFinite(val)) {
+                return Math.max(0, Math.floor(val));
+            }
+            if (typeof val === 'string' && val.trim() !== '') {
+                const n = Number(val.trim());
+                if (Number.isFinite(n)) return Math.max(0, Math.floor(n));
+            }
+            return null;
+        }
+
+        function parseDiscordWidgetPayload(data) {
+            if (!data || typeof data !== 'object') return null;
+
+            let membersNum = toSafeCount(
+                data.approximate_member_count ??
+                data.member_count ??
+                data.members_count ??
+                data.total_members
+            );
+            if (membersNum === null && Array.isArray(data.members)) {
+                membersNum = data.members.length;
+            }
+
+            let onlineNum = toSafeCount(
+                data.approximate_presence_count ??
+                data.presence_count ??
+                data.online_count ??
+                data.online
+            );
+            if (onlineNum === null && typeof data.presence_count === 'number') {
+                onlineNum = toSafeCount(data.presence_count);
+            }
+            if (onlineNum === null && Array.isArray(data.members) && data.members.length > 0) {
+                onlineNum = data.members.length;
+            }
+
+            if (membersNum === null && onlineNum === null) return null;
+            return {
+                members: membersNum,
+                online: onlineNum
+            };
+        }
+
+        async function fetchJsonWithTimeout(url, timeoutMs = 4500) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                const res = await fetch(url, {
+                    method: 'GET',
+                    cache: 'no-store',
+                    headers: { 'Accept': 'application/json' },
+                    signal: controller.signal
+                });
+                if (!res.ok) return null;
+                return await res.json();
+            } catch (e) {
+                return null;
+            } finally {
+                clearTimeout(timer);
+            }
+        }
+
         async function fetchDiscordCountsLive(inviteCode) {
             const code = extractInviteCode(inviteCode);
             if (!code) return null;
 
-            const endpoints = [
-                `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true`,
-                `https://discord.com/api/v9/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true`,
-                `${BACKEND_URL}/api/discord/invite-stats?code=${encodeURIComponent(code)}`
+            const cacheBuster = `_t=${Date.now()}&r=${Math.random().toString(36).slice(2, 7)}`;
+            let members = null;
+            let online = null;
+            let guildId = null;
+
+            const inviteUrls = [
+                `${BACKEND_URL}/api/discord/invite-stats?code=${encodeURIComponent(code)}&${cacheBuster}`,
+                `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true&${cacheBuster}`,
+                `https://discord.com/api/v9/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true&${cacheBuster}`
             ];
 
-            for (const url of endpoints) {
-                try {
-                    const controller = new AbortController();
-                    const timer = setTimeout(() => controller.abort(), 4500);
-                    const res = await fetch(url, {
-                        cache: 'no-store',
-                        signal: controller.signal
-                    });
-                    clearTimeout(timer);
-                    if (!res.ok) continue;
-                    const data = await res.json();
-                    const members = data.approximate_member_count ?? data.member_count ?? data.members;
-                    const online = data.approximate_presence_count ?? data.presence_count ?? data.online;
-                    if (members !== undefined || online !== undefined) {
-                        return {
-                            members: members !== undefined ? Number(members) : null,
-                            online: online !== undefined ? Number(online) : null
-                        };
-                    }
-                } catch (e) {}
+            for (const url of inviteUrls) {
+                const data = await fetchJsonWithTimeout(url);
+                if (!data) continue;
+                if (!guildId && data.guild && data.guild.id) {
+                    guildId = String(data.guild.id);
+                }
+                const parsed = parseDiscordWidgetPayload(data);
+                if (parsed) {
+                    if (parsed.members !== null) members = parsed.members;
+                    if (parsed.online !== null) online = parsed.online;
+                    if (members !== null && online !== null) break;
+                }
             }
-            return null;
+
+            if (guildId) {
+                const widgetData = await fetchJsonWithTimeout(
+                    `https://discord.com/api/guilds/${encodeURIComponent(guildId)}/widget.json?${cacheBuster}`
+                );
+                const wParsed = parseDiscordWidgetPayload(widgetData);
+                if (wParsed) {
+                    if (members === null && wParsed.members !== null) members = wParsed.members;
+                    if (typeof widgetData.presence_count === 'number') {
+                        online = toSafeCount(widgetData.presence_count);
+                    } else if (online === null && wParsed.online !== null) {
+                        online = wParsed.online;
+                    }
+                }
+            }
+
+            if (members === null && online === null) return null;
+            return { members, online };
         }
 
         async function fetchCustomInviteStats(item) {
@@ -2997,7 +3275,15 @@
 
             setInterval(() => {
                 renderHomeKitStats();
-            }, 10000);
+            }, 5000);
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    renderHomeKitStats();
+                    pullLatestFromServer();
+                    refreshBotKitTiersStatus();
+                }
+            });
 
             setInterval(() => {
                 pullLatestFromServer();
@@ -3177,27 +3463,74 @@
             }
         }
 
+        function mergePlayerEntry(existing, incoming, preferIncoming = false) {
+            if (!incoming || typeof incoming !== 'object') return existing;
+            if (!existing || typeof existing !== 'object') return { ...incoming };
+            const out = { ...existing };
+            ALL_KITS.forEach(kit => {
+                const incVal = incoming[kit];
+                const curVal = existing[kit];
+                if (incVal !== undefined && incVal !== null) {
+                    const normInc = String(incVal).toUpperCase();
+                    if (preferIncoming) {
+                        out[kit] = normInc;
+                    } else if (!curVal || curVal === '0' || (normInc !== '0')) {
+                        out[kit] = normInc;
+                    }
+                }
+            });
+            ['title', 'server', 'ping', 'discord_id'].forEach(field => {
+                if (incoming[field] !== undefined && incoming[field] !== null && String(incoming[field]).trim() !== '') {
+                    out[field] = incoming[field];
+                } else if (!out[field] && existing[field]) {
+                    out[field] = existing[field];
+                }
+            });
+            return out;
+        }
+
         function mergeServerStateIntoLocal(serverState, preserveLocalRecent = false) {
             if (!serverState || typeof serverState !== 'object') return;
-            const isRecentLocal = preserveLocalRecent && (Date.now() - lastLocalMutationTs < 4000);
+            const serverTs = Number(serverState.updatedAt || serverState.updated_at || 0);
+            const isRecentLocal = preserveLocalRecent && (Date.now() - lastLocalMutationTs < 5000) && (!serverTs || serverTs <= lastLocalMutationTs);
 
             if (serverState.players && typeof serverState.players === 'object') {
-                if (!isRecentLocal) {
-                    window.playersData = { ...window.playersData, ...serverState.players };
-                    Object.keys(serverState.players).forEach(nick => {
-                        if (serverState.players[nick] === null) {
-                            delete window.playersData[nick];
-                        }
-                    });
-                } else {
-                    window.playersData = { ...serverState.players, ...window.playersData };
-                }
+                const nextPlayers = { ...window.playersData };
+                Object.keys(serverState.players).forEach(nick => {
+                    const incPlayer = serverState.players[nick];
+                    if (incPlayer === null) {
+                        if (!isRecentLocal) delete nextPlayers[nick];
+                        return;
+                    }
+                    const existingKey = Object.keys(nextPlayers).find(k => normalizeNickKey(k) === normalizeNickKey(nick));
+                    const targetKey = existingKey || nick;
+                    nextPlayers[targetKey] = mergePlayerEntry(nextPlayers[targetKey], incPlayer, !isRecentLocal);
+                });
+                window.playersData = nextPlayers;
                 localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
             }
             if (serverState.views && typeof serverState.views === 'object') {
-                window.playerViews = isRecentLocal
-                    ? { ...serverState.views, ...window.playerViews }
-                    : { ...window.playerViews, ...serverState.views };
+                Object.keys(serverState.views).forEach(nick => {
+                    const sv = serverState.views[nick];
+                    const lv = window.playerViews[nick];
+                    if (!lv) {
+                        window.playerViews[nick] = sv;
+                    } else if (sv) {
+                        const mergedDays = { ...(sv.days || {}), ...(lv.days || {}) };
+                        Object.keys(sv.days || {}).forEach(d => {
+                            mergedDays[d] = Math.max(Number(sv.days[d] || 0), Number((lv.days && lv.days[d]) || 0));
+                        });
+                        const mergedMonths = { ...(sv.months || {}), ...(lv.months || {}) };
+                        Object.keys(sv.months || {}).forEach(m => {
+                            mergedMonths[m] = Math.max(Number(sv.months[m] || 0), Number((lv.months && lv.months[m]) || 0));
+                        });
+                        window.playerViews[nick] = {
+                            total: Math.max(Number(sv.total || 0), Number(lv.total || 0)),
+                            days: mergedDays,
+                            months: mergedMonths
+                        };
+                    }
+                });
                 localStorage.setItem('priz_views', JSON.stringify(window.playerViews));
             }
             if (serverState.bgThemes && typeof serverState.bgThemes === 'object') {
