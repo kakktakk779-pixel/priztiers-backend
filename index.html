@@ -943,8 +943,6 @@
                         </div>
                     </div>
                 </div>
-
-                </div>
             </div>
 
             <!-- СТРАНИЦЫ ТИРОВ ПО КИТАМ -->
@@ -2363,8 +2361,8 @@
             if (str === null || str === undefined) return '';
             return String(str)
                 .replace(/\/g, '\\')
-                .replace(/'/g, "\'")
-                .replace(/"/g, '\"')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '\\"')
                 .replace(/</g, '\x3c')
                 .replace(/>/g, '\x3e');
         }
@@ -3856,8 +3854,7 @@
 
         function downloadSiteCode() {
             if (!hasActiveAdminBypass()) return;
-            const htmlContent = "<!DOCTYPE html>
-" + document.documentElement.outerHTML;
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -3874,8 +3871,7 @@
             if (!hasActiveAdminBypass()) return;
             const textarea = document.getElementById('siteCodeTextarea');
             if (textarea) {
-                textarea.value = "<!DOCTYPE html>
-" + document.documentElement.outerHTML;
+                textarea.value = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             }
             const modal = document.getElementById('codeEditorModal');
             if (modal) modal.style.display = 'flex';
