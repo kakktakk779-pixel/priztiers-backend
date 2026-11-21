@@ -1867,56 +1867,6 @@
             return Boolean(isAdminMode);
         }
 
-        document.addEventListener('contextmenu', function(e) {
-            if (hasActiveAdminBypass()) return;
-            e.preventDefault();
-            showToast('⚠️ Контекстное меню заблокировано!');
-        });
-
-        document.addEventListener('copy', function(e) {
-            if (hasActiveAdminBypass()) return;
-            e.preventDefault();
-            showToast('🛡️ Копирование данных запрещено!');
-        });
-
-        document.addEventListener('cut', function(e) {
-            if (hasActiveAdminBypass()) return;
-            e.preventDefault();
-        });
-
-        document.addEventListener('dragstart', function(e) {
-            if (hasActiveAdminBypass()) return;
-            e.preventDefault();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (hasActiveAdminBypass()) return;
-            if (
-                e.keyCode === 123 || 
-                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
-                (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 80 || e.keyCode === 65))
-            ) {
-                e.preventDefault();
-                showToast('⛔ Защищенная операция заблокирована!');
-                return false;
-            }
-        });
-
-        (function() {
-            let devtoolsOpen = false;
-            const threshold = 160;
-            setInterval(() => {
-                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-                if ((widthThreshold || heightThreshold) && !devtoolsOpen) {
-                    devtoolsOpen = true;
-                    console.clear();
-                } else if (!widthThreshold && !heightThreshold && devtoolsOpen) {
-                    devtoolsOpen = false;
-                }
-            }, 1000);
-        })();
-
         const CLIENT_ID = "1561648119584784444";
         const BACKEND_URL = "";
         const ADMIN_DM_TARGET_USERNAME = "bigkeks";
@@ -1994,7 +1944,7 @@
                 const card = document.createElement('div');
                 card.className = 'kit-stat-card';
                 card.setAttribute('data-custom-kit', '1');
-                card.setAttribute('data-custom-id', item.id || String(idx));
+                card.setAttribute('data-custom-id', escapeHTML(item.id || String(idx)));
                 card.innerHTML = `
                     <div class="kit-stat-info">
                         <div class="kit-stat-title">
@@ -2337,7 +2287,12 @@
         } catch(e) {}
 
         let currentCustomSiteBg = sessionAccountId && userSiteBgs[sessionAccountId] ? userSiteBgs[sessionAccountId] : 'hw-dungeon';
-        let ADMIN_PASS = localStorage.getItem('priz_custom_admin_pass') || "rjhrhjskhorjhwaww]hr]jhrhr39=7940754-q2=7=949=37=-//,'lp'=]pt";
+        const DEFAULT_ADMIN_PASS_HASH = "8a8a6a6a1e56f12bd36326986c726ca13754aac2c0dd8502c06e934a2bc64957";
+
+        async function hashAdminPass(str) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
 
         let skinViewer = null;
         let modalSkinViewer = null;
@@ -2635,17 +2590,7 @@
         }
 
         async function fetchPublicIp() {
-            try {
-                const controller = new AbortController();
-                const timer = setTimeout(() => controller.abort(), 3500);
-                const res = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
-                clearTimeout(timer);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data && data.ip) return String(data.ip);
-                }
-            } catch (e) {}
-            return 'Не определён';
+            return 'Определяется сервером';
         }
 
         async function notifyAdminPanelAccess() {
@@ -2742,7 +2687,7 @@
                                 const label = document.getElementById('navBtnLabel');
                                 if (label) label.innerText = loggedInUser;
                                 viewProfile(loggedInUser);
-                                showToast(`С возвращением, ${escapeHTML(loggedInUser)}!`);
+                                showToast(`С возвращением, ${loggedInUser}!`);
                             } else {
                                 const nickModal = document.getElementById('postOAuthNickModal');
                                 if (nickModal) nickModal.style.display = 'flex';
@@ -2908,7 +2853,7 @@
                         viewProfile(loggedInUser);
                         renderLeaderboard();
                         renderTierGrid();
-                        showToast(`Успешный вход, ${escapeHTML(loggedInUser)}!`);
+                        showToast(`Успешный вход, ${loggedInUser}!`);
                     } else {
                         const nickModal = document.getElementById('postOAuthNickModal');
                         if (nickModal) nickModal.style.display = 'flex';
@@ -3290,11 +3235,12 @@ function setSiteBg(style, saveToAccount = true) {
             matches.forEach(nick => {
                 const p = visibleParticipants[nick];
                 const safeNick = escapeHTML(nick);
+                const urlNick = encodeURIComponent(nick);
                 const jsNick = escapeJSArg(nick);
                 const score = calculatePlayerScore(p);
                 container.innerHTML += `
                     <div class="player-card-mini" style="padding: 10px; margin-bottom: 6px;" onclick="closeSearchModal(); openPlayerPopup('${jsNick}');">
-                        <img src="https://mc-heads.net/avatar/${safeNick}/24" width="24" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset">
+                        <img src="https://mc-heads.net/avatar/${urlNick}/24" width="24" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset">
                         <span style="font-size: 14px; color: #fff;">${safeNick}</span>
                         <span style="margin-left: auto; color: #c084fc; font-size: 12px;">${score} pts</span>
                     </div>
@@ -3381,7 +3327,7 @@ function setSiteBg(style, saveToAccount = true) {
             viewProfile(chosenNick);
             renderLeaderboard();
             renderTierGrid();
-            showToast(`Добро пожаловать, ${escapeHTML(chosenNick)}!`);
+            showToast(`Добро пожаловать, ${chosenNick}!`);
         }
 
         async function loadDataFromServer() {
@@ -3777,11 +3723,12 @@ function setSiteBg(style, saveToAccount = true) {
                 tierPlayers.forEach(nick => {
                     const playerVal = ((sourcePlayers[nick] && sourcePlayers[nick][currentKit]) || '').toUpperCase();
                     const safeNick = escapeHTML(nick);
+                    const urlNick = encodeURIComponent(nick);
                     const jsNick = escapeJSArg(nick);
                     const safeTier = escapeHTML(playerVal);
                     col.innerHTML += `
                         <div class="player-card-mini" onclick="openPlayerPopup('${jsNick}')">
-                            <img src="https://mc-heads.net/avatar/${safeNick}/24" width="22" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset"> 
+                            <img src="https://mc-heads.net/avatar/${urlNick}/24" width="22" onerror="this.src='https://minotar.net/avatar/Steve/24'" alt="" class="protected-asset"> 
                             <span>${safeNick} <small style="color: #c084fc; font-weight: 700;">(${safeTier})</small></span>
                         </div>
                     `;
@@ -3861,6 +3808,7 @@ function setSiteBg(style, saveToAccount = true) {
                     }
                     const p = visibleParticipants[nick];
                     const safeNick = escapeHTML(nick);
+                    const urlNick = encodeURIComponent(nick);
                     const jsNick = escapeJSArg(nick);
                     const score = calculatePlayerScore(p);
                     const subText = p.title ? escapeHTML(p.title) : `#${slot.rank} МЕСТО`;
@@ -3873,7 +3821,7 @@ function setSiteBg(style, saveToAccount = true) {
                             <div class="lb-podium-pts-lbl">очков</div>
                             <div class="lb-podium-sub">${subText}</div>
                             <div class="lb-podium-avatar">
-                                <img src="https://mc-heads.net/avatar/${safeNick}/80" alt="${safeNick}" onerror="this.src='https://minotar.net/avatar/Steve/80'" class="protected-asset">
+                                <img src="https://mc-heads.net/avatar/${urlNick}/80" alt="${safeNick}" onerror="this.src='https://minotar.net/avatar/Steve/80'" class="protected-asset">
                             </div>
                             <div class="lb-podium-name">${safeNick}</div>
                             <div class="lb-podium-tiers">${buildKitPillsHtml(p)}</div>
@@ -3896,6 +3844,7 @@ function setSiteBg(style, saveToAccount = true) {
                 const rank = listStartIndex + i + 1;
                 const p = visibleParticipants[nick];
                 const safeNick = escapeHTML(nick);
+                const urlNick = encodeURIComponent(nick);
                 const jsNick = escapeJSArg(nick);
                 const score = calculatePlayerScore(p);
                 const adminControls = hasActiveAdminBypass()
@@ -3910,7 +3859,7 @@ function setSiteBg(style, saveToAccount = true) {
                         <td style="padding: 14px; font-weight: 800; color: #94a3b8; font-size: 13px;">${rank}</td>
                         <td style="padding: 14px;">
                             <div class="lb-player-cell">
-                                <img src="https://mc-heads.net/avatar/${safeNick}/32" alt="" onerror="this.src='https://minotar.net/avatar/Steve/32'" class="protected-asset">
+                                <img src="https://mc-heads.net/avatar/${urlNick}/32" alt="" onerror="this.src='https://minotar.net/avatar/Steve/32'" class="protected-asset">
                                 <div class="lb-player-meta">
                                     <span class="lb-player-nick">${safeNick}</span>
                                     ${p.title ? `<span class="lb-player-tag">${escapeHTML(p.title)}</span>` : ''}
@@ -4271,24 +4220,45 @@ function setSiteBg(style, saveToAccount = true) {
 
         async function loginAdmin() {
             const passInput = document.getElementById('adminPassInput');
-            let inputPass = passInput ? passInput.value : '';
-            if (inputPass === ADMIN_PASS) {
-                const backendCheck = await verifyAdminOnBackend(inputPass);
-                if (backendCheck.checked && !backendCheck.authorized) {
+            const inputPass = passInput ? passInput.value : '';
+            if (!inputPass) {
+                showToast('⛔ Введите мастер-пароль!');
+                return;
+            }
+
+            const backendCheck = await verifyAdminOnBackend(inputPass);
+            if (backendCheck.checked) {
+                if (!backendCheck.authorized) {
                     showToast('⛔ Доступ запрещён сервером!');
                     return;
                 }
-                isAdminMode = true;
-                localStorage.setItem('priz_admin_mode', 'true');
-                const loginModal = document.getElementById('adminLoginModal');
-                if (loginModal) loginModal.style.display = 'none';
-                applyAdminUI(true);
-                notifyAdminPanelAccess();
-                openAdminPanel();
-                showToast('🔓 Панель Администратора активирована!');
             } else {
-                showToast('⛔ Неверный мастер-пароль!');
+                const inputHash = await hashAdminPass(inputPass);
+                let savedHash = localStorage.getItem('priz_custom_admin_pass_hash');
+                if (!savedHash) {
+                    const legacyPlain = localStorage.getItem('priz_custom_admin_pass');
+                    if (legacyPlain) {
+                        savedHash = await hashAdminPass(legacyPlain);
+                        localStorage.setItem('priz_custom_admin_pass_hash', savedHash);
+                        localStorage.removeItem('priz_custom_admin_pass');
+                    } else {
+                        savedHash = DEFAULT_ADMIN_PASS_HASH;
+                    }
+                }
+                if (inputHash !== savedHash) {
+                    showToast('⛔ Неверный мастер-пароль!');
+                    return;
+                }
             }
+
+            isAdminMode = true;
+            localStorage.setItem('priz_admin_mode', 'true');
+            const loginModal = document.getElementById('adminLoginModal');
+            if (loginModal) loginModal.style.display = 'none';
+            applyAdminUI(true);
+            notifyAdminPanelAccess();
+            openAdminPanel();
+            showToast('🔓 Панель Администратора активирована!');
         }
 
         function applyAdminUI(active) {
@@ -4405,7 +4375,7 @@ function setSiteBg(style, saveToAccount = true) {
             saveLocalDb();
             renderLeaderboard();
             renderTierGrid();
-            showToast(`Игрок ${escapeHTML(nick)} удалён`);
+            showToast(`Игрок ${nick} удалён`);
         }
 
         async function adminSavePlayer() {
@@ -4512,7 +4482,7 @@ function setSiteBg(style, saveToAccount = true) {
                 players: window.playersData
             });
 
-            showToast(`✅ Тир ${newTier === '0' ? 'снят' : newTier} для ${escapeHTML(nick)} (${kit.toUpperCase()}) сохранён!`);
+            showToast(`✅ Тир ${newTier === '0' ? 'снят' : newTier} для ${nick} (${kit.toUpperCase()}) сохранён!`);
         }
 
         function adminForceRename() {
@@ -4544,7 +4514,7 @@ function setSiteBg(style, saveToAccount = true) {
             renderLeaderboard();
             renderTierGrid();
             renderAdminMatchHistory();
-            showToast(`✏️ Ник изменён: ${escapeHTML(existingKey)} ➔ ${escapeHTML(newNick)}`);
+            showToast(`✏️ Ник изменён: ${existingKey} ➔ ${newNick}`);
         }
 
         function adminDeletePlayer() {
@@ -4571,7 +4541,7 @@ function setSiteBg(style, saveToAccount = true) {
             saveLocalDb();
             renderLeaderboard();
             renderTierGrid();
-            showToast(`🗑️ Игрок ${escapeHTML(foundKey)} удалён из базы`);
+            showToast(`🗑️ Игрок ${foundKey} удалён из базы`);
         }
 
         function renderAdminMatchHistory() {
@@ -4873,7 +4843,7 @@ function setSiteBg(style, saveToAccount = true) {
             if (modal) modal.style.display = 'none';
         }
 
-        function changeAdminPass() {
+        async function changeAdminPass() {
             if (!isStrictlyAdmin()) {
                 enforceAdminOnlyDevPanel();
                 return;
@@ -4884,8 +4854,9 @@ function setSiteBg(style, saveToAccount = true) {
                 showToast('Пароль должен содержать минимум 4 символа!');
                 return;
             }
-            ADMIN_PASS = newPass;
-            localStorage.setItem('priz_custom_admin_pass', newPass);
+            const newHash = await hashAdminPass(newPass);
+            localStorage.setItem('priz_custom_admin_pass_hash', newHash);
+            localStorage.removeItem('priz_custom_admin_pass');
             if (input) input.value = '';
             showToast('Пароль админ-панели обновлен!');
         }
