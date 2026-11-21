@@ -945,6 +945,156 @@
             transform: none !important;
         }
     </style>
+
+    <style id="priz-top-gap-and-mobile-fix">
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+        .page-overlay,
+        .page-overlay > *,
+        .app-container,
+        .page-view,
+        .page-view.active,
+        .page-view > :first-child,
+        #page-tier,
+        #page-tier > :first-child,
+        #page-tier .tier-table-wrapper,
+        #page-tier #tierWrapper,
+        #page-tier .tier-header-bar,
+        #page-tier .tier-grid,
+        #page-tier .kit-soon-box,
+        #page-leaderboard,
+        #page-leaderboard > :first-child,
+        #page-leaderboard .lb-header-section,
+        #page-leaderboard .lb-podium-grid,
+        #page-leaderboard .lb-table-card,
+        #page-links,
+        #page-links > :first-child,
+        #page-links .guide-hero-card,
+        #page-links .links-grid,
+        #page-home,
+        #page-home > :first-child,
+        #page-home .hero-section,
+        #page-home .kit-stats-bar,
+        #page-guide,
+        #page-guide > :first-child,
+        #page-guide .guide-hero-card,
+        #page-profile,
+        #page-profile > :first-child,
+        #page-profile .cabinet-layout {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+            top: 0 !important;
+            transform: none !important;
+        }
+        #page-tier .tier-header-bar {
+            padding: 12px 16px !important;
+            margin-top: 0 !important;
+        }
+        #page-tier .tier-grid {
+            padding: 12px 16px 16px !important;
+            margin-top: 0 !important;
+        }
+        #page-leaderboard .lb-header-section {
+            padding: 12px 16px !important;
+            margin-bottom: 10px !important;
+        }
+        #page-links .guide-hero-card {
+            padding: 14px 18px !important;
+            margin-bottom: 12px !important;
+        }
+        #page-links .links-grid {
+            padding-top: 0 !important;
+            margin-top: 8px !important;
+        }
+
+        /* Mobile / Tablet layout identical in usability & structure to desktop */
+        @media (max-width: 768px) {
+            #prizMainHeader {
+                flex-wrap: wrap !important;
+                gap: 8px !important;
+                padding: 8px 10px !important;
+            }
+            #prizMainHeader .header-left {
+                width: 100% !important;
+                flex: 1 1 100% !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: none !important;
+            }
+            #prizMainHeader .header-left::-webkit-scrollbar {
+                display: none !important;
+            }
+            #prizNavIconsBar {
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                gap: 6px !important;
+            }
+            #prizMainHeader .nav-icon-btn {
+                padding: 6px 9px !important;
+                font-size: 11px !important;
+                flex-shrink: 0 !important;
+            }
+            #prizMainHeader .header-right {
+                width: 100% !important;
+                display: flex !important;
+                justify-content: flex-end !important;
+            }
+            .app-container {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+                padding-top: 6px !important;
+            }
+            .tier-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 10px !important;
+                padding: 10px !important;
+            }
+            .lb-podium-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 8px !important;
+            }
+            .lb-summary-bar {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 8px !important;
+            }
+            .links-grid,
+            .guide-steps-grid,
+            .kit-stats-bar,
+            .profile-kit-cards-grid,
+            .cabinet-layout {
+                grid-template-columns: 1fr !important;
+                display: grid !important;
+            }
+            .modal-box {
+                width: calc(100vw - 24px) !important;
+                max-width: calc(100vw - 24px) !important;
+                margin: 12px auto !important;
+                box-sizing: border-box !important;
+            }
+            .lb-list-table th,
+            .lb-list-table td {
+                padding: 8px 6px !important;
+                font-size: 12px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .tier-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .lb-podium-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+
 </head>
 <body class="site-bg-hw-dungeon">
 
@@ -2372,15 +2522,29 @@
                 });
             }
 
-                        const currentLoggedNick = (typeof loggedInUser === 'string' && loggedInUser.trim())
-                ? loggedInUser.trim()
-                : (localStorage.getItem('priz_ign') || '').trim();
-            if (currentLoggedNick) {
-                const key = ensureEntry(currentLoggedNick);
-                if (key && sessionAccountId && !combined[key].discord_id) {
-                    combined[key].discord_id = normalizeDiscordId(sessionAccountId);
+                        try {
+                const storedIgn = (localStorage.getItem('priz_ign') || '').trim();
+                const storedAccId = normalizeDiscordId(localStorage.getItem('priz_account_id') || sessionAccountId || '');
+                const activeNick = (typeof loggedInUser === 'string' && loggedInUser.trim())
+                    ? loggedInUser.trim()
+                    : storedIgn;
+                if (activeNick) {
+                    const key = ensureEntry(activeNick);
+                    if (key && storedAccId && !combined[key].discord_id) {
+                        combined[key].discord_id = storedAccId;
+                    }
                 }
-            }
+                const createdMap = JSON.parse(localStorage.getItem('priz_user_created_dates') || '{}') || {};
+                Object.keys(createdMap).forEach(accKey => {
+                    const foundNick = findNickByDiscordId(accKey);
+                    if (foundNick) {
+                        const key = ensureEntry(foundNick);
+                        if (key && !combined[key].discord_id) {
+                            combined[key].discord_id = normalizeDiscordId(accKey);
+                        }
+                    }
+                });
+            } catch (e) {}
 
             return combined;
         }
@@ -3471,7 +3635,7 @@
             const totalAxeEl = document.getElementById('lbTotalAxe');
 
             const allEntries = Object.values(participants);
-            if (totalPlayersEl) totalPlayersEl.innerText = allEntries.filter(p => ALL_KITS.some(k => p?.[k] && String(p[k]) !== '0')).length;
+            if (totalPlayersEl) totalPlayersEl.innerText = allEntries.length;
             if (totalBeastEl) totalBeastEl.innerText = allEntries.filter(p => p?.beast && String(p.beast) !== '0').length;
             if (totalMaceEl) totalMaceEl.innerText = allEntries.filter(p => p?.mace && String(p.mace) !== '0').length;
             if (totalCartsEl) totalCartsEl.innerText = allEntries.filter(p => p?.carts && String(p.carts) !== '0').length;
@@ -3494,7 +3658,7 @@
             if (!tbody) return;
 
             if (!list.length) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:24px;">Игроки с присвоенными тирами не найдены</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:24px;">Участники не найдены</td></tr>`;
                 return;
             }
 
@@ -4236,6 +4400,7 @@
 
         function saveLocalDb() {
             try {
+                rebuildDiscordBindingsFromPlayers();
                 localStorage.setItem('priz_players_db', JSON.stringify(window.playersData || {}));
                 localStorage.setItem('priz_player_views', JSON.stringify(window.playerViews || {}));
                 localStorage.setItem('priz_player_bg', JSON.stringify(window.playerBgTheme || {}));
