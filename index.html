@@ -1026,9 +1026,9 @@
 
     <style id="priz-esports-ultra-smooth-motion">
         :root {
-            --priz-eye-glide: cubic-bezier(0.22, 1, 0.36, 1);
-            --priz-eye-soft: cubic-bezier(0.25, 0.9, 0.35, 1);
-            --priz-eye-settle: cubic-bezier(0.16, 1, 0.3, 1);
+            --esports-ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --esports-spring: cubic-bezier(0.2, 1.18, 0.35, 1);
+            --esports-snap: cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1040,68 +1040,56 @@
         }
 
         .priz-ui-press-anim {
-            animation: prizGentlePressGlide 0.56s var(--priz-eye-glide) both !important;
+            animation: prizEsportsSnapPress 0.26s var(--esports-spring) both !important;
             will-change: transform, filter, box-shadow;
         }
 
         .priz-ui-holding {
-            transform: scale3d(0.976, 0.976, 1) translate3d(0, 1px, 0) !important;
-            filter: brightness(1.09) !important;
-            box-shadow: 0 0 18px rgba(192, 132, 252, 0.34), 0 0 8px rgba(56, 189, 248, 0.16) !important;
-            transition: transform 0.24s var(--priz-eye-soft), filter 0.24s var(--priz-eye-soft), box-shadow 0.24s var(--priz-eye-soft) !important;
+            transform: scale(0.968) translateY(0.5px) !important;
+            filter: brightness(1.16) contrast(1.04) !important;
+            box-shadow: 0 0 22px rgba(192, 132, 252, 0.58), 0 0 8px rgba(56, 189, 248, 0.32), inset 0 0 10px rgba(255, 255, 255, 0.14) !important;
+            transition: transform 0.08s var(--esports-snap), filter 0.08s var(--esports-snap), box-shadow 0.08s var(--esports-snap) !important;
         }
 
-        @keyframes prizGentlePressGlide {
+        @keyframes prizEsportsSnapPress {
             0% {
-                transform: scale3d(0.976, 0.976, 1) translate3d(0, 1px, 0);
-                filter: brightness(1.09);
+                transform: scale(0.968) translateY(0.5px);
+                filter: brightness(1.16) contrast(1.04);
             }
-            45% {
-                transform: scale3d(1.012, 1.012, 1) translate3d(0, -1px, 0);
-                filter: brightness(1.06);
-                box-shadow: 0 0 16px rgba(192, 132, 252, 0.28), 0 6px 18px rgba(0, 0, 0, 0.22);
+            48% {
+                transform: scale(1.022) translateY(-1px);
+                filter: brightness(1.12) contrast(1.03);
+                box-shadow: 0 0 20px rgba(192, 132, 252, 0.52), 0 6px 18px rgba(0, 0, 0, 0.42);
             }
             100% {
-                transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
-                filter: brightness(1);
+                transform: scale(1) translateY(0);
+                filter: brightness(1) contrast(1);
                 box-shadow: none;
             }
         }
 
-        .modal-overlay {
-            opacity: 0;
-            transition: opacity 0.44s var(--priz-eye-soft) !important;
-        }
-
-        .modal-overlay[style*="display: flex"],
-        .modal-overlay[style*="display:flex"] {
-            opacity: 1;
-        }
-
         .modal-overlay[style*="display: flex"] .modal-box,
         .modal-overlay[style*="display:flex"] .modal-box {
-            animation: prizGentleModalFade 0.52s var(--priz-eye-glide) both !important;
+            animation: prizEsportsModalEntrance 0.22s var(--esports-ease) both !important;
             will-change: transform, opacity;
         }
 
-        @keyframes prizGentleModalFade {
+        @keyframes prizEsportsModalEntrance {
             0% {
                 opacity: 0;
-                transform: translate3d(0, 14px, 0) scale3d(0.975, 0.975, 1);
+                transform: translate3d(0, 12px, 0) scale(0.972);
             }
             100% {
                 opacity: 1;
-                transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+                transform: translate3d(0, 0, 0) scale(1);
             }
         }
 
         .page-view {
             display: none;
             opacity: 0;
-            transform: translate3d(0, 14px, 0) scale3d(0.992, 0.992, 1);
-            transition:
-                opacity 0.66s var(--priz-eye-soft),
-                transform 0.74s var(--priz-eye-glide);
+            transform: translate3d(0, 8px, 0) scale(0.994);
+            transition: opacity 0.22s var(--esports-ease), transform 0.24s var(--esports-ease);
             will-change: opacity, transform;
             pointer-events: none;
         }
@@ -1109,24 +1097,15 @@
         .page-view.active {
             display: block;
             opacity: 1;
-            transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+            transform: translate3d(0, 0, 0) scale(1);
             pointer-events: auto;
-        }
-
-        .page-view.page-entering {
-            display: block;
-            opacity: 0;
-            transform: translate3d(0, 14px, 0) scale3d(0.992, 0.992, 1);
-            pointer-events: none;
         }
 
         .page-view.page-leaving {
             display: block;
             opacity: 0 !important;
-            transform: translate3d(0, -10px, 0) scale3d(0.995, 0.995, 1) !important;
-            transition:
-                opacity 0.42s var(--priz-eye-soft),
-                transform 0.46s var(--priz-eye-soft) !important;
+            transform: translate3d(0, -6px, 0) scale(0.995) !important;
+            transition: opacity 0.14s var(--esports-snap), transform 0.14s var(--esports-snap) !important;
             pointer-events: none !important;
         }
 
@@ -1136,12 +1115,7 @@
         .btn-purple,
         .c-tab-btn,
         .social-hub-btn {
-            transition:
-                transform 0.42s var(--priz-eye-glide),
-                border-color 0.38s var(--priz-eye-soft),
-                box-shadow 0.46s var(--priz-eye-soft),
-                background 0.4s var(--priz-eye-soft),
-                color 0.36s var(--priz-eye-soft) !important;
+            transition: transform 0.18s var(--esports-spring), border-color 0.18s var(--esports-ease), box-shadow 0.2s var(--esports-ease), background 0.2s var(--esports-ease), color 0.18s var(--esports-ease) !important;
             will-change: transform, box-shadow;
         }
 
@@ -1149,13 +1123,13 @@
         .profile-avatar-btn:hover,
         .btn-action-sm:hover,
         .c-tab-btn:hover {
-            transform: translate3d(0, -2px, 0);
+            transform: translate3d(0, -1.5px, 0);
         }
 
         .btn-purple:hover,
         .social-hub-btn:hover {
             transform: translate3d(0, -2px, 0);
-            box-shadow: 0 10px 26px rgba(168, 85, 247, 0.28);
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.36);
         }
 
         .kit-stat-card,
@@ -1165,11 +1139,7 @@
         .profile-kit-slot,
         .lb-podium-card,
         .player-card-mini {
-            transition:
-                transform 0.46s var(--priz-eye-glide),
-                border-color 0.4s var(--priz-eye-soft),
-                box-shadow 0.48s var(--priz-eye-soft),
-                background 0.4s var(--priz-eye-soft) !important;
+            transition: transform 0.2s var(--esports-spring), border-color 0.2s var(--esports-ease), box-shadow 0.22s var(--esports-ease), background 0.2s var(--esports-ease) !important;
             will-change: transform, box-shadow;
         }
 
@@ -1179,26 +1149,26 @@
         .step-box:hover,
         .profile-kit-slot:hover {
             transform: translate3d(0, -3px, 0);
-            border-color: rgba(192, 132, 252, 0.36);
-            box-shadow: 0 12px 28px rgba(2, 6, 23, 0.42), 0 0 0 1px rgba(192, 132, 252, 0.14);
+            border-color: rgba(192, 132, 252, 0.38);
+            box-shadow: 0 12px 28px rgba(2, 6, 23, 0.52), 0 0 0 1px rgba(192, 132, 252, 0.14);
         }
 
         .lb-podium-card:hover {
-            transform: translate3d(0, -4px, 0) scale3d(1.01, 1.01, 1);
+            transform: translate3d(0, -4px, 0) scale(1.012);
         }
 
         .player-card-mini:hover {
-            transform: translate3d(3px, 0, 0);
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(192, 132, 252, 0.32);
+            transform: translate3d(2px, 0, 0);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(192, 132, 252, 0.34);
         }
 
         .lb-list-table tbody tr {
-            transition: background-color 0.36s var(--priz-eye-soft), transform 0.38s var(--priz-eye-soft);
+            transition: background-color 0.16s var(--esports-ease), transform 0.16s var(--esports-ease);
         }
 
         .lb-list-table tbody tr:hover {
-            background-color: rgba(168, 85, 247, 0.08);
+            background-color: rgba(168, 85, 247, 0.09);
         }
 
         .guide-faq-body {
@@ -1207,10 +1177,7 @@
             opacity: 0;
             padding-top: 0 !important;
             padding-bottom: 0 !important;
-            transition:
-                grid-template-rows 0.56s var(--priz-eye-glide),
-                opacity 0.48s var(--priz-eye-soft),
-                padding 0.56s var(--priz-eye-glide) !important;
+            transition: grid-template-rows 0.24s var(--esports-ease), opacity 0.2s var(--esports-ease), padding 0.24s var(--esports-ease) !important;
         }
 
         .guide-faq-body > * {
@@ -1225,27 +1192,27 @@
         }
 
         .guide-faq-icon {
-            transition: transform 0.5s var(--priz-eye-glide), color 0.36s var(--priz-eye-soft) !important;
+            transition: transform 0.22s var(--esports-spring), color 0.18s var(--esports-ease) !important;
         }
 
         .guide-faq-item.open .guide-faq-icon {
-            transform: rotate(45deg) scale(1.05);
+            transform: rotate(45deg) scale(1.08);
             color: #e9d5ff;
         }
 
-        @keyframes prizSoftLiveUpdate {
+        @keyframes prizEsportsLiveFlash {
             0% {
-                transform: scale3d(1, 1, 1);
+                transform: scale(1);
                 color: #4ade80;
-                text-shadow: 0 0 10px rgba(74, 222, 128, 0.55);
+                text-shadow: 0 0 14px rgba(74, 222, 128, 0.8);
             }
             50% {
-                transform: scale3d(1.03, 1.03, 1);
+                transform: scale(1.06);
                 color: #86efac;
-                text-shadow: 0 0 14px rgba(74, 222, 128, 0.65);
+                text-shadow: 0 0 18px rgba(74, 222, 128, 0.9);
             }
             100% {
-                transform: scale3d(1, 1, 1);
+                transform: scale(1);
                 color: inherit;
                 text-shadow: 0 0 0 rgba(74, 222, 128, 0);
             }
@@ -1253,7 +1220,7 @@
 
         .priz-live-pulse {
             display: inline-block;
-            animation: prizSoftLiveUpdate 0.95s var(--priz-eye-soft) !important;
+            animation: prizEsportsLiveFlash 0.48s var(--esports-spring) !important;
         }
     </style>
 
@@ -2423,6 +2390,9 @@
                 data.members_count ??
                 data.total_members
             );
+            if (membersNum === null && Array.isArray(data.members)) {
+                membersNum = data.members.length;
+            }
 
             let onlineNum = toSafeCount(
                 data.approximate_presence_count ??
@@ -2430,8 +2400,10 @@
                 data.online_count ??
                 data.online
             );
-
-            if (onlineNum === null && Array.isArray(data.members)) {
+            if (onlineNum === null && typeof data.presence_count === 'number') {
+                onlineNum = toSafeCount(data.presence_count);
+            }
+            if (onlineNum === null && Array.isArray(data.members) && data.members.length > 0) {
                 onlineNum = data.members.length;
             }
 
@@ -2484,8 +2456,9 @@
                 }
                 const parsed = parseDiscordWidgetPayload(data);
                 if (parsed) {
-                    if (members === null && parsed.members !== null) members = parsed.members;
-                    if (online === null && parsed.online !== null) online = parsed.online;
+                    if (parsed.members !== null) members = parsed.members;
+                    if (parsed.online !== null) online = parsed.online;
+                    if (members !== null && online !== null) break;
                 }
             }
 
@@ -2496,7 +2469,9 @@
                 const wParsed = parseDiscordWidgetPayload(widgetData);
                 if (wParsed) {
                     if (members === null && wParsed.members !== null) members = wParsed.members;
-                    if (wParsed.online !== null) {
+                    if (typeof widgetData.presence_count === 'number') {
+                        online = toSafeCount(widgetData.presence_count);
+                    } else if (online === null && wParsed.online !== null) {
                         online = wParsed.online;
                     }
                 }
@@ -2914,285 +2889,1419 @@
                     const val = (document.getElementById(id)?.value || '').toUpperCase();
                     if (val && TIER_WEIGHTS[val]) pts += TIER_WEIGHTS[val];
                 });
-                const out = document.getElementById('ptsCalcResult');
-                if (out) out.textContent = `Итого: ${pts} очков`;
+                const el = document.getElementById('ptsCalcResult');
+                if (el) el.innerText = `Итого: ${pts} очков`;
             } catch (e) {}
         }
 
         function toggleGuideFaq(btn) {
-            const item = btn?.closest('.guide-faq-item');
+            const item = btn && btn.closest ? btn.closest('.guide-faq-item') : null;
             if (!item) return;
             item.classList.toggle('open');
         }
 
-        function updateBotStatusBadge() {
-            const badge = document.getElementById('botStatusBadge');
+        function updateBotStatusUI(online) {
+            isBotOnline = Boolean(online);
             const dot = document.getElementById('botStatusDot');
             const text = document.getElementById('botStatusText');
-            if (!badge || !dot || !text) return;
 
-            if (isBotOnline) {
-                dot.classList.remove('offline');
-                text.textContent = 'Бот: Online';
-                badge.style.borderColor = 'rgba(34, 197, 94, 0.45)';
-                badge.style.color = '#86efac';
-            } else {
-                dot.classList.add('offline');
-                text.textContent = 'Бот: Offline';
-                badge.style.borderColor = 'rgba(239, 68, 68, 0.45)';
-                badge.style.color = '#fca5a5';
+            if (dot) {
+                dot.classList.toggle('offline', !isBotOnline);
+            }
+            if (text) {
+                text.innerText = isBotOnline ? 'Бот: Онлайн' : 'Бот: Оффлайн';
             }
         }
 
-        function applyKitTheme(kit) {
-            const wrapper = document.getElementById('tierWrapper') || document.querySelector('.tier-table-wrapper');
-            if (!wrapper) return;
-            wrapper.classList.remove('theme-beast', 'theme-mace', 'theme-carts', 'theme-axe');
-            if (['beast', 'mace', 'carts', 'axe'].includes(kit)) {
-                wrapper.classList.add(`theme-${kit}`);
-            }
-        }
+        function mergeBotPlayersIntoStore(botPlayersObj) {
+            if (!botPlayersObj || typeof botPlayersObj !== 'object') return;
+            botKitTiersData = { ...(botKitTiersData || {}), ...botPlayersObj };
 
-        function formatDateRussian(dateObj) {
-            const months = [
-                'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-                'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
-            ];
-            const d = dateObj.getDate();
-            const m = months[dateObj.getMonth()];
-            const y = dateObj.getFullYear();
-            return `${d} ${m} ${y} г.`;
-        }
+            Object.keys(botPlayersObj).forEach(rawNick => {
+                const nick = String(rawNick || '').trim();
+                if (!nick) return;
+                const existingKey = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick));
+                const targetNick = existingKey || nick;
+                const bp = botPlayersObj[rawNick] || {};
 
-        function ensureAccountCreatedDate(accId) {
-            if (!accId) return formatDateRussian(new Date());
-            if (!userCreatedDates[accId]) {
-                userCreatedDates[accId] = formatDateRussian(new Date());
-                try {
-                    localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
-                } catch(e) {}
-            }
-            return userCreatedDates[accId];
-        }
+                if (!window.playersData[targetNick]) {
+                    window.playersData[targetNick] = {
+                        beast: '0', mace: '0', carts: '0',
+                        smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                        title: '', server: '', ping: '', discord_id: ''
+                    };
+                }
 
-        function applyUserSiteBackground() {
-            const body = document.body;
-            const classesToRemove = [
-                'site-bg-default', 'site-bg-dark', 'site-bg-orange', 'site-bg-purple',
-                'site-bg-blue', 'site-bg-red', 'site-bg-emerald',
-                'site-bg-gta6', 'site-bg-minecraft', 'site-bg-roblox',
-                'site-bg-hw-dungeon', 'site-bg-hw-blood', 'site-bg-hw-pumpkin',
-                'site-bg-ny-frost', 'site-bg-ny-aurora', 'site-bg-ny-night'
-            ];
-            body.classList.remove(...classesToRemove);
-
-            let bgKey = 'hw-dungeon';
-            if (sessionAccountId && userSiteBgs[sessionAccountId]) {
-                bgKey = userSiteBgs[sessionAccountId];
-            } else if (currentCustomSiteBg) {
-                bgKey = currentCustomSiteBg;
-            }
-            body.classList.add(`site-bg-${bgKey}`);
-        }
-
-        function setSiteBg(bgKey) {
-            currentCustomSiteBg = bgKey;
-            if (sessionAccountId) {
-                userSiteBgs[sessionAccountId] = bgKey;
-                try {
-                    localStorage.setItem('priz_user_site_bgs', JSON.stringify(userSiteBgs));
-                } catch(e) {}
-            }
-            applyUserSiteBackground();
-            showToast(`Фон сайта изменён на: ${bgKey}`);
-        }
-
-        function updateAdminOnlyVisibility() {
-            const showAdminItems = hasActiveAdminBypass();
-            document.body.classList.toggle('admin-panel-active', showAdminItems);
-
-            document.querySelectorAll('.admin-only-item').forEach(el => {
-                if (el.classList.contains('bg-section-title')) {
-                    el.style.display = showAdminItems ? 'block' : 'none';
-                } else if (el.classList.contains('btn-action-sm')) {
-                    el.style.display = showAdminItems ? 'inline-block' : 'none';
-                } else {
-                    el.style.display = showAdminItems ? 'block' : 'none';
+                ALL_KITS.forEach(k => {
+                    if (bp[k] !== undefined && bp[k] !== null && String(bp[k]) !== '') {
+                        window.playersData[targetNick][k] = String(bp[k]).toUpperCase();
+                    }
+                });
+                if (bp.title) window.playersData[targetNick].title = bp.title;
+                if (bp.server) window.playersData[targetNick].server = bp.server;
+                if (bp.ping) window.playersData[targetNick].ping = bp.ping;
+                if (bp.discord_id) {
+                    const dId = normalizeDiscordId(bp.discord_id);
+                    window.playersData[targetNick].discord_id = dId;
+                    window.discordNickBindings[normalizeNickKey(targetNick)] = {
+                        discord_id: dId,
+                        nickname: targetNick,
+                        bound_at: (window.discordNickBindings[normalizeNickKey(targetNick)]?.bound_at) || new Date().toISOString()
+                    };
                 }
             });
 
-            document.querySelectorAll('.admin-only-axe-editor').forEach(el => {
-                el.style.display = showAdminItems ? 'flex' : 'none';
-            });
+            persistDiscordBindings();
+            try {
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            } catch (e) {}
+        }
 
-            const head = document.getElementById('adminColHead');
-            if (head) head.textContent = showAdminItems ? 'АДМИН' : '';
+        async function refreshBotKitTiersStatus() {
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 3000);
+                const res = await fetch(`${BACKEND_URL}/api/bot/kit-tiers?kit=${encodeURIComponent(currentKit)}`, {
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.players && typeof data.players === 'object') {
+                        mergeBotPlayersIntoStore(data.players);
+                    }
+                    if (Array.isArray(data?.history) && data.history.length > 0) {
+                        window.matchHistory = data.history.slice(0, 200);
+                        localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
+                    }
+                    if (typeof data?.online === 'boolean') {
+                        updateBotStatusUI(data.online);
+                    } else {
+                        updateBotStatusUI(true);
+                    }
+                } else {
+                    updateBotStatusUI(true);
+                }
+            } catch (e) {
+                updateBotStatusUI(true);
+            }
+
+            if (document.getElementById('page-tier')?.classList.contains('active')) {
+                renderTierGrid();
+            }
             if (document.getElementById('page-leaderboard')?.classList.contains('active')) {
                 renderLeaderboard();
             }
         }
 
-        function saveLocalStorageData() {
-            try {
-                rebuildDiscordBindingsFromPlayers();
-                localStorage.setItem('priz_players_data', JSON.stringify(window.playersData));
-                localStorage.setItem('priz_player_views', JSON.stringify(window.playerViews));
-                localStorage.setItem('priz_player_bg', JSON.stringify(window.playerBgTheme));
-                localStorage.setItem('priz_player_skins', JSON.stringify(window.playerSkins));
-                localStorage.setItem('priz_player_poses', JSON.stringify(window.playerPoses));
-                localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
-            } catch (e) {}
+        function getAuthHeaders() {
+            const headers = { 'Content-Type': 'application/json' };
+            if (loggedInUser) headers['X-Priz-User'] = loggedInUser;
+            if (sessionAccountId) headers['X-Discord-Id'] = sessionAccountId;
+            return headers;
         }
 
-        function loadLocalStorageData() {
+        async function verifyAdminOnBackend(password) {
             try {
-                const p = JSON.parse(localStorage.getItem('priz_players_data') || '{}');
-                window.playersData = (p && typeof p === 'object') ? p : {};
-                window.playerViews = JSON.parse(localStorage.getItem('priz_player_views') || '{}') || {};
-                window.playerBgTheme = JSON.parse(localStorage.getItem('priz_player_bg') || '{}') || {};
-                window.playerSkins = JSON.parse(localStorage.getItem('priz_player_skins') || '{}') || {};
-                window.playerPoses = JSON.parse(localStorage.getItem('priz_player_poses') || '{}') || {};
-                window.matchHistory = JSON.parse(localStorage.getItem('priz_match_history') || '[]') || [];
-
-                Object.keys(DEFAULT_PLAYERS_SEED).forEach(nick => {
-                    if (!window.playersData[nick]) {
-                        window.playersData[nick] = { ...DEFAULT_PLAYERS_SEED[nick] };
-                    }
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 3000);
+                const res = await fetch(`${BACKEND_URL}/api/admin/auth`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({
+                        password,
+                        nickname: loggedInUser || null,
+                        discord_id: sessionAccountId || null
+                    }),
+                    signal: controller.signal
                 });
-                rebuildDiscordBindingsFromPlayers();
+                clearTimeout(timer);
+                if (res.status === 404 || res.status === 405) {
+                    return { checked: false, authorized: true };
+                }
+                if (!res.ok) {
+                    return { checked: true, authorized: false };
+                }
+                const data = await res.json().catch(() => ({}));
+                if (typeof data.authorized === 'boolean') {
+                    return { checked: true, authorized: data.authorized };
+                }
+                if (typeof data.success === 'boolean') {
+                    return { checked: true, authorized: data.success };
+                }
+                return { checked: true, authorized: true };
             } catch (e) {
-                window.playersData = { ...DEFAULT_PLAYERS_SEED };
+                return { checked: false, authorized: true };
             }
         }
 
-        function generateDemoPlayers() {
-            const tiersPool = ['HT1', 'RHT1', 'LT1', 'RLT1', 'HT2', 'RHT2', 'LT2', 'RLT2', 'HT3', 'LT3', 'HT4', 'LT4', 'HT5', 'LT5'];
-            const servers = ['PriZriT', 'HolyWorld', 'FunTime', 'EU Practice', 'NA PvP'];
-            const titles = ['⚡ Legend', '🔥 Champion', '⚔️ Striker', '🛡️ Guardian', '👑 Ace'];
+        async function syncTierIssueToBackendAndBot(payload) {
+            const endpoints = ['/api/bot/set-tier', '/api/admin/issue-tier'];
+            for (const ep of endpoints) {
+                try {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 3500);
+                    const res = await fetch(`${BACKEND_URL}${ep}`, {
+                        method: 'POST',
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
+                    });
+                    clearTimeout(timer);
+                    if (res.ok) {
+                        const data = await res.json().catch(() => ({}));
+                        if (data && data.players && typeof data.players === 'object') {
+                            mergeBotPlayersIntoStore(data.players);
+                        }
+                        refreshBotKitTiersStatus();
+                        return true;
+                    }
+                } catch (e) {}
+            }
+            return false;
+        }
 
-            for (let i = 1; i <= 15; i++) {
-                const nick = `Player_${i}`;
-                if (!window.playersData[nick]) {
-                    const b = tiersPool[(i * 2) % tiersPool.length];
-                    const m = tiersPool[(i * 3 + 1) % tiersPool.length];
-                    const c = tiersPool[(i * 5 + 2) % tiersPool.length];
-                    const a = tiersPool[(i * 4 + 3) % tiersPool.length];
-                    window.playersData[nick] = {
-                        beast: b, mace: m, carts: c, axe: a,
-                        smp: '0', uhc: '0', op: '0', spearmace: '0',
-                        title: i <= 5 ? titles[i - 1] : '',
-                        server: servers[i % servers.length],
-                        ping: `${18 + ((i * 7) % 62)}ms`
-                    };
-                    if (!window.matchHistory.some(item => item.player === nick)) {
-                        window.matchHistory.push({
-                            player: nick,
-                            kit: 'beast',
-                            tier: b,
-                            score: '3-1',
-                            tester: 'System',
-                            date: new Date().toLocaleDateString('ru-RU')
+        function detectDeviceInfo() {
+            const ua = navigator.userAgent || '';
+            let deviceModel = 'Не определена';
+            let deviceName = 'Не определено';
+
+            const iPadMatch = ua.match(/iPad/i);
+            const iPhoneMatch = ua.match(/iPhone/i);
+            const androidMatch = ua.match(/Android\s+([\d.]+)?\s*;?\s*([^;\)]+)/i);
+            const macMatch = ua.match(/Macintosh;.*Mac OS X\s+([0-9_]+)/i);
+            const winMatch = ua.match(/Windows NT\s+([0-9.]+)/i);
+            const linuxMatch = ua.match(/Linux/i);
+
+            if (iPhoneMatch) {
+                deviceModel = 'iPhone';
+                deviceName = 'Apple iPhone (iOS)';
+            } else if (iPadMatch) {
+                deviceModel = 'iPad';
+                deviceName = 'Apple iPad (iPadOS)';
+            } else if (androidMatch) {
+                const rawModel = (androidMatch[2] || 'Android Device').replace(/Build\/.*$/i, '').trim();
+                deviceModel = rawModel || 'Android Device';
+                deviceName = `${deviceModel} (Android${androidMatch[1] ? ' ' + androidMatch[1] : ''})`;
+            } else if (macMatch) {
+                deviceModel = 'Macintosh';
+                deviceName = 'Apple Mac (' + macMatch[1].replace(/_/g, '.') + ')';
+            } else if (winMatch) {
+                const ver = winMatch[1];
+                const winLabel = ver === '10.0' ? 'Windows 10 / 11' : `Windows NT ${ver}`;
+                deviceModel = `PC (${winLabel})`;
+                deviceName = `Desktop PC (${winLabel})`;
+            } else if (linuxMatch) {
+                deviceModel = 'Linux PC';
+                deviceName = 'Linux Workstation';
+            } else {
+                deviceModel = (navigator.platform || 'Unknown').trim();
+                deviceName = ua.slice(0, 80) || 'Unknown Device';
+            }
+
+            if (navigator.userAgentData && navigator.userAgentData.model) {
+                deviceModel = navigator.userAgentData.model;
+            }
+            if (navigator.userAgentData && navigator.userAgentData.platform) {
+                const plat = navigator.userAgentData.platform;
+                if (!deviceName.toLowerCase().includes(plat.toLowerCase())) {
+                    deviceName = `${deviceModel} (${plat})`;
+                }
+            }
+
+            return {
+                ip: 'Определяется...',
+                deviceModel,
+                deviceName,
+                siteNickname: loggedInUser || 'Гость (не авторизован)',
+                discordId: sessionAccountId || null,
+                targetDiscordUsername: ADMIN_DM_TARGET_USERNAME,
+                targetDiscordId: ADMIN_DM_TARGET_ID,
+                userAgent: ua,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        async function fetchPublicIp() {
+            return 'Определяется сервером';
+        }
+
+        async function notifyAdminPanelAccess() {
+            const info = detectDeviceInfo();
+            info.ip = await fetchPublicIp();
+            info.siteNickname = loggedInUser || localStorage.getItem('priz_ign') || 'Гость (не авторизован)';
+
+            window.adminLoginLogs.unshift(info);
+            if (window.adminLoginLogs.length > 100) {
+                window.adminLoginLogs = window.adminLoginLogs.slice(0, 100);
+            }
+            try {
+                localStorage.setItem('priz_admin_login_logs', JSON.stringify(window.adminLoginLogs));
+            } catch (e) {}
+
+            try {
+                await fetch(`${BACKEND_URL}/api/admin/login-alert`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        target_username: ADMIN_DM_TARGET_USERNAME,
+                        target_user: ADMIN_DM_TARGET_USERNAME,
+                        target_discord_id: ADMIN_DM_TARGET_ID,
+                        ip: info.ip,
+                        device_model: info.deviceModel,
+                        device_name: info.deviceName,
+                        site_nickname: info.siteNickname,
+                        discord_id: info.discordId,
+                        user_agent: info.userAgent,
+                        timestamp: info.timestamp
+                    })
+                });
+            } catch (e) {}
+
+            try {
+                await fetch(`${BACKEND_URL}/api/bot/dm`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        recipient_username: ADMIN_DM_TARGET_USERNAME,
+                        recipient_id: ADMIN_DM_TARGET_ID,
+                        ip: info.ip,
+                        device_model: info.deviceModel,
+                        device_name: info.deviceName,
+                        site_nickname: info.siteNickname,
+                        timestamp: info.timestamp
+                    })
+                });
+            } catch (e) {}
+
+            syncWithServer();
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const returnedState = urlParams.get('state');
+            const savedState = localStorage.getItem('priz_oauth_state');
+
+            if (code) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+
+                if (savedState && returnedState && returnedState !== savedState) {
+                    showToast('⛔ Ошибка безопасности OAuth2 (несоответствие state)!');
+                    localStorage.removeItem('priz_oauth_state');
+                } else {
+                    localStorage.removeItem('priz_oauth_state');
+                    showToast('Авторизация в Discord... Подождите');
+
+                    try {
+                        const currentRedirectUri = window.location.origin + window.location.pathname;
+                        const response = await fetch(`${BACKEND_URL}/api/auth/discord`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ code, redirect_uri: currentRedirectUri })
                         });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+
+                        const data = await response.json();
+
+                        if (data.discord_id) {
+                            sessionAccountId = data.discord_id;
+                            localStorage.setItem('priz_account_id', sessionAccountId);
+                            userCreatedDates[sessionAccountId] = data.created_at || new Date().toLocaleDateString('ru-RU');
+                            localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+
+                            const existingNick = data.nickname || findNickByDiscordId(sessionAccountId);
+                            if (existingNick) {
+                                loggedInUser = existingNick;
+                                localStorage.setItem('priz_ign', loggedInUser);
+                                const label = document.getElementById('navBtnLabel');
+                                if (label) label.innerText = loggedInUser;
+                                viewProfile(loggedInUser);
+                                showToast(`С возвращением, ${loggedInUser}!`);
+                            } else {
+                                const nickModal = document.getElementById('postOAuthNickModal');
+                                if (nickModal) nickModal.style.display = 'flex';
+                            }
+                        } else {
+                            showToast('Ошибка авторизации: ' + (data.error || 'неизвестно'));
+                        }
+                    } catch (err) {
+                        console.warn('Cloudflare Function /api/auth/discord недоступна или не настроена:', err);
+                        showToast('Ошибка связи с сервером авторизации Discord');
                     }
                 }
             }
-            saveLocalStorageData();
+
+            if (sessionAccountId && userSiteBgs[sessionAccountId]) {
+                currentCustomSiteBg = userSiteBgs[sessionAccountId];
+            }
+
+            loadSavedData();
+            rebuildDiscordBindingsFromPlayers();
+            renderCustomHomeKits();
+            renderCustomDiscordLinks();
+            applyAxeDiscordInviteUI();
+            applySiteBg(currentCustomSiteBg);
+
+            if (loggedInUser) {
+                if (!sessionAccountId) {
+                    const bound = getNickBindingInfo(loggedInUser);
+                    if (bound && bound.discord_id) {
+                        sessionAccountId = bound.discord_id;
+                        localStorage.setItem('priz_account_id', sessionAccountId);
+                    }
+                }
+                const label = document.getElementById('navBtnLabel');
+                if (label) label.innerText = loggedInUser;
+                updateProfileUI(loggedInUser);
+                renderProfileSkins();
+            }
+
+            if (isAdminMode) {
+                enableAdminModeUI();
+            } else {
+                disableAdminModeUI();
+            }
+
+            updatePointsCalculator();
+            renderHomeKitStats();
+            renderLeaderboard();
+            refreshBotKitTiersStatus();
+            syncWithServer();
+
+            setInterval(() => {
+                renderHomeKitStats();
+            }, 5000);
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    renderHomeKitStats();
+                    pullLatestFromServer();
+                    refreshBotKitTiersStatus();
+                }
+            });
+
+            setInterval(() => {
+                pullLatestFromServer();
+                refreshBotKitTiersStatus();
+            }, 5000);
+        });
+
+        function findNickByDiscordId(discordId) {
+            const targetId = normalizeDiscordId(discordId);
+            if (!targetId) return null;
+
+            for (const key in window.discordNickBindings) {
+                const entry = window.discordNickBindings[key];
+                if (entry && normalizeDiscordId(entry.discord_id) === targetId && entry.nickname) {
+                    const exactInPlayers = Object.keys(window.playersData || {}).find(n => normalizeNickKey(n) === normalizeNickKey(entry.nickname));
+                    return exactInPlayers || entry.nickname;
+                }
+            }
+
+            for (const nick in window.playersData) {
+                if (normalizeDiscordId(window.playersData[nick]?.discord_id) === targetId) {
+                    return nick;
+                }
+            }
+            return null;
+        }
+
+        function redirectToDiscord() {
+            const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
+            const state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            localStorage.setItem('priz_oauth_state', state);
+            window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${state}`;
+        }
+
+        function openCodeLoginModal() {
+            closeModal('authModal');
+            document.getElementById('codeLoginModal').style.display = 'flex';
+            document.getElementById('secretLoginCodeInput').value = '';
+            document.getElementById('codeLoginErrorMsg').innerText = '';
+            setTimeout(() => document.getElementById('secretLoginCodeInput').focus(), 100);
+        }
+
+        function closeCodeLoginModal() {
+            closeModal('codeLoginModal');
+        }
+
+        async function submitSecretCode() {
+            const code = document.getElementById('secretLoginCodeInput').value.trim();
+            const errEl = document.getElementById('codeLoginErrorMsg');
+
+            if (!code || code.length < 4) {
+                errEl.innerText = 'Введите корректный код из бота!';
+                return;
+            }
+
+            errEl.innerText = 'Проверка кода...';
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/auth/code-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.discord_id) {
+                    sessionAccountId = data.discord_id;
+                    localStorage.setItem('priz_account_id', sessionAccountId);
+                    userCreatedDates[sessionAccountId] = data.created_at || new Date().toLocaleDateString('ru-RU');
+                    localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+
+                    closeCodeLoginModal();
+
+                    const existingNick = data.nickname || findNickByDiscordId(sessionAccountId);
+                    if (existingNick) {
+                        loggedInUser = existingNick;
+                        localStorage.setItem('priz_ign', loggedInUser);
+                        const label = document.getElementById('navBtnLabel');
+                        if (label) label.innerText = loggedInUser;
+                        viewProfile(loggedInUser);
+                        showToast(`Успешный вход как ${loggedInUser}!`);
+                    } else {
+                        document.getElementById('postOAuthNickModal').style.display = 'flex';
+                        setTimeout(() => document.getElementById('oauthNickInput').focus(), 100);
+                    }
+                } else {
+                    errEl.innerText = data.error || 'Неверный или просроченный код!';
+                }
+            } catch (err) {
+                errEl.innerText = 'Ошибка соединения с сервером проверки кода!';
+            }
+        }
+
+        function closePostOAuthModal() {
+            closeModal('postOAuthNickModal');
+        }
+
+        function submitOAuthNick() {
+            const nick = document.getElementById('oauthNickInput').value.trim();
+            const errEl = document.getElementById('oauthNickErrorMsg');
+
+            if (nick.length < 2 || nick.length > 16 || !/^[a-zA-Z0-9_]+$/.test(nick)) {
+                errEl.innerText = 'Ник должен содержать от 2 до 16 символов (латиница, цифры, _).';
+                return;
+            }
+
+            if (!sessionAccountId) {
+                sessionAccountId = 'dc_' + Date.now().toString(36);
+                localStorage.setItem('priz_account_id', sessionAccountId);
+            }
+
+            const existingNick = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick));
+            const finalNick = existingNick || nick;
+            const bindResult = bindNickToDiscordAccount(finalNick, sessionAccountId);
+            if (!bindResult.ok) {
+                errEl.innerText = bindResult.error;
+                return;
+            }
+
+            loggedInUser = finalNick;
+            localStorage.setItem('priz_ign', loggedInUser);
+
+            if (!userCreatedDates[sessionAccountId]) {
+                userCreatedDates[sessionAccountId] = new Date().toLocaleDateString('ru-RU');
+                localStorage.setItem('priz_user_created_dates', JSON.stringify(userCreatedDates));
+            }
+
+            closePostOAuthModal();
+            const label = document.getElementById('navBtnLabel');
+            if (label) label.innerText = loggedInUser;
+
+            syncWithServer();
+            viewProfile(loggedInUser);
+            renderLeaderboard();
+            showToast(`Добро пожаловать на PrizTiers, ${loggedInUser}!`);
+        }
+
+        let lastLocalMutationTs = Number(localStorage.getItem('priz_last_mutation_ts') || 0);
+        let prizBroadcastChannel = null;
+        try {
+            if (typeof BroadcastChannel !== 'undefined') {
+                prizBroadcastChannel = new BroadcastChannel('priztiers_realtime_sync');
+                prizBroadcastChannel.onmessage = (ev) => {
+                    if (ev && ev.data && ev.data.type === 'STATE_UPDATED') {
+                        loadSavedData();
+                        rebuildDiscordBindingsFromPlayers();
+                        applyGlobalVisualState();
+                    }
+                };
+            }
+        } catch (e) {}
+
+        function markLocalStateMutated() {
+            lastLocalMutationTs = Date.now();
+            try {
+                localStorage.setItem('priz_last_mutation_ts', String(lastLocalMutationTs));
+                if (prizBroadcastChannel) {
+                    prizBroadcastChannel.postMessage({ type: 'STATE_UPDATED', ts: lastLocalMutationTs });
+                }
+            } catch (e) {}
+        }
+
+        function applyGlobalVisualState() {
+            renderLeaderboard();
+            if (document.getElementById('page-tier')?.classList.contains('active')) {
+                renderTierGrid();
+            }
+            if (loggedInUser) {
+                updateProfileUI(loggedInUser);
+                renderProfileSkins();
+            }
+            const modalBox = document.getElementById('playerModal');
+            const modalIgn = document.getElementById('modalPlayerIgn')?.innerText?.trim();
+            if (modalBox && modalBox.style.display === 'flex' && modalIgn) {
+                refreshOpenPlayerModal(modalIgn);
+            }
+        }
+
+        function mergePlayerEntry(existing, incoming, preferIncoming = false) {
+            if (!incoming || typeof incoming !== 'object') return existing;
+            if (!existing || typeof existing !== 'object') return { ...incoming };
+            const out = { ...existing };
+            ALL_KITS.forEach(kit => {
+                const incVal = incoming[kit];
+                const curVal = existing[kit];
+                if (incVal !== undefined && incVal !== null) {
+                    const normInc = String(incVal).toUpperCase();
+                    if (preferIncoming) {
+                        out[kit] = normInc;
+                    } else if (!curVal || curVal === '0' || (normInc !== '0')) {
+                        out[kit] = normInc;
+                    }
+                }
+            });
+            ['title', 'server', 'ping', 'discord_id'].forEach(field => {
+                if (incoming[field] !== undefined && incoming[field] !== null && String(incoming[field]).trim() !== '') {
+                    out[field] = incoming[field];
+                } else if (!out[field] && existing[field]) {
+                    out[field] = existing[field];
+                }
+            });
+            return out;
+        }
+
+        function mergeServerStateIntoLocal(serverState, preserveLocalRecent = false) {
+            if (!serverState || typeof serverState !== 'object') return;
+            const serverTs = Number(serverState.updatedAt || serverState.updated_at || 0);
+            const isRecentLocal = preserveLocalRecent && (Date.now() - lastLocalMutationTs < 5000) && (!serverTs || serverTs <= lastLocalMutationTs);
+
+            if (serverState.players && typeof serverState.players === 'object') {
+                const nextPlayers = { ...window.playersData };
+                Object.keys(serverState.players).forEach(nick => {
+                    const incPlayer = serverState.players[nick];
+                    if (incPlayer === null) {
+                        if (!isRecentLocal) delete nextPlayers[nick];
+                        return;
+                    }
+                    const existingKey = Object.keys(nextPlayers).find(k => normalizeNickKey(k) === normalizeNickKey(nick));
+                    const targetKey = existingKey || nick;
+                    nextPlayers[targetKey] = mergePlayerEntry(nextPlayers[targetKey], incPlayer, !isRecentLocal);
+                });
+                window.playersData = nextPlayers;
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            }
+            if (serverState.views && typeof serverState.views === 'object') {
+                Object.keys(serverState.views).forEach(nick => {
+                    const sv = serverState.views[nick];
+                    const lv = window.playerViews[nick];
+                    if (!lv) {
+                        window.playerViews[nick] = sv;
+                    } else if (sv) {
+                        const mergedDays = { ...(sv.days || {}), ...(lv.days || {}) };
+                        Object.keys(sv.days || {}).forEach(d => {
+                            mergedDays[d] = Math.max(Number(sv.days[d] || 0), Number((lv.days && lv.days[d]) || 0));
+                        });
+                        const mergedMonths = { ...(sv.months || {}), ...(lv.months || {}) };
+                        Object.keys(sv.months || {}).forEach(m => {
+                            mergedMonths[m] = Math.max(Number(sv.months[m] || 0), Number((lv.months && lv.months[m]) || 0));
+                        });
+                        window.playerViews[nick] = {
+                            total: Math.max(Number(sv.total || 0), Number(lv.total || 0)),
+                            days: mergedDays,
+                            months: mergedMonths
+                        };
+                    }
+                });
+                localStorage.setItem('priz_views', JSON.stringify(window.playerViews));
+            }
+            if (serverState.bgThemes && typeof serverState.bgThemes === 'object') {
+                window.playerBgTheme = isRecentLocal
+                    ? { ...serverState.bgThemes, ...window.playerBgTheme }
+                    : { ...window.playerBgTheme, ...serverState.bgThemes };
+                localStorage.setItem('priz_bg_themes', JSON.stringify(window.playerBgTheme));
+            }
+            if (serverState.skins && typeof serverState.skins === 'object') {
+                window.playerSkins = isRecentLocal
+                    ? { ...serverState.skins, ...window.playerSkins }
+                    : { ...window.playerSkins, ...serverState.skins };
+                localStorage.setItem('priz_skins', JSON.stringify(window.playerSkins));
+            }
+            if (serverState.poses && typeof serverState.poses === 'object') {
+                window.playerPoses = isRecentLocal
+                    ? { ...serverState.poses, ...window.playerPoses }
+                    : { ...window.playerPoses, ...serverState.poses };
+                localStorage.setItem('priz_poses', JSON.stringify(window.playerPoses));
+            }
+            if (Array.isArray(serverState.history)) {
+                if (serverState.history.length > 0 || !isRecentLocal) {
+                    const mergedHist = [...(isRecentLocal ? window.matchHistory : []), ...serverState.history];
+                    const seen = new Set();
+                    window.matchHistory = mergedHist.filter(item => {
+                        const sig = `${item.nick}|${item.kit}|${item.newTier}|${item.date}`;
+                        if (seen.has(sig)) return false;
+                        seen.add(sig);
+                        return true;
+                    }).slice(0, 200);
+                    localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
+                }
+            }
+            if (serverState.bindings && typeof serverState.bindings === 'object') {
+                window.discordNickBindings = { ...window.discordNickBindings, ...serverState.bindings };
+                persistDiscordBindings();
+            }
+            if (serverState.axeInvite && typeof serverState.axeInvite === 'string') {
+                const cur = getSavedAxeInviteUrl();
+                if (!cur && serverState.axeInvite) {
+                    localStorage.setItem('priz_axe_discord_invite', serverState.axeInvite);
+                    applyAxeDiscordInviteUI();
+                }
+            }
+            rebuildDiscordBindingsFromPlayers();
+            applyGlobalVisualState();
+        }
+
+        async function pullLatestFromServer() {
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 4000);
+                const res = await fetch(`${BACKEND_URL}/api/sync?_t=${Date.now()}`, {
+                    method: 'GET',
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+                if (res.ok) {
+                    const serverState = await res.json();
+                    mergeServerStateIntoLocal(serverState, true);
+                }
+            } catch (e) {}
+        }
+
+        async function syncWithServer(pushMode = true) {
+            if (pushMode) {
+                markLocalStateMutated();
+            }
+            try {
+                const payload = {
+                    action: pushMode ? 'push' : 'pull',
+                    updatedAt: Date.now(),
+                    actor: loggedInUser || null,
+                    players: window.playersData,
+                    views: window.playerViews,
+                    bgThemes: window.playerBgTheme,
+                    skins: window.playerSkins,
+                    poses: window.playerPoses,
+                    history: window.matchHistory,
+                    bindings: window.discordNickBindings,
+                    axeInvite: getSavedAxeInviteUrl(),
+                    adminLogs: window.adminLoginLogs
+                };
+
+                const response = await fetch(`${BACKEND_URL}/api/sync`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const serverState = await response.json();
+                    mergeServerStateIntoLocal(serverState, pushMode);
+                }
+            } catch (e) {}
+        }
+
+        window.addEventListener('storage', (e) => {
+            if (!e || !e.key) return;
+            if (e.key.startsWith('priz_')) {
+                loadSavedData();
+                rebuildDiscordBindingsFromPlayers();
+                applyGlobalVisualState();
+            }
+        });
+
+        function checkAuthAndOpenProfile() {
+            if (!loggedInUser) {
+                document.getElementById('authModal').style.display = 'flex';
+            } else {
+                const label = document.getElementById('navBtnLabel');
+                if (label) label.innerText = loggedInUser;
+                switchPage('profile');
+                viewProfile(loggedInUser);
+            }
+        }
+
+        function logoutUser() {
+            loggedInUser = null;
+            localStorage.removeItem('priz_ign');
+            const label = document.getElementById('navBtnLabel');
+            if (label) label.innerText = 'Аккаунт';
+            switchPage('home');
+            showToast('Вы вышли из аккаунта');
+        }
+
+        function openChangeNickModal() {
+            if (!loggedInUser) return;
+            document.getElementById('newNickInput').value = loggedInUser;
+            document.getElementById('nickErrorMsg').innerText = '';
+            document.getElementById('nickModal').style.display = 'flex';
+        }
+
+        function submitNewNick() {
+            const newNick = document.getElementById('newNickInput').value.trim();
+            const errEl = document.getElementById('nickErrorMsg');
+            const now = Date.now();
+            const cooldownMs = 15 * 24 * 60 * 60 * 1000;
+
+            if (newNick.length < 2 || newNick.length > 16 || !/^[a-zA-Z0-9_]+$/.test(newNick)) {
+                errEl.innerText = 'Ник должен содержать от 2 до 16 символов (латиница, цифры, _).';
+                return;
+            }
+
+            if (lastNickChange && (now - parseInt(lastNickChange)) < cooldownMs) {
+                const daysLeft = Math.ceil((cooldownMs - (now - parseInt(lastNickChange))) / (1000 * 60 * 60 * 24));
+                errEl.innerText = `Смена ника доступна раз в 15 дней. Осталось дней: ${daysLeft}.`;
+                return;
+            }
+
+            const existingNick = Object.keys(window.playersData || {}).find(k => normalizeNickKey(k) === normalizeNickKey(newNick));
+            if (existingNick && normalizeNickKey(existingNick) !== normalizeNickKey(loggedInUser)) {
+                const bound = getNickBindingInfo(existingNick);
+                const currentActorId = normalizeDiscordId(sessionAccountId || window.playersData[loggedInUser]?.discord_id);
+                if (bound && bound.discord_id && (!currentActorId || normalizeDiscordId(bound.discord_id) !== currentActorId)) {
+                    errEl.innerText = 'Этот никнейм уже закреплён за другим Discord аккаунтом!';
+                    return;
+                }
+            }
+
+            const oldNick = loggedInUser;
+            const actorDiscordId = normalizeDiscordId(sessionAccountId || window.playersData[oldNick]?.discord_id);
+
+            if (window.playersData[oldNick]) {
+                const playerObj = { ...window.playersData[oldNick] };
+                if (actorDiscordId) playerObj.discord_id = actorDiscordId;
+                delete window.playersData[oldNick];
+                window.playersData[newNick] = playerObj;
+            } else {
+                window.playersData[newNick] = {
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: '', discord_id: actorDiscordId
+                };
+            }
+
+            if (window.playerViews[oldNick]) {
+                window.playerViews[newNick] = window.playerViews[oldNick];
+                delete window.playerViews[oldNick];
+            }
+            if (window.playerBgTheme[oldNick]) {
+                window.playerBgTheme[newNick] = window.playerBgTheme[oldNick];
+                delete window.playerBgTheme[oldNick];
+            }
+            if (window.playerSkins[oldNick]) {
+                window.playerSkins[newNick] = window.playerSkins[oldNick];
+                delete window.playerSkins[oldNick];
+            }
+            if (window.playerPoses[oldNick]) {
+                window.playerPoses[newNick] = window.playerPoses[oldNick];
+                delete window.playerPoses[oldNick];
+            }
+
+            if (actorDiscordId) {
+                bindNickToDiscordAccount(newNick, actorDiscordId);
+            }
+
+            loggedInUser = newNick;
+            localStorage.setItem('priz_ign', loggedInUser);
+            lastNickChange = now;
+            localStorage.setItem('priz_last_nick_change', lastNickChange);
+
+            localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            localStorage.setItem('priz_views', JSON.stringify(window.playerViews));
+            localStorage.setItem('priz_bg_themes', JSON.stringify(window.playerBgTheme));
+            localStorage.setItem('priz_skins', JSON.stringify(window.playerSkins));
+            localStorage.setItem('priz_poses', JSON.stringify(window.playerPoses));
+            syncWithServer();
+
+            closeModal('nickModal');
+            const label = document.getElementById('navBtnLabel');
+            if (label) label.innerText = loggedInUser;
+            updateProfileUI(loggedInUser);
+            renderLeaderboard();
+            showToast(`Ник изменён на ${newNick}!`);
+        }
+
+        function openAdminLoginModal() {
+            if (isAdminMode) {
+                openAdminPanel();
+                return;
+            }
+            document.getElementById('adminPassInput').value = '';
+            document.getElementById('adminLoginModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('adminPassInput').focus(), 100);
+        }
+
+        async function loginAdmin() {
+            const pass = document.getElementById('adminPassInput').value;
+            const passHash = await hashAdminPass(pass);
+            if (passHash !== DEFAULT_ADMIN_PASS_HASH) {
+                showToast('Неверный мастер-пароль!');
+                return;
+            }
+
+            const backendAuth = await verifyAdminOnBackend(pass);
+            if (backendAuth.checked && !backendAuth.authorized) {
+                showToast('Доступ отклонён сервером!');
+                return;
+            }
+
+            isAdminMode = true;
+            localStorage.setItem('priz_admin_mode', 'true');
+            closeModal('adminLoginModal');
+            enableAdminModeUI();
+            renderLeaderboard();
+            notifyAdminPanelAccess();
+            openAdminPanel();
+            showToast('Режим Администратора активирован');
+        }
+
+        function enableAdminModeUI() {
+            document.body.classList.add('admin-panel-active');
+            document.querySelectorAll('.admin-only-item').forEach(el => {
+                el.style.display = '';
+            });
+            document.querySelectorAll('.admin-only-axe-editor').forEach(el => {
+                el.style.display = 'flex';
+            });
+            const axeSiteInp = document.getElementById('siteAxeDiscordInput');
+            const axeAdmInp = document.getElementById('admAxeDiscordInput');
+            const savedUrl = getSavedAxeInviteUrl();
+            if (axeSiteInp) axeSiteInp.value = savedUrl;
+            if (axeAdmInp) axeAdmInp.value = savedUrl;
+            const head = document.getElementById('adminColHead');
+            if (head) head.innerText = 'УПРАВЛЕНИЕ';
+            const devDot = document.getElementById('devTriggerDot');
+            if (devDot) devDot.style.display = 'inline-block';
+        }
+
+        function disableAdminModeUI() {
+            document.body.classList.remove('admin-panel-active');
+            document.querySelectorAll('.admin-only-item').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('.admin-only-axe-editor').forEach(el => {
+                el.style.display = 'none';
+            });
+            const head = document.getElementById('adminColHead');
+            if (head) head.innerText = '';
+            const devDot = document.getElementById('devTriggerDot');
+            if (devDot) devDot.style.display = 'none';
+        }
+
+        function deactivateAdminMode() {
+            isAdminMode = false;
+            localStorage.setItem('priz_admin_mode', 'false');
+            disableAdminModeUI();
+            closeAdminPanel();
+            renderLeaderboard();
+            showToast('Вы вышли из режима администратора');
+        }
+
+        function openAdminPanel() {
+            if (!hasActiveAdminBypass()) {
+                showToast('Доступ запрещён');
+                return;
+            }
+            document.getElementById('admPlayerNick').value = '';
+            document.getElementById('admMatchScore').value = '3-0';
+            document.getElementById('admTesterNick').value = loggedInUser || 'Admin';
+            document.getElementById('admPlayerServer').value = '';
+            document.getElementById('admPlayerPing').value = '';
+            document.getElementById('admPlayerDiscordId').value = '';
+            document.getElementById('admTitleInput').value = '';
+            document.getElementById('admTierSelect').value = 'HT1';
+            switchAdminTab('issue');
+            refreshBotKitTiersStatus();
+            renderAdminHistory();
+            document.getElementById('adminPanelModal').style.display = 'flex';
+        }
+
+        function closeAdminPanel() {
+            closeModal('adminPanelModal');
+        }
+
+        function switchAdminTab(tabName) {
+            ['issue', 'profile', 'history', 'tools'].forEach(t => {
+                const btn = document.getElementById(`admTabBtn-${t}`);
+                const panel = document.getElementById(`admTab-${t}`);
+                if (btn) btn.classList.toggle('active', t === tabName);
+                if (panel) panel.classList.toggle('active', t === tabName);
+            });
+            if (tabName === 'history') renderAdminHistory();
+        }
+
+        function autoFillAdminPlayer() {
+            const nickInput = document.getElementById('admPlayerNick');
+            const kit = document.getElementById('admKitSelect').value;
+            if (!nickInput) return;
+            const rawNick = nickInput.value.trim();
+            if (!rawNick) return;
+
+            const exactKey = Object.keys(window.playersData || {}).find(k => k.toLowerCase() === rawNick.toLowerCase());
+            if (!exactKey) return;
+
+            const p = window.playersData[exactKey];
+            const currentTier = p[kit] || '0';
+            document.getElementById('admTierSelect').value = currentTier;
+            document.getElementById('admTitleInput').value = p.title || '';
+            document.getElementById('admPlayerServer').value = p.server || '';
+            document.getElementById('admPlayerPing').value = p.ping || '';
+            document.getElementById('admPlayerDiscordId').value = p.discord_id || '';
+        }
+
+        function adminEditPlayer(nick, defaultKit = 'beast') {
+            if (!hasActiveAdminBypass()) return;
+            openAdminPanel();
+            document.getElementById('admPlayerNick').value = nick;
+            document.getElementById('admKitSelect').value = defaultKit;
+            autoFillAdminPlayer();
+        }
+
+        async function adminSavePlayer() {
+            if (!hasActiveAdminBypass()) return;
+            const nick = document.getElementById('admPlayerNick').value.trim();
+            const kit = document.getElementById('admKitSelect').value;
+            const tier = document.getElementById('admTierSelect').value;
+            const score = document.getElementById('admMatchScore').value.trim() || '3-0';
+            const tester = document.getElementById('admTesterNick').value.trim() || 'Admin';
+            const title = document.getElementById('admTitleInput').value.trim();
+            const server = document.getElementById('admPlayerServer').value.trim();
+            const ping = document.getElementById('admPlayerPing').value.trim();
+            const discordId = normalizeDiscordId(document.getElementById('admPlayerDiscordId').value.trim());
+
+            if (!nick) {
+                showToast('Введите никнейм игрока!');
+                return;
+            }
+
+            if (discordId) {
+                const bindCheck = bindNickToDiscordAccount(nick, discordId);
+                if (!bindCheck.ok) {
+                    showToast(bindCheck.error);
+                    return;
+                }
+            }
+
+            if (!window.playersData[nick]) {
+                window.playersData[nick] = {
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: '', discord_id: ''
+                };
+            }
+
+            const prevTier = window.playersData[nick][kit] || '0';
+            window.playersData[nick][kit] = tier;
+            if (title) window.playersData[nick].title = title;
+            if (server) window.playersData[nick].server = server;
+            if (ping) window.playersData[nick].ping = ping;
+            if (discordId) window.playersData[nick].discord_id = discordId;
+
+            if (tier !== '0') {
+                window.matchHistory.unshift({
+                    nick,
+                    kit: kit.toUpperCase(),
+                    oldTier: prevTier,
+                    newTier: tier,
+                    score,
+                    tester,
+                    date: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+                });
+                if (window.matchHistory.length > 200) {
+                    window.matchHistory = window.matchHistory.slice(0, 200);
+                }
+                localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
+            }
+
+            localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            await syncTierIssueToBackendAndBot({
+                nick,
+                kit,
+                tier,
+                oldTier: prevTier,
+                score,
+                tester,
+                title,
+                server,
+                ping,
+                discord_id: discordId || window.playersData[nick].discord_id || null,
+                playerData: window.playersData[nick]
+            });
+            syncWithServer();
+
+            renderLeaderboard();
+            if (document.getElementById('page-tier')?.classList.contains('active')) {
+                renderTierGrid();
+            }
+            if (loggedInUser && loggedInUser.toLowerCase() === nick.toLowerCase()) {
+                updateProfileUI(loggedInUser);
+            }
+
+            closeAdminPanel();
+            showToast(`✅ ${nick} (${kit.toUpperCase()}): ${tier === '0' ? 'тир снят' : tier} [${score}]`);
+        }
+
+        function adminForceRename() {
+            if (!hasActiveAdminBypass()) return;
+            const oldNick = document.getElementById('admRenameOldNick').value.trim();
+            const newNick = document.getElementById('admRenameNewNick').value.trim();
+
+            if (!oldNick || !newNick) {
+                showToast('Укажите старый и новый никнейм!');
+                return;
+            }
+            const exactOld = Object.keys(window.playersData || {}).find(k => k.toLowerCase() === oldNick.toLowerCase());
+            if (!exactOld) {
+                showToast('Игрок с таким ником не найден!');
+                return;
+            }
+            if (exactOld === newNick) {
+                showToast('Ники совпадают!');
+                return;
+            }
+
+            const existingNew = Object.keys(window.playersData || {}).find(k => k.toLowerCase() === newNick.toLowerCase());
+            if (existingNew && existingNew !== exactOld) {
+                const bound = getNickBindingInfo(existingNew);
+                const oldBound = getNickBindingInfo(exactOld);
+                if (bound && bound.discord_id && (!oldBound || normalizeDiscordId(bound.discord_id) !== normalizeDiscordId(oldBound.discord_id))) {
+                    showToast('Этот никнейм уже привязан к другому Discord аккаунту!');
+                    return;
+                }
+            }
+
+            const oldBoundInfo = getNickBindingInfo(exactOld);
+            const movedPlayer = { ...window.playersData[exactOld] };
+            delete window.playersData[exactOld];
+            window.playersData[newNick] = movedPlayer;
+
+            if (window.playerViews[exactOld]) {
+                window.playerViews[newNick] = window.playerViews[exactOld];
+                delete window.playerViews[exactOld];
+            }
+            if (window.playerBgTheme[exactOld]) {
+                window.playerBgTheme[newNick] = window.playerBgTheme[exactOld];
+                delete window.playerBgTheme[exactOld];
+            }
+            if (window.playerSkins[exactOld]) {
+                window.playerSkins[newNick] = window.playerSkins[exactOld];
+                delete window.playerSkins[exactOld];
+            }
+            if (window.playerPoses[exactOld]) {
+                window.playerPoses[newNick] = window.playerPoses[exactOld];
+                delete window.playerPoses[exactOld];
+            }
+
+            delete window.discordNickBindings[normalizeNickKey(exactOld)];
+            if (oldBoundInfo && oldBoundInfo.discord_id) {
+                bindNickToDiscordAccount(newNick, oldBoundInfo.discord_id);
+            }
+
+            if (loggedInUser && loggedInUser.toLowerCase() === exactOld.toLowerCase()) {
+                loggedInUser = newNick;
+                localStorage.setItem('priz_ign', loggedInUser);
+                const label = document.getElementById('navBtnLabel');
+                if (label) label.innerText = loggedInUser;
+                updateProfileUI(loggedInUser);
+            }
+
+            window.matchHistory.unshift({
+                nick: `${exactOld} → ${newNick}`,
+                kit: 'RENAME',
+                oldTier: exactOld,
+                newTier: newNick,
+                score: 'Без КД',
+                tester: loggedInUser || 'Admin',
+                date: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+            });
+
+            localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
+            syncWithServer();
+            renderLeaderboard();
+            if (document.getElementById('page-tier')?.classList.contains('active')) {
+                renderTierGrid();
+            }
+            showToast(`✅ Игрок переименован: ${exactOld} → ${newNick}`);
+        }
+
+        function adminDeletePlayer() {
+            if (!hasActiveAdminBypass()) return;
+            const rawNick = document.getElementById('admPlayerNick').value.trim();
+            if (!rawNick) {
+                showToast('Введите ник игрока во вкладке «Выдача тира» для удаления!');
+                return;
+            }
+            const exactKey = Object.keys(window.playersData || {}).find(k => k.toLowerCase() === rawNick.toLowerCase());
+            if (!exactKey) {
+                showToast('Игрок не найден в базе!');
+                return;
+            }
+            delete window.playersData[exactKey];
+            delete window.discordNickBindings[normalizeNickKey(exactKey)];
+            persistDiscordBindings();
+            localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            syncWithServer();
+            renderLeaderboard();
+            if (document.getElementById('page-tier')?.classList.contains('active')) {
+                renderTierGrid();
+            }
+            closeAdminPanel();
+            showToast(`🗑️ Игрок ${exactKey} удалён из базы`);
+        }
+
+        function renderAdminHistory() {
+            const box = document.getElementById('adminMatchHistoryContainer');
+            if (!box) return;
+            if (!window.matchHistory || window.matchHistory.length === 0) {
+                box.innerHTML = '<div style="color:#94a3b8;">История тестов пока пуста.</div>';
+                return;
+            }
+            box.innerHTML = window.matchHistory.slice(0, 30).map(item => `
+                <div style="padding:7px 8px; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                    <div>
+                        <strong style="color:#fff;">${escapeHTML(item.nick)}</strong> •
+                        <span style="color:#c084fc; font-weight:700;">${escapeHTML(item.kit)}</span>:
+                        ${escapeHTML(item.oldTier || '0')} → <strong style="color:#34d399;">${escapeHTML(item.newTier)}</strong>
+                        <span style="color:#94a3b8;">(${escapeHTML(item.score || '3-0')})</span>
+                    </div>
+                    <div style="font-size:10px; color:#64748b; text-align:right; white-space:nowrap;">
+                        <div>${escapeHTML(item.tester || 'Admin')}</div>
+                        <div>${escapeHTML(item.date || '')}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function adminClearHistory() {
+            if (!hasActiveAdminBypass()) return;
+            window.matchHistory = [];
+            localStorage.setItem('priz_match_history', JSON.stringify([]));
+            syncWithServer();
+            renderAdminHistory();
+            showToast('История тестов очищена');
+        }
+
+        function adminSyncFromBotDatabase() {
+            if (!hasActiveAdminBypass()) return;
+            refreshBotKitTiersStatus();
+            syncWithServer();
+            showToast('🔄 Запрошена синхронизация с БД бота');
         }
 
         function adminGenerateDemoPlayers() {
             if (!hasActiveAdminBypass()) return;
-            generateDemoPlayers();
-            refreshAllViews();
-            showToast('✨ Демо-игроки сгенерированы и добавлены в рейтинг!');
+            const demo = {
+                "Dream": { beast: "HT1", mace: "LT2", carts: "HT3", axe: "HT1", smp: "LT2", uhc: "HT2", op: "LT1", spearmace: "HT3", title: "⚡ Speedrunner", server: "MC PvP", ping: "22ms" },
+                "Technoblade": { beast: "HT1", mace: "HT1", carts: "LT1", axe: "HT1", smp: "HT2", uhc: "HT1", op: "HT2", spearmace: "LT1", title: "👑 Legend", server: "Hypixel", ping: "34ms" },
+                "Fruitberries": { beast: "LT1", mace: "HT2", carts: "HT1", axe: "LT1", smp: "LT1", uhc: "LT2", op: "HT3", spearmace: "LT2", title: "🔥 Combo", server: "EU", ping: "18ms" },
+                "ClownPierce": { beast: "HT2", mace: "HT1", carts: "LT2", axe: "HT2", smp: "HT1", uhc: "LT3", op: "LT2", spearmace: "HT2", title: "💥 Mace God", server: "NA", ping: "41ms" },
+                "SpeedSilver": { beast: "LT2", mace: "LT2", carts: "LT3", axe: "LT2", smp: "HT3", uhc: "LT4", op: "LT3", spearmace: "LT3", title: "", server: "PriZriT", ping: "29ms" }
+            };
+            window.playersData = { ...window.playersData, ...demo };
+            localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            syncWithServer();
+            renderLeaderboard();
+            if (document.getElementById('page-tier')?.classList.contains('active')) {
+                renderTierGrid();
+            }
+            showToast('✨ Добавлены демо-игроки в тир-лист');
         }
 
         function adminExportDatabaseJson() {
             if (!hasActiveAdminBypass()) return;
-            try {
-                const payload = {
-                    exportedAt: new Date().toISOString(),
-                    playersData: window.playersData || {},
-                    playerViews: window.playerViews || {},
-                    playerBgTheme: window.playerBgTheme || {},
-                    playerSkins: window.playerSkins || {},
-                    playerPoses: window.playerPoses || {},
-                    matchHistory: window.matchHistory || []
-                };
-                const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `priztiers-players-${new Date().toISOString().slice(0, 10)}.json`;
-                a.click();
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-                showToast('📥 База игроков экспортирована в JSON!');
-            } catch (e) {
-                showToast('Ошибка при экспорте базы');
-            }
+            const exportPayload = {
+                exportedAt: new Date().toISOString(),
+                players: window.playersData || {},
+                views: window.playerViews || {},
+                bgThemes: window.playerBgTheme || {},
+                skins: window.playerSkins || {},
+                poses: window.playerPoses || {},
+                history: window.matchHistory || [],
+                bindings: window.discordNickBindings || {}
+            };
+            const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `priztier-db-${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📥 База игроков экспортирована в JSON');
         }
 
         function triggerAdminImportJson() {
             if (!hasActiveAdminBypass()) return;
             const inp = document.getElementById('admImportJsonInput');
-            if (inp) inp.click();
+            if (inp) {
+                inp.value = '';
+                inp.click();
+            }
         }
 
         function adminImportDatabaseJson(event) {
             if (!hasActiveAdminBypass()) return;
-            const file = event?.target?.files?.[0];
+            const file = event && event.target && event.target.files ? event.target.files[0] : null;
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = function(e) {
                 try {
-                    const parsed = JSON.parse(String(e.target?.result || '{}'));
-                    const importedPlayers = parsed.playersData && typeof parsed.playersData === 'object'
-                        ? parsed.playersData
-                        : (typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : null);
-                    if (!importedPlayers) {
-                        showToast('Неверный формат JSON файла');
-                        return;
+                    const parsed = JSON.parse(String(e.target.result || '{}'));
+                    if (parsed.players && typeof parsed.players === 'object') {
+                        window.playersData = { ...window.playersData, ...parsed.players };
+                        localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
                     }
-                    window.playersData = { ...(window.playersData || {}), ...importedPlayers };
-                    if (parsed.playerViews && typeof parsed.playerViews === 'object') {
-                        window.playerViews = { ...(window.playerViews || {}), ...parsed.playerViews };
+                    if (parsed.views && typeof parsed.views === 'object') {
+                        window.playerViews = { ...window.playerViews, ...parsed.views };
+                        localStorage.setItem('priz_views', JSON.stringify(window.playerViews));
                     }
-                    if (parsed.playerBgTheme && typeof parsed.playerBgTheme === 'object') {
-                        window.playerBgTheme = { ...(window.playerBgTheme || {}), ...parsed.playerBgTheme };
+                    if (parsed.bgThemes && typeof parsed.bgThemes === 'object') {
+                        window.playerBgTheme = { ...window.playerBgTheme, ...parsed.bgThemes };
+                        localStorage.setItem('priz_bg_themes', JSON.stringify(window.playerBgTheme));
                     }
-                    if (parsed.playerSkins && typeof parsed.playerSkins === 'object') {
-                        window.playerSkins = { ...(window.playerSkins || {}), ...parsed.playerSkins };
+                    if (parsed.skins && typeof parsed.skins === 'object') {
+                        window.playerSkins = { ...window.playerSkins, ...parsed.skins };
+                        localStorage.setItem('priz_skins', JSON.stringify(window.playerSkins));
                     }
-                    if (parsed.playerPoses && typeof parsed.playerPoses === 'object') {
-                        window.playerPoses = { ...(window.playerPoses || {}), ...parsed.playerPoses };
+                    if (parsed.poses && typeof parsed.poses === 'object') {
+                        window.playerPoses = { ...window.playerPoses, ...parsed.poses };
+                        localStorage.setItem('priz_poses', JSON.stringify(window.playerPoses));
                     }
-                    if (Array.isArray(parsed.matchHistory)) {
-                        window.matchHistory = [...parsed.matchHistory, ...(window.matchHistory || [])].slice(0, 200);
+                    if (Array.isArray(parsed.history)) {
+                        window.matchHistory = parsed.history.slice(0, 200);
+                        localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
                     }
-                    saveLocalStorageData();
-                    refreshAllViews();
-                    showToast('📤 База игроков успешно импортирована!');
+                    if (parsed.bindings && typeof parsed.bindings === 'object') {
+                        window.discordNickBindings = { ...window.discordNickBindings, ...parsed.bindings };
+                        persistDiscordBindings();
+                    }
+                    rebuildDiscordBindingsFromPlayers();
+                    syncWithServer();
+                    renderLeaderboard();
+                    if (document.getElementById('page-tier')?.classList.contains('active')) {
+                        renderTierGrid();
+                    }
+                    if (loggedInUser) updateProfileUI(loggedInUser);
+                    showToast('📤 База игроков успешно импортирована');
                 } catch (err) {
-                    showToast('Ошибка чтения JSON файла');
+                    showToast('⛔ Ошибка чтения JSON-файла');
                 }
-                event.target.value = '';
             };
-            reader.readAsText(file, 'utf-8');
+            reader.readAsText(file);
         }
 
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            if (!t) return;
-            t.textContent = msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+        function adminResetViews() {
+            if (!hasActiveAdminBypass()) return;
+            window.playerViews = {};
+            localStorage.setItem('priz_views', JSON.stringify({}));
+            syncWithServer();
+            if (loggedInUser) updateProfileUI(loggedInUser);
+            showToast('🔄 Статистика просмотров сброшена');
         }
 
-        let pageTransitionTimer = null;
+        function adminSeasonReset() {
+            if (!hasActiveAdminBypass()) return;
+            Object.keys(window.playersData || {}).forEach(nick => {
+                ALL_KITS.forEach(kit => {
+                    window.playersData[nick][kit] = '0';
+                });
+            });
+            localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            syncWithServer();
+            renderLeaderboard();
+            if (document.getElementById('page-tier')?.classList.contains('active')) {
+                renderTierGrid();
+            }
+            if (loggedInUser) updateProfileUI(loggedInUser);
+            closeAdminPanel();
+            showToast('🏆 Новый сезон начат! Все тиры обнулены.');
+        }
+
+        function openDevModal() {
+            if (!hasActiveAdminBypass()) {
+                showToast('Доступ запрещён');
+                return;
+            }
+            document.getElementById('newAdminPassInput').value = '';
+            document.getElementById('devModal').style.display = 'flex';
+        }
+
+        function closeDevModal() {
+            closeModal('devModal');
+        }
+
+        function changeAdminPass() {
+            if (!hasActiveAdminBypass()) return;
+            showToast('Мастер-пароль зафиксирован на уровне системы безопасности');
+            document.getElementById('newAdminPassInput').value = '';
+        }
+
+        function downloadSiteCode() {
+            if (!hasActiveAdminBypass()) return;
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Файл index.html успешно скачан!');
+        }
+
+        function openCodeEditorModal() {
+            if (!hasActiveAdminBypass()) return;
+            document.getElementById('siteCodeTextarea').value = document.documentElement.outerHTML;
+            document.getElementById('codeEditorModal').style.display = 'flex';
+        }
+
+        function closeCodeEditorModal() {
+            closeModal('codeEditorModal');
+        }
+
+        function applySiteCodeChanges() {
+            if (!hasActiveAdminBypass()) return;
+            showToast('Изменения кода сайта применены локально!');
+            closeCodeEditorModal();
+        }
+
+        let isPageSwitching = false;
         function switchPage(pageId) {
             const targetEl = document.getElementById(`page-${pageId}`);
             if (!targetEl) return;
 
             const currentActive = document.querySelector('.page-view.active');
+            if (currentActive === targetEl && !isPageSwitching) return;
+
+            isPageSwitching = true;
 
             document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
             if (pageId === 'leaderboard') {
@@ -3203,48 +4312,54 @@
                 document.getElementById('btn-links')?.classList.add('active');
             }
 
-            if (pageTransitionTimer) {
-                clearTimeout(pageTransitionTimer);
-                pageTransitionTimer = null;
-            }
-
             if (currentActive && currentActive !== targetEl) {
-                currentActive.classList.remove('page-entering');
                 currentActive.classList.add('page-leaving');
-                pageTransitionTimer = setTimeout(() => {
+                setTimeout(() => {
                     currentActive.classList.remove('active');
                     currentActive.classList.remove('page-leaving');
-                }, 440);
+                }, 140);
             }
 
             targetEl.classList.remove('page-leaving');
-            targetEl.classList.add('page-entering');
             targetEl.classList.add('active');
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    targetEl.classList.remove('page-entering');
-                });
-            });
 
-            if (pageId === 'home') {
-                renderHomeKitStats();
-            } else if (pageId === 'tier') {
-                renderTierTable();
-            } else if (pageId === 'leaderboard') {
+            if (pageId === 'leaderboard') {
                 renderLeaderboard();
-            } else if (pageId === 'profile') {
-                renderProfilePage();
-            } else if (pageId === 'guide') {
-                updatePointsCalculator();
+                refreshBotKitTiersStatus();
+            } else if (pageId === 'home') {
+                renderHomeKitStats();
+            } else if (pageId === 'profile' && loggedInUser) {
+                updateProfileUI(loggedInUser);
+                renderProfileSkins();
             } else if (pageId === 'links') {
+                applyAxeDiscordInviteUI();
                 renderCustomDiscordLinks();
             }
+
+            setTimeout(() => {
+                isPageSwitching = false;
+            }, 260);
         }
+
         function switchKit(kitName) {
             currentKit = kitName;
+            const wrapper = document.getElementById('tierWrapper');
+            if (wrapper) {
+                wrapper.className = 'tier-table-wrapper';
+                if (['beast', 'mace', 'carts', 'axe'].includes(kitName)) {
+                    wrapper.classList.add(`theme-${kitName}`);
+                }
+            }
+
             document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById(`btn-${kitName}`);
-            if (btn) btn.classList.add('active');
+            if (kitName === 'beast') document.getElementById('btn-beast')?.classList.add('active');
+            if (kitName === 'mace') document.getElementById('btn-mace')?.classList.add('active');
+            if (kitName === 'carts') document.getElementById('btn-carts')?.classList.add('active');
+            if (kitName === 'axe') document.getElementById('btn-axe')?.classList.add('active');
+            if (kitName === 'smp') document.getElementById('btn-smp')?.classList.add('active');
+            if (kitName === 'uhc') document.getElementById('btn-uhc')?.classList.add('active');
+            if (kitName === 'op') document.getElementById('btn-op')?.classList.add('active');
+            if (kitName === 'spearmace') document.getElementById('btn-spearmace')?.classList.add('active');
 
             const titles = {
                 beast: 'BEAST TIER LIST',
@@ -3257,136 +4372,93 @@
                 spearmace: 'SPEARMACE TIER LIST'
             };
             const titleEl = document.getElementById('kitTitle');
-            if (titleEl) titleEl.textContent = titles[kitName] || `${kitName.toUpperCase()} TIER LIST`;
+            if (titleEl) titleEl.innerText = titles[kitName] || `${kitName.toUpperCase()} TIER LIST`;
 
-            applyKitTheme(kitName);
             switchPage('tier');
+            renderTierGrid();
+            refreshBotKitTiersStatus();
         }
 
-        function setLiveStatText(el, newText) {
-            if (!el) return;
-            const textStr = String(newText);
-            if (el.textContent !== textStr) {
-                el.textContent = textStr;
-                el.classList.remove('priz-live-pulse');
-                void el.offsetWidth;
-                el.classList.add('priz-live-pulse');
-            }
-        }
-
-        let isRenderingHomeKitStats = false;
-        async function renderHomeKitStats() {
-            if (isRenderingHomeKitStats) return;
-            isRenderingHomeKitStats = true;
-            try {
-                const applyKitCounts = (kitKey, membersVal, onlineVal) => {
-                    const cap = kitKey.charAt(0).toUpperCase() + kitKey.slice(1);
-                    const countEl = document.getElementById(`statCount${cap}`);
-                    const onlineEl = document.getElementById(`statDiscord${cap}Online`);
-                    if (membersVal !== null && membersVal !== undefined && !Number.isNaN(Number(membersVal))) {
-                        setLiveStatText(countEl, formatMembersRu(membersVal));
-                    }
-                    if (onlineVal !== null && onlineVal !== undefined && !Number.isNaN(Number(onlineVal))) {
-                        setLiveStatText(onlineEl, `${Number(onlineVal).toLocaleString('ru-RU')}`);
-                    }
-                };
-
-                const kitInvites = {
-                    beast: DISCORD_KITS_WIDGETS.beast,
-                    mace: DISCORD_KITS_WIDGETS.mace,
-                    carts: DISCORD_KITS_WIDGETS.carts,
-                    axe: extractInviteCode(getSavedAxeInviteUrl())
-                };
-
-                Object.keys(kitInvites).forEach(k => {
-                    if (k === 'axe' && !kitInvites.axe) {
-                        applyKitCounts('axe', 0, 0);
-                    }
-                });
-
-                await Promise.all(Object.entries(kitInvites).map(async ([kitKey, inviteCode]) => {
-                    if (!inviteCode) return;
-                    const stats = await fetchDiscordCountsLive(inviteCode);
-                    if (stats && (stats.members !== null || stats.online !== null)) {
-                        applyKitCounts(kitKey, stats.members, stats.online);
-                    }
-                }));
-
-                if (Array.isArray(window.customHomeKits)) {
-                    await Promise.all(window.customHomeKits.map(item => fetchCustomInviteStats(item)));
-                }
-            } finally {
-                isRenderingHomeKitStats = false;
-            }
-        }
-
-        function getPlayerTierForKit(playerObj, kit) {
-            if (!playerObj || !kit) return null;
-            const raw = playerObj[kit];
-            if (!raw || raw === '0' || String(raw).toLowerCase() === 'none' || String(raw).toLowerCase() === 'unranked') {
-                return null;
-            }
-            return String(raw).toUpperCase();
-        }
-
-        function renderTierTable() {
+        function renderTierGrid() {
             const grid = document.getElementById('tierGridContent');
             const soonBox = document.getElementById('kitSoonContainer');
             if (!grid) return;
 
-            if (!ACTIVE_KITS.includes(currentKit)) {
+            if (SOON_KITS.includes(currentKit)) {
                 grid.style.display = 'none';
                 grid.innerHTML = '';
                 if (soonBox) {
-                    soonBox.style.display = 'block';
+                    const labels = {
+                        smp: 'SMP PVP',
+                        uhc: 'UHC PVP',
+                        op: 'OP PVP',
+                        spearmace: 'SPEARMACE PVP'
+                    };
                     const badge = document.getElementById('kitSoonBadge');
                     const desc = document.getElementById('kitSoonDesc');
-                    if (badge) badge.textContent = `${currentKit.toUpperCase()} DISCIPLINE • SOON`;
-                    if (desc) desc.textContent = `Дисциплина ${currentKit.toUpperCase()} скоро появится в основном тир-листе PrizTiers. Следите за новостями в Discord и Telegram!`;
+                    if (badge) badge.innerText = labels[currentKit] || currentKit.toUpperCase();
+                    if (desc) {
+                        desc.innerText = `Дисциплина ${labels[currentKit] || currentKit.toUpperCase()} находится в разработке и скоро появится в основном тир-листе PrizTiers.`;
+                    }
+                    soonBox.style.display = 'block';
                 }
                 return;
             }
 
-            grid.style.display = 'grid';
             if (soonBox) soonBox.style.display = 'none';
+            grid.style.display = '';
 
-            const columns = [
-                { key: 'TIER 1', tiers: ['HT1', 'RHT1', 'LT1', 'RLT1'], label: 'Tier 1' },
-                { key: 'TIER 2', tiers: ['HT2', 'RHT2', 'LT2', 'RLT2'], label: 'Tier 2' },
-                { key: 'TIER 3', tiers: ['HT3', 'LT3'], label: 'Tier 3' },
-                { key: 'TIER 4', tiers: ['HT4', 'LT4'], label: 'Tier 4' },
-                { key: 'TIER 5', tiers: ['HT5', 'LT5'], label: 'Tier 5' }
+            const colsConfig = [
+                { id: 't1', label: 'Tier 1', tiers: ['HT1', 'RHT1', 'LT1', 'RLT1'] },
+                { id: 't2', label: 'Tier 2', tiers: ['HT2', 'RHT2', 'LT2', 'RLT2'] },
+                { id: 't3', label: 'Tier 3', tiers: ['HT3', 'LT3'] },
+                { id: 't4', label: 'Tier 4', tiers: ['HT4', 'LT4'] },
+                { id: 't5', label: 'Tier 5', tiers: ['HT5', 'LT5'] }
             ];
 
-            const allPlayers = getAllLeaderboardParticipants();
-            const entries = Object.entries(allPlayers)
-                .map(([nick, pData]) => ({
-                    nick,
-                    data: pData,
-                    tier: getPlayerTierForKit(pData, currentKit)
-                }))
-                .filter(item => item.tier !== null);
+            const tierRankOrder = {
+                'HT1': 1, 'RHT1': 2, 'LT1': 3, 'RLT1': 4,
+                'HT2': 5, 'RHT2': 6, 'LT2': 7, 'RLT2': 8,
+                'HT3': 9, 'LT3': 10,
+                'HT4': 11, 'LT4': 12,
+                'HT5': 13, 'LT5': 14
+            };
 
-            entries.sort((a, b) => (TIER_WEIGHTS[b.tier] || 0) - (TIER_WEIGHTS[a.tier] || 0));
+            const sourcePlayers = getAllLeaderboardParticipants();
+            const playersInKit = [];
 
-            grid.innerHTML = columns.map(col => {
-                const colPlayers = entries.filter(item => col.tiers.includes(item.tier));
-                const cardsHtml = colPlayers.length
-                    ? colPlayers.map(item => {
-                        const safeNick = escapeHTML(item.nick);
-                        const jsNick = escapeJSArg(item.nick);
-                        const avatarUrl = window.playerSkins[item.nick] && window.playerSkins[item.nick].startsWith('http')
-                            ? window.playerSkins[item.nick]
-                            : `https://minotar.net/avatar/${encodeURIComponent(item.nick)}/24`;
+            Object.keys(sourcePlayers).forEach(nick => {
+                const p = sourcePlayers[nick];
+                const tier = (p[currentKit] || '').toUpperCase();
+                if (tier && tier !== '0' && tierRankOrder[tier]) {
+                    playersInKit.push({
+                        nick,
+                        tier,
+                        rankOrder: tierRankOrder[tier],
+                        title: p.title || ''
+                    });
+                }
+            });
+
+            playersInKit.sort((a, b) => a.rankOrder - b.rankOrder || a.nick.localeCompare(b.nick));
+
+            grid.innerHTML = colsConfig.map(col => {
+                const matches = playersInKit.filter(item => col.tiers.includes(item.tier));
+                const cardsHtml = matches.length > 0
+                    ? matches.map(m => {
+                        const safeNick = escapeHTML(m.nick);
+                        const safeJsNick = escapeJSArg(m.nick);
+                        const safeTier = escapeHTML(m.tier);
+                        const badgeColor = m.tier.startsWith('HT') || m.tier.startsWith('RHT') ? '#fb7185' : '#38bdf8';
                         return `
-                            <div class="player-card-mini" onclick="openPlayerModal('${jsNick}')">
-                                <img src="${escapeHTML(avatarUrl)}" width="22" height="22" style="border-radius: 4px; object-fit: cover;" onerror="this.src='https://minotar.net/avatar/Steve/24'">
-                                <span style="font-weight: 700; font-size: 13px; color: #f8fafc; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${safeNick}</span>
-                                <span class="tier-badge">${escapeHTML(item.tier)}</span>
+                            <div class="player-card-mini" onclick="openPlayerProfileModal('${safeJsNick}')">
+                                <img src="${getAvatarUrl(m.nick)}" width="24" height="24" style="border-radius:5px;" alt="" class="protected-asset">
+                                <span style="flex:1; font-weight:700; font-size:13px; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${safeNick}</span>
+                                <span style="font-size:11px; font-weight:900; padding:2px 6px; border-radius:6px; background:rgba(255,255,255,0.08); color:${badgeColor};">${safeTier}</span>
                             </div>
                         `;
                     }).join('')
-                    : `<div style="font-size: 12px; color: #64748b; text-align: center; padding: 14px 4px;">Нет игроков</div>`;
+                    : `<div style="font-size:12px; color:#64748b; text-align:center; padding:18px 6px;">Нет игроков</div>`;
 
                 return `
                     <div class="tier-col">
@@ -3398,730 +4470,577 @@
         }
 
         function renderLeaderboard() {
-            const tbody = document.getElementById('leaderboardTableBody');
-            const podium = document.getElementById('leaderboardPodium');
-            if (!tbody) return;
+            const searchTerm = (document.getElementById('lbSearchInput')?.value || '').trim().toLowerCase();
+            const combinedPlayers = getAllLeaderboardParticipants();
 
-            const searchQuery = (document.getElementById('lbSearchInput')?.value || '').trim().toLowerCase();
-            const allPlayers = getAllLeaderboardParticipants();
+            const list = Object.keys(combinedPlayers).map(nick => {
+                const p = combinedPlayers[nick];
+                const score = calculatePlayerScore(p);
+                return {
+                    nick,
+                    score,
+                    data: p
+                };
+            }).filter(entry => entry.score > 0 || (window.playersData && window.playersData[entry.nick]) || DEFAULT_PLAYERS_SEED[entry.nick]);
 
-            let ranked = Object.entries(allPlayers).map(([nick, pData]) => {
-                const score = calculatePlayerScore(pData);
-                return { nick, data: pData, score };
-            });
+            list.sort((a, b) => b.score - a.score || a.nick.localeCompare(b.nick));
 
-            ranked.sort((a, b) => b.score - a.score || a.nick.localeCompare(b.nick));
+            const totalPlayersEl = document.getElementById('lbTotalPlayers');
+            const totalBeastEl = document.getElementById('lbTotalBeast');
+            const totalMaceEl = document.getElementById('lbTotalMace');
+            const totalCartsEl = document.getElementById('lbTotalCarts');
+            const totalAxeEl = document.getElementById('lbTotalAxe');
 
-            const totPlayers = document.getElementById('lbTotalPlayers');
-            const totBeast = document.getElementById('lbTotalBeast');
-            const totMace = document.getElementById('lbTotalMace');
-            const totCarts = document.getElementById('lbTotalCarts');
-            const totAxe = document.getElementById('lbTotalAxe');
+            if (totalPlayersEl) totalPlayersEl.innerText = list.length;
+            if (totalBeastEl) totalBeastEl.innerText = list.filter(x => x.data.beast && x.data.beast !== '0').length;
+            if (totalMaceEl) totalMaceEl.innerText = list.filter(x => x.data.mace && x.data.mace !== '0').length;
+            if (totalCartsEl) totalCartsEl.innerText = list.filter(x => x.data.carts && x.data.carts !== '0').length;
+            if (totalAxeEl) totalAxeEl.innerText = list.filter(x => x.data.axe && x.data.axe !== '0').length;
 
-            if (totPlayers) totPlayers.textContent = ranked.length;
-            if (totBeast) totBeast.textContent = ranked.filter(x => getPlayerTierForKit(x.data, 'beast')).length;
-            if (totMace) totMace.textContent = ranked.filter(x => getPlayerTierForKit(x.data, 'mace')).length;
-            if (totCarts) totCarts.textContent = ranked.filter(x => getPlayerTierForKit(x.data, 'carts')).length;
-            if (totAxe) totAxe.textContent = ranked.filter(x => getPlayerTierForKit(x.data, 'axe')).length;
-
-            if (podium) {
-                const top3 = ranked.slice(0, 3);
-                const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean);
-                const rankLabels = { 0: '🥇 #1', 1: '🥈 #2', 2: '🥉 #3' };
-
-                podium.innerHTML = top3.map((item, idx) => {
-                    const safeNick = escapeHTML(item.nick);
-                    const jsNick = escapeJSArg(item.nick);
-                    const avatarUrl = `https://minotar.net/avatar/${encodeURIComponent(item.nick)}/64`;
-                    const placeClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : 'rank-3';
+            const podiumContainer = document.getElementById('leaderboardPodium');
+            if (podiumContainer) {
+                const top3 = list.slice(0, 3);
+                const medals = ['🥇 #1', '🥈 #2', '🥉 #3'];
+                podiumContainer.innerHTML = top3.map((p, idx) => {
+                    const safeNick = escapeHTML(p.nick);
+                    const safeJsNick = escapeJSArg(p.nick);
                     return `
-                        <div class="lb-podium-card ${placeClass}" onclick="openPlayerModal('${jsNick}')">
-                            <div style="font-size: 12px; font-weight: 900; color: #facc15; margin-bottom: 6px;">${rankLabels[idx] || `#${idx + 1}`}</div>
-                            <img src="${escapeHTML(avatarUrl)}" width="48" height="48" style="border-radius: 10px; margin: 0 auto 8px; display: block;" onerror="this.src='https://minotar.net/avatar/Steve/64'">
-                            <div style="font-weight: 800; font-size: 15px; color: #fff;">${safeNick}</div>
-                            <div style="font-size: 13px; color: #c084fc; font-weight: 700; margin-top: 2px;">${item.score} очков</div>
+                        <div class="lb-podium-card rank-${idx + 1}" onclick="openPlayerProfileModal('${safeJsNick}')">
+                            <div class="lb-podium-medal">${medals[idx]}</div>
+                            <img src="${getAvatarUrl(p.nick)}" class="lb-podium-avatar protected-asset" alt="${safeNick}">
+                            <div class="lb-podium-name">${safeNick}</div>
+                            <div class="lb-podium-pts">${p.score} очков</div>
                         </div>
                     `;
                 }).join('');
             }
 
-            const filtered = searchQuery
-                ? ranked.filter(x => x.nick.toLowerCase().includes(searchQuery))
-                : ranked;
+            const filtered = searchTerm
+                ? list.filter(entry => entry.nick.toLowerCase().includes(searchTerm))
+                : list;
 
-            const showAdminBtns = hasActiveAdminBypass();
+            const tbody = document.getElementById('leaderboardTableBody');
+            if (!tbody) return;
 
-            tbody.innerHTML = filtered.map((item, index) => {
-                const realRank = ranked.findIndex(r => r.nick === item.nick) + 1;
-                const safeNick = escapeHTML(item.nick);
-                const jsNick = escapeJSArg(item.nick);
-                const avatarUrl = `https://minotar.net/avatar/${encodeURIComponent(item.nick)}/32`;
-                const titleBadge = item.data.title
-                    ? `<span style="margin-left: 6px; font-size: 11px; color: #facc15; background: rgba(250,204,21,0.12); border: 1px solid rgba(250,204,21,0.3); padding: 2px 6px; border-radius: 6px;">${escapeHTML(item.data.title)}</span>`
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:24px; color:#94a3b8;">Игроки не найдены</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((entry) => {
+                const globalRank = list.findIndex(x => x.nick === entry.nick) + 1;
+                const safeNick = escapeHTML(entry.nick);
+                const safeJsNick = escapeJSArg(entry.nick);
+                const titleBadge = entry.data.title
+                    ? `<span style="margin-left:6px; font-size:11px; padding:2px 7px; border-radius:6px; background:rgba(192,132,252,0.16); border:1px solid rgba(192,132,252,0.35); color:#e9d5ff;">${escapeHTML(entry.data.title)}</span>`
                     : '';
 
-                const tiersHtml = ['beast', 'mace', 'carts', 'axe'].map(k => {
-                    const tVal = getPlayerTierForKit(item.data, k);
-                    if (!tVal) return '';
-                    return `<span class="tier-badge" style="margin-right: 4px;">${k.toUpperCase()}: ${escapeHTML(tVal)}</span>`;
-                }).join('') || `<span style="font-size: 12px; color: #64748b;">—</span>`;
+                const tiersHtml = ['beast', 'mace', 'carts', 'axe', 'smp', 'uhc', 'op', 'spearmace'].map(kit => {
+                    const t = (entry.data[kit] || '').toUpperCase();
+                    if (!t || t === '0') return '';
+                    return `<span style="display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:800; padding:3px 7px; border-radius:6px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#f8fafc;">${kit.toUpperCase()}: <strong style="color:#c084fc;">${escapeHTML(t)}</strong></span>`;
+                }).filter(Boolean).join(' ');
 
-                const adminActionCell = showAdminBtns
-                    ? `<td style="text-align: right;"><button class="btn-action-sm" style="padding: 4px 8px; font-size: 11px;" onclick="event.stopPropagation(); quickEditPlayer('${jsNick}')">Изм.</button></td>`
+                const adminCell = isAdminMode
+                    ? `<td style="text-align:right;"><button class="btn-action-sm" style="padding:5px 10px; font-size:11px;" onclick="event.stopPropagation(); adminEditPlayer('${safeJsNick}', 'beast')">✏️ Тир</button></td>`
                     : `<td></td>`;
 
                 return `
-                    <tr onclick="openPlayerModal('${jsNick}')" style="cursor: pointer;">
-                        <td style="font-weight: 800; color: #94a3b8;">#${realRank}</td>
+                    <tr onclick="openPlayerProfileModal('${safeJsNick}')" style="cursor:pointer;">
+                        <td style="font-weight:900; color:${globalRank === 1 ? '#facc15' : globalRank === 2 ? '#e2e8f0' : globalRank === 3 ? '#fb923c' : '#94a3b8'};">#${globalRank}</td>
                         <td>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <img src="${escapeHTML(avatarUrl)}" width="28" height="28" style="border-radius: 6px;" onerror="this.src='https://minotar.net/avatar/Steve/28'">
-                                <span style="font-weight: 800; color: #fff;">${safeNick}</span>
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                <img src="${getAvatarUrl(entry.nick)}" width="24" height="24" style="border-radius:6px;" alt="" class="protected-asset">
+                                <span style="font-weight:800; color:#fff;">${safeNick}</span>
                                 ${titleBadge}
                             </div>
                         </td>
-                        <td>${tiersHtml}</td>
-                        <td style="text-align: right; font-weight: 900; color: #c084fc;">${item.score}</td>
-                        ${adminActionCell}
+                        <td><div style="display:flex; flex-wrap:wrap; gap:5px;">${tiersHtml || '<span style="color:#64748b; font-size:12px;">—</span>'}</div></td>
+                        <td style="text-align:right; font-weight:900; color:#c084fc;">${entry.score}</td>
+                        ${adminCell}
                     </tr>
                 `;
             }).join('');
         }
 
-        function checkAuthAndOpenProfile() {
-            if (!loggedInUser) {
-                document.getElementById('authModal').style.display = 'flex';
-                return;
-            }
-            switchPage('profile');
-        }
-
-        function redirectToDiscord() {
-            const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
-            window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=identify`;
-        }
-
-        function openCodeLoginModal() {
-            document.getElementById('authModal').style.display = 'none';
-            document.getElementById('codeLoginModal').style.display = 'flex';
-        }
-
-        function closeCodeLoginModal() {
-            document.getElementById('codeLoginModal').style.display = 'none';
-        }
-
-        function submitSecretCode() {
-            const code = (document.getElementById('secretLoginCodeInput')?.value || '').trim();
-            const errEl = document.getElementById('codeLoginErrorMsg');
-            if (!/^\d{6}$/.test(code)) {
-                if (errEl) errEl.textContent = 'Введите 6-значный числовой код.';
-                return;
-            }
-            const accId = `code_${code}`;
-            sessionAccountId = accId;
-            localStorage.setItem('priz_account_id', accId);
-            ensureAccountCreatedDate(accId);
-            closeCodeLoginModal();
-            const existingBound = findNickByDiscordId(accId);
-            if (existingBound) {
-                completeLoginWithNick(existingBound, accId);
-            } else {
-                document.getElementById('postOAuthNickModal').style.display = 'flex';
-            }
-        }
-
-        function findNickByDiscordId(dId) {
-            const cleanId = normalizeDiscordId(dId);
-            if (!cleanId) return null;
-            for (const key of Object.keys(window.discordNickBindings || {})) {
-                const entry = window.discordNickBindings[key];
-                if (entry && normalizeDiscordId(entry.discord_id) === cleanId && entry.nickname) {
-                    return entry.nickname;
+        function getAvatarUrl(nick) {
+            const exactKey = Object.keys(window.playerSkins || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+            const customSkin = window.playerSkins[exactKey];
+            if (customSkin && typeof customSkin === 'string' && customSkin.trim()) {
+                const val = customSkin.trim();
+                if (!/^https?:\/\//i.test(val)) {
+                    return `https://minotar.net/helm/${encodeURIComponent(val)}/64.png`;
                 }
             }
-            for (const nick of Object.keys(window.playersData || {})) {
-                const p = window.playersData[nick];
-                if (p && normalizeDiscordId(p.discord_id) === cleanId) {
-                    return nick;
+            return `https://minotar.net/helm/${encodeURIComponent(nick)}/64.png`;
+        }
+
+        function refreshOpenPlayerModal(nick) {
+            const allPlayers = getAllLeaderboardParticipants();
+            const exactKey = Object.keys(allPlayers).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+            const p = allPlayers[exactKey] || { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0' };
+            const score = calculatePlayerScore(p);
+
+            document.getElementById('modalPlayerIgn').innerText = exactKey;
+            document.getElementById('modalPlayerPts').innerText = `${score} очков`;
+
+            const metaParts = [];
+            if (p.title) metaParts.push(p.title);
+            if (p.server) metaParts.push(`Сервер: ${p.server}`);
+            if (p.ping) metaParts.push(`Пинг: ${p.ping}`);
+            document.getElementById('modalPlayerMeta').innerText = metaParts.join(' • ');
+
+            const badgesEl = document.getElementById('modalTierBadges');
+            const tierItems = ['beast', 'mace', 'carts', 'axe', 'smp', 'uhc', 'op', 'spearmace']
+                .filter(k => p[k] && p[k] !== '0')
+                .map(k => `<span class="tier-pill-badge">${k.toUpperCase()}: ${escapeHTML(p[k])}</span>`);
+            badgesEl.innerHTML = tierItems.length ? tierItems.join('') : `<span style="font-size:12px; color:#94a3b8;">Нет активных тиров</span>`;
+
+            const v = getPlayerViewsFormatted(exactKey);
+            document.getElementById('modalViewsDay').innerText = v.day;
+            document.getElementById('modalViewsMonth').innerText = v.month;
+            document.getElementById('modalViewsTotal').innerText = v.total;
+
+            const histEl = document.getElementById('modalPlayerHistoryList');
+            const pHist = (window.matchHistory || []).filter(h => String(h.nick || '').toLowerCase().includes(exactKey.toLowerCase()));
+            histEl.innerHTML = pHist.length
+                ? pHist.slice(0, 8).map(h => `<div>• <strong>${escapeHTML(h.kit)}</strong>: ${escapeHTML(h.oldTier || '0')} → ${escapeHTML(h.newTier)} (${escapeHTML(h.score || '3-0')}) <span style="color:#64748b;">${escapeHTML(h.date || '')}</span></div>`).join('')
+                : 'Тестов пока нет';
+
+            const box = document.getElementById('modalProfileBox');
+            const bgKey = Object.keys(window.playerBgTheme || {}).find(k => normalizeNickKey(k) === normalizeNickKey(exactKey)) || exactKey;
+            const bgTheme = window.playerBgTheme[bgKey] || 'default';
+            box.className = `modal-box bg-${bgTheme}`;
+
+            if (modalSkinViewer) {
+                modalSkinViewer.loadSkin(getSkinTextureSource(exactKey)).catch(() => {
+                    modalSkinViewer.loadSkin('https://minotar.net/skin/Steve').catch(() => {});
+                });
+                const poseKey = Object.keys(window.playerPoses || {}).find(k => normalizeNickKey(k) === normalizeNickKey(exactKey)) || exactKey;
+                applyPoseToViewer(modalSkinViewer, window.playerPoses[poseKey] || 'default');
+            }
+        }
+
+        function getSkinTextureSource(nick) {
+            const exactKey = Object.keys(window.playerSkins || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+            const custom = window.playerSkins[exactKey];
+            if (custom && typeof custom === 'string' && custom.trim()) {
+                const val = custom.trim();
+                if (/^https?:\/\//i.test(val)) {
+                    return val;
+                }
+                return `https://minotar.net/skin/${encodeURIComponent(val)}`;
+            }
+            return `https://minotar.net/skin/${encodeURIComponent(nick)}`;
+        }
+
+        function applyPoseToViewer(viewer, poseName) {
+            if (!viewer || !viewer.playerObject || !viewer.playerObject.skin) return;
+            const skin = viewer.playerObject.skin;
+            skin.rotation.set(0, 0, 0);
+            if (skin.leftArm) skin.leftArm.rotation.set(0, 0, 0);
+            if (skin.rightArm) skin.rightArm.rotation.set(0, 0, 0);
+            if (skin.leftLeg) skin.leftLeg.rotation.set(0, 0, 0);
+            if (skin.rightLeg) skin.rightLeg.rotation.set(0, 0, 0);
+            if (skin.head) skin.head.rotation.set(0, 0, 0);
+
+            if (poseName === 'battle') {
+                if (skin.rightArm) skin.rightArm.rotation.x = -0.85;
+                if (skin.leftArm) skin.leftArm.rotation.x = -0.45;
+                if (skin.rightLeg) skin.rightLeg.rotation.x = 0.25;
+                if (skin.leftLeg) skin.leftLeg.rotation.x = -0.25;
+            } else if (poseName === 'tilt') {
+                skin.rotation.z = 0.14;
+                if (skin.head) skin.head.rotation.z = -0.18;
+            } else if (poseName === 'aura') {
+                if (skin.leftArm) skin.leftArm.rotation.z = 0.55;
+                if (skin.rightArm) skin.rightArm.rotation.z = -0.55;
+            } else if (poseName === 'facepalm') {
+                if (skin.rightArm) {
+                    skin.rightArm.rotation.x = -1.25;
+                    skin.rightArm.rotation.z = 0.35;
+                }
+                if (skin.head) skin.head.rotation.x = 0.22;
+            } else if (poseName === 'wave') {
+                if (skin.rightArm) {
+                    skin.rightArm.rotation.x = -2.35;
+                    skin.rightArm.rotation.z = -0.2;
+                }
+            } else if (poseName === 'victory') {
+                if (skin.leftArm) {
+                    skin.leftArm.rotation.x = -2.5;
+                    skin.leftArm.rotation.z = 0.25;
+                }
+                if (skin.rightArm) {
+                    skin.rightArm.rotation.x = -2.5;
+                    skin.rightArm.rotation.z = -0.25;
+                }
+            } else if (poseName === 'sword-ready') {
+                if (skin.rightArm) {
+                    skin.rightArm.rotation.x = -1.05;
+                    skin.rightArm.rotation.y = -0.25;
+                }
+                if (skin.leftLeg) skin.leftLeg.rotation.x = 0.3;
+                if (skin.rightLeg) skin.rightLeg.rotation.x = -0.2;
+            } else if (poseName === 'thinker') {
+                if (skin.rightArm) {
+                    skin.rightArm.rotation.x = -1.35;
+                    skin.rightArm.rotation.z = 0.28;
+                }
+                if (skin.head) {
+                    skin.head.rotation.x = 0.14;
+                    skin.head.rotation.y = -0.15;
                 }
             }
-            return null;
         }
 
-        function completeLoginWithNick(nick, accId) {
-            const cleanNick = String(nick || '').trim();
-            if (!cleanNick) return;
-            const dId = normalizeDiscordId(accId || sessionAccountId || localStorage.getItem('priz_account_id') || 'guest_session');
-            sessionAccountId = dId;
-            loggedInUser = cleanNick;
-            localStorage.setItem('priz_ign', cleanNick);
-            localStorage.setItem('priz_account_id', dId);
-            ensureAccountCreatedDate(dId);
-            bindNickToDiscordAccount(cleanNick, dId);
-            saveLocalStorageData();
-            updateHeaderAuthUI();
-            switchPage('profile');
-            showToast(`Добро пожаловать, ${cleanNick}!`);
-        }
-
-        function submitOAuthNick() {
-            const nick = (document.getElementById('oauthNickInput')?.value || '').trim();
-            const errEl = document.getElementById('oauthNickErrorMsg');
-            if (!nick || nick.length < 2) {
-                if (errEl) errEl.textContent = 'Никнейм должен содержать минимум 2 символа.';
-                return;
-            }
-            const dId = sessionAccountId || `discord_${Date.now()}`;
-            const bindRes = bindNickToDiscordAccount(nick, dId);
-            if (!bindRes.ok) {
-                if (errEl) errEl.textContent = bindRes.error;
-                return;
-            }
-            document.getElementById('postOAuthNickModal').style.display = 'none';
-            completeLoginWithNick(nick, dId);
-        }
-
-        function closePostOAuthModal() {
-            document.getElementById('postOAuthNickModal').style.display = 'none';
-        }
-
-        function logoutUser() {
-            loggedInUser = null;
-            localStorage.removeItem('priz_ign');
-            updateHeaderAuthUI();
-            switchPage('home');
-            showToast('Вы вышли из аккаунта');
-        }
-
-        function updateHeaderAuthUI() {
-            const lbl = document.getElementById('navBtnLabel');
-            if (lbl) {
-                lbl.textContent = loggedInUser ? loggedInUser : 'Аккаунт';
-            }
-        }
-
-        function renderProfilePage() {
-            const ign = loggedInUser || 'Игрок';
-            const pData = getAllLeaderboardParticipants()[ign] || {};
-            const score = calculatePlayerScore(pData);
-            const allSorted = Object.entries(getAllLeaderboardParticipants())
-                .map(([k, v]) => ({ nick: k, score: calculatePlayerScore(v) }))
-                .sort((a, b) => b.score - a.score);
-            const pos = allSorted.findIndex(x => x.nick.toLowerCase() === ign.toLowerCase());
-            const rankLabel = getCombatTitleByScore(score);
-
-            const ignEl = document.getElementById('userIgnTxt');
-            const ptsEl = document.getElementById('userPtsTxt');
-            const rankEl = document.getElementById('profileRankTitle');
-            const metaEl = document.getElementById('profileMetaInfo');
-            const createdEl = document.getElementById('accountCreatedDateTxt');
-
-            if (ignEl) ignEl.textContent = ign;
-            if (ptsEl) ptsEl.textContent = `${score} очков`;
-            if (rankEl) rankEl.textContent = `${rankLabel} • #${pos >= 0 ? pos + 1 : '—'}`;
-            if (metaEl) metaEl.textContent = `${pData.server || 'Не указано'} / ${pData.ping || '—'}`;
-            if (createdEl) createdEl.textContent = ensureAccountCreatedDate(sessionAccountId || ign);
-
-            const slotsGrid = document.getElementById('profileKitSlotsGrid');
-            if (slotsGrid) {
-                const mainKits = [
-                    { key: 'beast', label: 'BEAST' },
-                    { key: 'mace', label: 'MACE' },
-                    { key: 'carts', label: 'CARTS' },
-                    { key: 'axe', label: 'AXE' }
-                ];
-                slotsGrid.innerHTML = mainKits.map(mk => {
-                    const t = getPlayerTierForKit(pData, mk.key);
-                    return `
-                        <div class="profile-kit-slot">
-                            <span style="font-weight: 800; font-size: 13px; color: #e2e8f0;">${mk.label}</span>
-                            ${t ? `<span class="tier-badge">${escapeHTML(t)}</span>` : `<span style="font-size: 12px; color: #64748b;">Unranked</span>`}
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            const badgesBox = document.getElementById('profileTierBadges');
-            if (badgesBox) {
-                const activeBadges = ALL_KITS.map(k => {
-                    const t = getPlayerTierForKit(pData, k);
-                    return t ? `<span class="tier-badge">${k.toUpperCase()}: ${escapeHTML(t)}</span>` : '';
-                }).filter(Boolean);
-                badgesBox.innerHTML = activeBadges.length
-                    ? activeBadges.join('')
-                    : `<span style="font-size: 13px; color: #94a3b8;">У вас пока нет присвоенных тиров. Пройдите тестирование в Discord!</span>`;
-            }
-
-            const histEl = document.getElementById('profileHistoryList');
-            if (histEl) {
-                const userHistory = (window.matchHistory || []).filter(h => h.player && h.player.toLowerCase() === ign.toLowerCase());
-                histEl.innerHTML = userHistory.length
-                    ? userHistory.map(h => `<div style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">[${escapeHTML(h.date || '')}] ${escapeHTML((h.kit || '').toUpperCase())} → <strong>${escapeHTML(h.tier)}</strong> (${escapeHTML(h.score || '')})</div>`).join('')
-                    : 'Тестов пока нет';
-            }
-
-            const views = window.playerViews[ign] || { day: 0, month: 0, total: 0 };
-            const vDay = document.getElementById('viewsDay');
-            const vMonth = document.getElementById('viewsMonth');
-            const vTotal = document.getElementById('viewsTotal');
-            if (vDay) vDay.textContent = views.day || 0;
-            if (vMonth) vMonth.textContent = views.month || 0;
-            if (vTotal) vTotal.textContent = views.total || 0;
-
-            initMainSkinViewer(ign);
-        }
-
-        function initMainSkinViewer(nick) {
+        function renderProfileSkins() {
+            if (!loggedInUser || typeof skinview3d === 'undefined') return;
             const canvas = document.getElementById('skin_container');
-            if (!canvas || typeof skinview3d === 'undefined') return;
+            if (!canvas) return;
+
             if (!skinViewer) {
                 skinViewer = new skinview3d.SkinViewer({
                     canvas,
-                    width: 180,
-                    height: 220,
-                    skin: `https://minotar.net/skin/${encodeURIComponent(nick)}`
+                    width: 170,
+                    height: 210
                 });
-                skinViewer.autoRotate = true;
-                skinViewer.autoRotateSpeed = 0.6;
-            } else {
-                const customSkin = window.playerSkins[nick];
-                skinViewer.loadSkin(customSkin || `https://minotar.net/skin/${encodeURIComponent(nick)}`).catch(() => {});
             }
+
+            const src = getSkinTextureSource(loggedInUser);
+            skinViewer.loadSkin(src).catch(() => {
+                skinViewer.loadSkin(`https://minotar.net/skin/Steve`).catch(() => {});
+            });
+
+            const pose = window.playerPoses[loggedInUser] || 'default';
+            applyPoseToViewer(skinViewer, pose);
         }
 
-        function applySkinUrl() {
-            if (!loggedInUser) return;
-            const raw = (document.getElementById('skinUrlInput')?.value || '').trim();
-            if (!raw) {
-                showToast('Введите ник или ссылку на скин');
-                return;
-            }
-            const skinSrc = /^https?:\/\//i.test(raw)
-                ? raw
-                : `https://minotar.net/skin/${encodeURIComponent(raw)}`;
-            window.playerSkins[loggedInUser] = skinSrc;
-            saveLocalStorageData();
-            if (skinViewer) {
-                skinViewer.loadSkin(skinSrc).catch(() => {});
-            }
-            showToast('Скин применён!');
-        }
+        function openPlayerProfileModal(nick) {
+            incrementPlayerView(nick);
+            syncWithServer(true);
+            const allPlayers = getAllLeaderboardParticipants();
+            const p = allPlayers[nick] || { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0' };
+            const score = calculatePlayerScore(p);
 
-        function setPose(poseName) {
-            if (!loggedInUser) return;
-            window.playerPoses[loggedInUser] = poseName;
-            saveLocalStorageData();
-            showToast(`Поза установлена: ${poseName}`);
-        }
+            document.getElementById('modalPlayerIgn').innerText = nick;
+            document.getElementById('modalPlayerPts').innerText = `${score} очков`;
 
-        function setBg(bgName) {
-            if (!loggedInUser) return;
-            window.playerBgTheme[loggedInUser] = bgName;
-            saveLocalStorageData();
-            const card = document.getElementById('profileCardBox');
-            if (card) {
-                card.className = `left-profile-card bg-${bgName}`;
-            }
-            showToast(`Фон персонажа изменён: ${bgName}`);
-        }
+            const metaParts = [];
+            if (p.title) metaParts.push(p.title);
+            if (p.server) metaParts.push(`Сервер: ${p.server}`);
+            if (p.ping) metaParts.push(`Пинг: ${p.ping}`);
+            document.getElementById('modalPlayerMeta').innerText = metaParts.join(' • ');
 
-        function switchCustomTab(event, tabKey) {
-            document.querySelectorAll('#page-profile .c-tab-btn').forEach(b => b.classList.remove('active'));
-            if (event && event.currentTarget) event.currentTarget.classList.add('active');
-            document.querySelectorAll('#page-profile .c-panel').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(`cp-${tabKey}`);
-            if (target) target.classList.add('active');
-        }
-
-        function copyProfileLink() {
-            const nick = loggedInUser || 'Prizrit';
-            const url = `${window.location.origin}${window.location.pathname}?player=${encodeURIComponent(nick)}`;
-            navigator.clipboard?.writeText(url).catch(() => {});
-            showToast('Ссылка на профиль скопирована!');
-        }
-
-        function openChangeNickModal() {
-            document.getElementById('nickModal').style.display = 'flex';
-        }
-
-        function submitNewNick() {
-            const newNick = (document.getElementById('newNickInput')?.value || '').trim();
-            const errEl = document.getElementById('nickErrorMsg');
-            if (!newNick || newNick.length < 2) {
-                if (errEl) errEl.textContent = 'Введите корректный никнейм.';
-                return;
-            }
-            const now = Date.now();
-            const fifteenDaysMs = 15 * 24 * 60 * 60 * 1000;
-            if (lastNickChange && (now - Number(lastNickChange)) < fifteenDaysMs) {
-                if (errEl) errEl.textContent = 'Смена ника доступна раз в 15 дней.';
-                return;
-            }
-            if (loggedInUser && window.playersData[loggedInUser]) {
-                window.playersData[newNick] = { ...window.playersData[loggedInUser] };
-                delete window.playersData[loggedInUser];
-            }
-            loggedInUser = newNick;
-            lastNickChange = now;
-            localStorage.setItem('priz_ign', newNick);
-            localStorage.setItem('priz_last_nick_change', String(now));
-            saveLocalStorageData();
-            updateHeaderAuthUI();
-            renderProfilePage();
-            document.getElementById('nickModal').style.display = 'none';
-            showToast('Никнейм успешно обновлён!');
-        }
-
-        function openSearchModal() {
-            document.getElementById('searchModal').style.display = 'flex';
-            renderHeaderSearchResults();
-        }
-
-        function closeSearchModal() {
-            document.getElementById('searchModal').style.display = 'none';
-        }
-
-        function renderHeaderSearchResults() {
-            const q = (document.getElementById('headerSearchInput')?.value || '').trim().toLowerCase();
-            const box = document.getElementById('headerSearchResults');
-            if (!box) return;
-            const all = Object.keys(getAllLeaderboardParticipants());
-            const matches = q ? all.filter(n => n.toLowerCase().includes(q)) : all.slice(0, 12);
-            box.innerHTML = matches.length
-                ? matches.map(n => {
-                    const jsN = escapeJSArg(n);
-                    return `<div class="player-card-mini" onclick="closeSearchModal(); openPlayerModal('${jsN}')"><strong style="color:#fff;">${escapeHTML(n)}</strong></div>`;
-                }).join('')
-                : '<div style="font-size:12px;color:#94a3b8;padding:8px;">Игроки не найдены</div>';
-        }
-
-        function openPlayerModal(nick) {
-            const all = getAllLeaderboardParticipants();
-            const pData = all[nick] || {};
-            const score = calculatePlayerScore(pData);
-
-            if (!window.playerViews[nick]) window.playerViews[nick] = { day: 0, month: 0, total: 0 };
-            window.playerViews[nick].day = (window.playerViews[nick].day || 0) + 1;
-            window.playerViews[nick].month = (window.playerViews[nick].month || 0) + 1;
-            window.playerViews[nick].total = (window.playerViews[nick].total || 0) + 1;
-            saveLocalStorageData();
-
-            const ignEl = document.getElementById('modalPlayerIgn');
-            const ptsEl = document.getElementById('modalPlayerPts');
-            const metaEl = document.getElementById('modalPlayerMeta');
             const badgesEl = document.getElementById('modalTierBadges');
+            const tierItems = ['beast', 'mace', 'carts', 'axe', 'smp', 'uhc', 'op', 'spearmace']
+                .filter(k => p[k] && p[k] !== '0')
+                .map(k => `<span class="tier-pill-badge">${k.toUpperCase()}: ${escapeHTML(p[k])}</span>`);
+            badgesEl.innerHTML = tierItems.length ? tierItems.join('') : `<span style="font-size:12px; color:#94a3b8;">Нет активных тиров</span>`;
 
-            if (ignEl) ignEl.textContent = nick;
-            if (ptsEl) ptsEl.textContent = `${score} очков`;
-            if (metaEl) metaEl.textContent = `${pData.server || 'Не указано'} • ${pData.ping || '—'}`;
-            if (badgesEl) {
-                const list = ALL_KITS.map(k => {
-                    const t = getPlayerTierForKit(pData, k);
-                    return t ? `<span class="tier-badge">${k.toUpperCase()}: ${escapeHTML(t)}</span>` : '';
-                }).filter(Boolean);
-                badgesEl.innerHTML = list.length ? list.join('') : '<span style="font-size:12px;color:#94a3b8;">Нет тиров</span>';
-            }
-
-            const v = window.playerViews[nick];
-            document.getElementById('modalViewsDay').textContent = v.day;
-            document.getElementById('modalViewsMonth').textContent = v.month;
-            document.getElementById('modalViewsTotal').textContent = v.total;
+            const v = getPlayerViewsFormatted(nick);
+            document.getElementById('modalViewsDay').innerText = v.day;
+            document.getElementById('modalViewsMonth').innerText = v.month;
+            document.getElementById('modalViewsTotal').innerText = v.total;
 
             const histEl = document.getElementById('modalPlayerHistoryList');
-            const items = (window.matchHistory || []).filter(h => h.player && h.player.toLowerCase() === nick.toLowerCase());
-            if (histEl) {
-                histEl.innerHTML = items.length
-                    ? items.map(h => `<div>[${escapeHTML(h.date || '')}] ${escapeHTML((h.kit || '').toUpperCase())} → <strong>${escapeHTML(h.tier)}</strong> (${escapeHTML(h.score || '')})</div>`).join('')
-                    : 'Тестов пока нет';
-            }
+            const pHist = (window.matchHistory || []).filter(h => String(h.nick || '').toLowerCase().includes(nick.toLowerCase()));
+            histEl.innerHTML = pHist.length
+                ? pHist.slice(0, 8).map(h => `<div>• <strong>${escapeHTML(h.kit)}</strong>: ${escapeHTML(h.oldTier || '0')} → ${escapeHTML(h.newTier)} (${escapeHTML(h.score || '3-0')}) <span style="color:#64748b;">${escapeHTML(h.date || '')}</span></div>`).join('')
+                : 'Тестов пока нет';
+
+            const box = document.getElementById('modalProfileBox');
+            const bgKey = Object.keys(window.playerBgTheme || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+            const bgTheme = window.playerBgTheme[bgKey] || 'default';
+            box.className = `modal-box bg-${bgTheme}`;
 
             document.getElementById('playerModal').style.display = 'flex';
 
-            const canvas = document.getElementById('modal_skin_container');
-            if (canvas && typeof skinview3d !== 'undefined') {
-                if (!modalSkinViewer) {
-                    modalSkinViewer = new skinview3d.SkinViewer({
-                        canvas,
-                        width: 150,
-                        height: 185,
-                        skin: `https://minotar.net/skin/${encodeURIComponent(nick)}`
+            if (typeof skinview3d !== 'undefined') {
+                const mCanvas = document.getElementById('modal_skin_container');
+                if (mCanvas) {
+                    if (!modalSkinViewer) {
+                        modalSkinViewer = new skinview3d.SkinViewer({
+                            canvas: mCanvas,
+                            width: 150,
+                            height: 190
+                        });
+                    }
+                    modalSkinViewer.loadSkin(getSkinTextureSource(nick)).catch(() => {
+                        modalSkinViewer.loadSkin('https://minotar.net/skin/Steve').catch(() => {});
                     });
-                    modalSkinViewer.autoRotate = true;
-                } else {
-                    modalSkinViewer.loadSkin(`https://minotar.net/skin/${encodeURIComponent(nick)}`).catch(() => {});
+                    const poseKey = Object.keys(window.playerPoses || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+                    applyPoseToViewer(modalSkinViewer, window.playerPoses[poseKey] || 'default');
                 }
             }
         }
 
         function closePlayerModal() {
-            document.getElementById('playerModal').style.display = 'none';
+            closeModal('playerModal');
         }
 
-        function closeModalOnBg(event, modalId) {
-            if (event.target && event.target.id === modalId) {
-                document.getElementById(modalId).style.display = 'none';
+        function updateProfileUI(nick) {
+            const allPlayers = getAllLeaderboardParticipants();
+            const p = allPlayers[nick] || { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0' };
+            const score = calculatePlayerScore(p);
+
+            document.getElementById('userIgnTxt').innerText = nick;
+            document.getElementById('userPtsTxt').innerText = `${score} очков`;
+
+            const list = Object.keys(allPlayers)
+                .map(k => ({ nick: k, pts: calculatePlayerScore(allPlayers[k]) }))
+                .filter(x => x.pts > 0)
+                .sort((a, b) => b.pts - a.pts);
+            const pos = list.findIndex(x => x.nick.toLowerCase() === nick.toLowerCase()) + 1;
+            const rankTitle = getCombatTitleByScore(score);
+            const rankEl = document.getElementById('profileRankTitle');
+            if (rankEl) {
+                rankEl.innerText = `${rankTitle} • ${pos > 0 ? `#${pos}` : 'Без рейтинга'}`;
+            }
+
+            const metaEl = document.getElementById('profileMetaInfo');
+            if (metaEl) {
+                const srv = p.server || 'Сервер не указан';
+                const png = p.ping || '—';
+                metaEl.innerText = `${srv} / ${png}`;
+            }
+
+            const kitSlotsGrid = document.getElementById('profileKitSlotsGrid');
+            if (kitSlotsGrid) {
+                const mainKits = [
+                    { key: 'beast', name: 'Beast (Sword)' },
+                    { key: 'mace', name: 'Mace (Smash)' },
+                    { key: 'carts', name: 'Carts (TNT)' },
+                    { key: 'axe', name: 'Axe PvP' }
+                ];
+                kitSlotsGrid.innerHTML = mainKits.map(mk => {
+                    const t = (p[mk.key] && p[mk.key] !== '0') ? p[mk.key] : 'Не пройден';
+                    const pts = (p[mk.key] && TIER_WEIGHTS[p[mk.key]]) ? `${TIER_WEIGHTS[p[mk.key]]} pts` : '0 pts';
+                    return `
+                        <div class="profile-kit-slot">
+                            <div>
+                                <div style="font-size:11px; color:#94a3b8; font-weight:700;">${mk.name}</div>
+                                <div style="font-size:14px; font-weight:900; color:#fff;">${escapeHTML(t)}</div>
+                            </div>
+                            <span style="font-size:11px; color:#c084fc; font-weight:800;">${pts}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const createdEl = document.getElementById('accountCreatedDateTxt');
+            if (createdEl) {
+                createdEl.innerText = (sessionAccountId && userCreatedDates[sessionAccountId]) || 'сегодня';
+            }
+
+            const badgesEl = document.getElementById('profileTierBadges');
+            const activeTiers = ['beast', 'mace', 'carts', 'axe', 'smp', 'uhc', 'op', 'spearmace']
+                .filter(k => p[k] && p[k] !== '0')
+                .map(k => `<span class="tier-pill-badge">${k.toUpperCase()}: ${escapeHTML(p[k])}</span>`);
+
+            if (badgesEl) {
+                badgesEl.innerHTML = activeTiers.length
+                    ? activeTiers.join('')
+                    : `<span style="font-size: 13px; color: #94a3b8;">У вас пока нет присвоенных тиров. Пройдите тестирование в Discord!</span>`;
+            }
+
+            const histEl = document.getElementById('profileHistoryList');
+            const myHist = (window.matchHistory || []).filter(h => String(h.nick || '').toLowerCase() === nick.toLowerCase());
+            if (histEl) {
+                histEl.innerHTML = myHist.length
+                    ? myHist.slice(0, 10).map(h => `<div style="margin-bottom:4px;">• <strong>${escapeHTML(h.kit)}</strong>: ${escapeHTML(h.oldTier || '0')} → <strong style="color:#34d399;">${escapeHTML(h.newTier)}</strong> (${escapeHTML(h.score || '3-0')})</div>`).join('')
+                    : 'Тестов пока нет';
+            }
+
+            const v = getPlayerViewsFormatted(nick);
+            document.getElementById('viewsDay').innerText = v.day;
+            document.getElementById('viewsMonth').innerText = v.month;
+            document.getElementById('viewsTotal').innerText = v.total;
+
+            const cardBox = document.getElementById('profileCardBox');
+            if (cardBox) {
+                const bg = window.playerBgTheme[nick] || 'default';
+                cardBox.className = `left-profile-card bg-${bg}`;
             }
         }
 
-        function openAdminLoginModal() {
-            document.getElementById('adminLoginModal').style.display = 'flex';
+        function switchCustomTab(event, tabId) {
+            document.querySelectorAll('.c-tab-btn').forEach(b => b.classList.remove('active'));
+            if (event && event.currentTarget) event.currentTarget.classList.add('active');
+            document.querySelectorAll('.c-panel').forEach(p => p.classList.remove('active'));
+            const panel = document.getElementById(`cp-${tabId}`);
+            if (panel) panel.classList.add('active');
         }
 
-        async function loginAdmin() {
-            const pass = (document.getElementById('adminPassInput')?.value || '').trim();
-            const storedHash = localStorage.getItem('priz_admin_pass_hash') || DEFAULT_ADMIN_PASS_HASH;
-            const inputHash = await hashAdminPass(pass);
-            if (inputHash === storedHash || pass === 'prizadmin2026') {
-                isAdminMode = true;
-                localStorage.setItem('priz_admin_mode', 'true');
-                document.getElementById('adminLoginModal').style.display = 'none';
-                updateAdminOnlyVisibility();
-                openAdminPanel();
-                showToast('Панель администратора активирована');
-            } else {
-                showToast('Неверный мастер-пароль');
-            }
-        }
-
-        function deactivateAdminMode() {
-            isAdminMode = false;
-            localStorage.removeItem('priz_admin_mode');
-            updateAdminOnlyVisibility();
-            closeAdminPanel();
-            showToast('Вы вышли из панели администратора');
-        }
-
-        function openAdminPanel() {
-            if (!hasActiveAdminBypass()) return;
-            updateBotStatusBadge();
-            renderAdminHistory();
-            document.getElementById('adminPanelModal').style.display = 'flex';
-        }
-
-        function closeAdminPanel() {
-            document.getElementById('adminPanelModal').style.display = 'none';
-        }
-
-        function switchAdminTab(tabName) {
-            ['issue', 'profile', 'history', 'tools'].forEach(t => {
-                document.getElementById(`admTabBtn-${t}`)?.classList.remove('active');
-                document.getElementById(`admTab-${t}`)?.classList.remove('active');
-            });
-            document.getElementById(`admTabBtn-${tabName}`)?.classList.add('active');
-            document.getElementById(`admTab-${tabName}`)?.classList.add('active');
-            if (tabName === 'history') renderAdminHistory();
-        }
-
-        function autoFillAdminPlayer() {
-            const nick = (document.getElementById('admPlayerNick')?.value || '').trim();
-            if (!nick) return;
-            const all = getAllLeaderboardParticipants();
-            const matchKey = Object.keys(all).find(k => k.toLowerCase() === nick.toLowerCase());
-            if (!matchKey) return;
-            const p = all[matchKey];
-            const kit = document.getElementById('admKitSelect')?.value || 'beast';
-            const tierSel = document.getElementById('admTierSelect');
-            if (tierSel) tierSel.value = p[kit] || '0';
-            if (document.getElementById('admPlayerServer')) document.getElementById('admPlayerServer').value = p.server || '';
-            if (document.getElementById('admPlayerPing')) document.getElementById('admPlayerPing').value = p.ping || '';
-            if (document.getElementById('admPlayerDiscordId')) document.getElementById('admPlayerDiscordId').value = p.discord_id || '';
-            if (document.getElementById('admTitleInput')) document.getElementById('admTitleInput').value = p.title || '';
-        }
-
-        function quickEditPlayer(nick) {
-            if (!hasActiveAdminBypass()) return;
-            openAdminPanel();
-            const inp = document.getElementById('admPlayerNick');
-            if (inp) {
-                inp.value = nick;
-                autoFillAdminPlayer();
-            }
-        }
-
-        function adminSavePlayer() {
-            if (!hasActiveAdminBypass()) return;
-            const nick = (document.getElementById('admPlayerNick')?.value || '').trim();
-            if (!nick) {
-                showToast('Введите никнейм игрока');
+        function applySkinUrl() {
+            if (!loggedInUser) return;
+            const val = document.getElementById('skinUrlInput').value.trim();
+            if (!val) {
+                showToast('Введите ник или ссылку на скин!');
                 return;
             }
-            const kit = document.getElementById('admKitSelect')?.value || 'beast';
-            const tier = document.getElementById('admTierSelect')?.value || '0';
-            const scoreLine = (document.getElementById('admMatchScore')?.value || '3-0').trim();
-            const tester = (document.getElementById('admTesterNick')?.value || 'Admin').trim();
-            const server = (document.getElementById('admPlayerServer')?.value || '').trim();
-            const ping = (document.getElementById('admPlayerPing')?.value || '').trim();
-            const discordId = (document.getElementById('admPlayerDiscordId')?.value || '').trim();
-            const title = (document.getElementById('admTitleInput')?.value || '').trim();
-
-            if (!window.playersData[nick]) {
-                window.playersData[nick] = {
+            if (!window.playersData[loggedInUser]) {
+                window.playersData[loggedInUser] = {
                     beast: '0', mace: '0', carts: '0',
                     smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
-                    title: '', server: '', ping: '', discord_id: ''
+                    title: '', server: '', ping: '', discord_id: sessionAccountId || ''
                 };
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
             }
-
-            window.playersData[nick][kit] = tier;
-            if (server) window.playersData[nick].server = server;
-            if (ping) window.playersData[nick].ping = ping;
-            if (discordId) window.playersData[nick].discord_id = discordId;
-            if (title !== undefined) window.playersData[nick].title = title;
-
-            if (tier !== '0') {
-                window.matchHistory.unshift({
-                    player: nick,
-                    kit,
-                    tier,
-                    score: scoreLine,
-                    tester,
-                    date: new Date().toLocaleDateString('ru-RU')
-                });
-                window.matchHistory = window.matchHistory.slice(0, 200);
-            }
-
-            saveLocalStorageData();
-            refreshAllViews();
-            renderAdminHistory();
-            showToast(`✅ Тир ${tier} по ${kit.toUpperCase()} сохранён для ${nick}`);
+            window.playerSkins[loggedInUser] = val;
+            localStorage.setItem('priz_skins', JSON.stringify(window.playerSkins));
+            syncWithServer(true);
+            renderProfileSkins();
+            renderLeaderboard();
+            showToast('Скин применён!');
         }
 
-        function adminForceRename() {
-            if (!hasActiveAdminBypass()) return;
-            const oldNick = (document.getElementById('admRenameOldNick')?.value || '').trim();
-            const newNick = (document.getElementById('admRenameNewNick')?.value || '').trim();
-            if (!oldNick || !newNick) {
-                showToast('Укажите старый и новый ник');
+        function setPose(pose) {
+            if (!loggedInUser) return;
+            if (!window.playersData[loggedInUser]) {
+                window.playersData[loggedInUser] = {
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: '', discord_id: sessionAccountId || ''
+                };
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            }
+            window.playerPoses[loggedInUser] = pose;
+            localStorage.setItem('priz_poses', JSON.stringify(window.playerPoses));
+            syncWithServer(true);
+            applyPoseToViewer(skinViewer, pose);
+            showToast(`Стойка изменена: ${pose}`);
+        }
+
+        function setBg(bgName) {
+            if (!loggedInUser) return;
+            if (!window.playersData[loggedInUser]) {
+                window.playersData[loggedInUser] = {
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: '', discord_id: sessionAccountId || ''
+                };
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            }
+            window.playerBgTheme[loggedInUser] = bgName;
+            localStorage.setItem('priz_bg_themes', JSON.stringify(window.playerBgTheme));
+            syncWithServer(true);
+            updateProfileUI(loggedInUser);
+            showToast('Фон карточки обновлён');
+        }
+
+        function setSiteBg(bgName) {
+            currentCustomSiteBg = bgName;
+            if (sessionAccountId) {
+                userSiteBgs[sessionAccountId] = bgName;
+                localStorage.setItem('priz_user_site_bgs', JSON.stringify(userSiteBgs));
+            }
+            applySiteBg(bgName);
+            showToast('Фон сайта обновлён');
+        }
+
+        function applySiteBg(bgName) {
+            document.body.className = document.body.className
+                .split(/\s+/)
+                .filter(c => !c.startsWith('site-bg-'))
+                .join(' ');
+            if (bgName && bgName !== 'default') {
+                document.body.classList.add(`site-bg-${bgName}`);
+            }
+            if (isAdminMode) {
+                document.body.classList.add('admin-panel-active');
+            }
+        }
+
+        function copyProfileLink() {
+            if (!loggedInUser) return;
+            const url = `${window.location.origin}${window.location.pathname}?player=${encodeURIComponent(loggedInUser)}`;
+            navigator.clipboard?.writeText(url).catch(() => {});
+            showToast('Ссылка на профиль скопирована!');
+        }
+
+        function incrementPlayerView(nick) {
+            if (!nick) return;
+            const today = new Date().toISOString().slice(0, 10);
+            const month = new Date().toISOString().slice(0, 7);
+            if (!window.playerViews[nick]) {
+                window.playerViews[nick] = { total: 0, days: {}, months: {} };
+            }
+            const v = window.playerViews[nick];
+            v.total = (v.total || 0) + 1;
+            v.days = v.days || {};
+            v.months = v.months || {};
+            v.days[today] = (v.days[today] || 0) + 1;
+            v.months[month] = (v.months[month] || 0) + 1;
+            localStorage.setItem('priz_views', JSON.stringify(window.playerViews));
+        }
+
+        function getPlayerViewsFormatted(nick) {
+            const today = new Date().toISOString().slice(0, 10);
+            const month = new Date().toISOString().slice(0, 7);
+            const v = window.playerViews[nick] || { total: 0, days: {}, months: {} };
+            return {
+                day: (v.days && v.days[today]) || 0,
+                month: (v.months && v.months[month]) || 0,
+                total: v.total || 0
+            };
+        }
+
+        function openSearchModal() {
+            document.getElementById('headerSearchInput').value = '';
+            renderHeaderSearchResults();
+            document.getElementById('searchModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('headerSearchInput').focus(), 80);
+        }
+
+        function closeSearchModal() {
+            closeModal('searchModal');
+        }
+
+        function renderHeaderSearchResults() {
+            const q = (document.getElementById('headerSearchInput')?.value || '').trim().toLowerCase();
+            const container = document.getElementById('headerSearchResults');
+            if (!container) return;
+
+            const allPlayers = getAllLeaderboardParticipants();
+            const names = Object.keys(allPlayers)
+                .filter(n => !q || n.toLowerCase().includes(q))
+                .slice(0, 20);
+
+            if (!names.length) {
+                container.innerHTML = `<div style="color:#94a3b8; font-size:13px; padding:10px;">Ничего не найдено</div>`;
                 return;
             }
-            const exactOld = Object.keys(window.playersData).find(k => k.toLowerCase() === oldNick.toLowerCase());
-            if (!exactOld) {
-                showToast('Игрок не найден');
-                return;
+
+            container.innerHTML = names.map(n => {
+                const pts = calculatePlayerScore(allPlayers[n]);
+                return `
+                    <div class="player-card-mini" onclick="closeSearchModal(); openPlayerProfileModal('${escapeJSArg(n)}')">
+                        <img src="${getAvatarUrl(n)}" width="24" height="24" style="border-radius:5px;" alt="" class="protected-asset">
+                        <span style="flex:1; font-weight:700; color:#fff;">${escapeHTML(n)}</span>
+                        <span style="font-size:12px; color:#c084fc; font-weight:800;">${pts} pts</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function pulseLiveElement(el) {
+            if (!el) return;
+            el.classList.remove('priz-live-pulse');
+            void el.offsetWidth;
+            el.classList.add('priz-live-pulse');
+            setTimeout(() => el.classList.remove('priz-live-pulse'), 600);
+        }
+
+        function setLiveStatText(el, nextText) {
+            if (!el) return;
+            const prevText = el.innerText;
+            if (prevText !== nextText) {
+                el.innerText = nextText;
+                if (prevText && prevText !== '... участников' && prevText !== '...') {
+                    pulseLiveElement(el);
+                }
             }
-            window.playersData[newNick] = { ...window.playersData[exactOld] };
-            delete window.playersData[exactOld];
-            saveLocalStorageData();
-            refreshAllViews();
-            showToast(`Переименовано: ${exactOld} → ${newNick}`);
-        }
-
-        function adminDeletePlayer() {
-            if (!hasActiveAdminBypass()) return;
-            const nick = (document.getElementById('admPlayerNick')?.value || '').trim();
-            if (!nick) {
-                showToast('Введите ник игрока');
-                return;
-            }
-            const exactKey = Object.keys(window.playersData).find(k => k.toLowerCase() === nick.toLowerCase());
-            if (!exactKey) {
-                showToast('Игрок не найден в базе');
-                return;
-            }
-            delete window.playersData[exactKey];
-            saveLocalStorageData();
-            refreshAllViews();
-            showToast(`Игрок ${exactKey} удалён`);
-        }
-
-        function renderAdminHistory() {
-            const box = document.getElementById('adminMatchHistoryContainer');
-            if (!box) return;
-            const list = window.matchHistory || [];
-            box.innerHTML = list.length
-                ? list.map(item => `<div style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06);"><strong>${escapeHTML(item.player)}</strong> • ${escapeHTML((item.kit || '').toUpperCase())} → <span style="color:#c084fc;">${escapeHTML(item.tier)}</span> (${escapeHTML(item.score || '')}) • <em>${escapeHTML(item.tester || '')}</em> • ${escapeHTML(item.date || '')}</div>`).join('')
-                : 'История пуста.';
-        }
-
-        function adminClearHistory() {
-            if (!hasActiveAdminBypass()) return;
-            window.matchHistory = [];
-            saveLocalStorageData();
-            renderAdminHistory();
-            showToast('История матчей очищена');
-        }
-
-        function refreshBotKitTiersStatus() {
-            isBotOnline = true;
-            updateBotStatusBadge();
-            showToast('Статус Discord-бота обновлён');
-        }
-
-        function adminSyncFromBotDatabase() {
-            if (!hasActiveAdminBypass()) return;
-            loadLocalStorageData();
-            refreshAllViews();
-            showToast('Синхронизация завершена');
-        }
-
-        function adminResetViews() {
-            if (!hasActiveAdminBypass()) return;
-            window.playerViews = {};
-            saveLocalStorageData();
-            refreshAllViews();
-            showToast('Статистика просмотров сброшена');
-        }
-
-        function adminSeasonReset() {
-            if (!hasActiveAdminBypass()) return;
-            Object.keys(window.playersData).forEach(nick => {
-                ALL_KITS.forEach(k => {
-                    window.playersData[nick][k] = '0';
-                });
-            });
-            saveLocalStorageData();
-            refreshAllViews();
-            showToast('🏆 Сезон завершён, тиры сброшены');
-        }
-
-        function openDevModal() {
-            if (!hasActiveAdminBypass()) return;
-            document.getElementById('devModal').style.display = 'flex';
-        }
-
-        function closeDevModal() {
-            document.getElementById('devModal').style.display = 'none';
-        }
-
-        async function changeAdminPass() {
-            const np = (document.getElementById('newAdminPassInput')?.value || '').trim();
-            if (!np || np.length < 4) {
-                showToast('Пароль должен быть не короче 4 символов');
-                return;
-            }
-            const h = await hashAdminPass(np);
-            localStorage.setItem('priz_admin_pass_hash', h);
-            document.getElementById('newAdminPassInput').value = '';
-            showToast('Мастер-пароль обновлён');
-        }
-
-        function downloadSiteCode() {
-            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'priztiers.html';
-            a.click();
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-        }
-
-        function openCodeEditorModal() {
-            const ta = document.getElementById('siteCodeTextarea');
-            if (ta) ta.value = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            document.getElementById('codeEditorModal').style.display = 'flex';
-        }
-
-        function closeCodeEditorModal() {
-            document.getElementById('codeEditorModal').style.display = 'none';
-        }
-
-        function applySiteCodeChanges() {
-            const ta = document.getElementById('siteCodeTextarea');
-            if (!ta) return;
-            document.open();
-            document.write(ta.value);
-            document.close();
         }
 
         function getSavedAxeInviteUrl() {
@@ -4132,111 +5051,362 @@
             }
         }
 
-        function syncAxeInviteUI() {
+        function applyAxeDiscordInviteUI() {
             const url = getSavedAxeInviteUrl();
-            const btn = document.getElementById('socialHubAxeBtn');
+            const hubBtn = document.getElementById('socialHubAxeBtn');
+            const hubDesc = document.getElementById('socialHubAxeDesc');
             const guideWrap = document.getElementById('guideAxeDiscordWrap');
             const guideLink = document.getElementById('guideAxeDiscordLink');
+            const siteInp = document.getElementById('siteAxeDiscordInput');
+            const admInp = document.getElementById('admAxeDiscordInput');
 
-            if (url) {
-                const href = /^https?:\/\//i.test(url) ? url : `https://discord.gg/${url}`;
-                if (btn) {
-                    btn.textContent = 'Открыть Discord Axe';
-                    btn.setAttribute('href', href);
-                    btn.setAttribute('target', '_blank');
-                    btn.onclick = null;
+            if (siteInp && document.activeElement !== siteInp) siteInp.value = url;
+            if (admInp && document.activeElement !== admInp) admInp.value = url;
+
+            if (url && /^https?:\/\//i.test(url)) {
+                if (hubBtn) {
+                    hubBtn.href = url;
+                    hubBtn.target = '_blank';
+                    hubBtn.rel = 'noopener noreferrer';
+                    hubBtn.innerText = 'Открыть Discord Axe';
+                    hubBtn.onclick = null;
+                }
+                if (hubDesc) {
+                    hubDesc.innerText = 'Очереди на тестирование и правила дисциплины Axe PvP.';
                 }
                 if (guideWrap && guideLink) {
                     guideWrap.style.display = 'inline';
-                    guideLink.setAttribute('href', href);
+                    guideLink.href = url;
                 }
-            } else if (btn) {
-                btn.textContent = 'Ссылка не указана';
-                btn.setAttribute('href', 'javascript:void(0)');
-                btn.removeAttribute('target');
+            } else {
+                if (hubBtn) {
+                    hubBtn.href = 'javascript:void(0)';
+                    hubBtn.removeAttribute('target');
+                    hubBtn.innerText = 'Ссылка не указана';
+                    hubBtn.onclick = function() {
+                        showToast('Укажите ссылку на Discord Axe для сохранения');
+                        return false;
+                    };
+                }
+                if (hubDesc) {
+                    hubDesc.innerText = 'Ссылка на Discord-сервер дисциплины Axe ещё не указана.';
+                }
+                if (guideWrap) {
+                    guideWrap.style.display = 'none';
+                }
             }
         }
 
         function saveAxeDiscordInviteFromSite(inputId) {
-            if (!hasActiveAdminBypass()) return;
-            const inp = document.getElementById(inputId);
-            const raw = (inp?.value || '').trim();
-            try {
-                localStorage.setItem('priz_axe_discord_invite', raw);
-            } catch (e) {}
-            syncAxeInviteUI();
+            if (!hasActiveAdminBypass()) {
+                showToast('Доступ запрещён');
+                return;
+            }
+            const inp = document.getElementById(inputId || 'siteAxeDiscordInput');
+            if (!inp) return;
+            const raw = inp.value.trim();
+            if (!raw) {
+                localStorage.removeItem('priz_axe_discord_invite');
+                applyAxeDiscordInviteUI();
+                renderHomeKitStats();
+                showToast('Ссылка Discord Axe очищена');
+                return;
+            }
+            const normalized = /^https?:\/\//i.test(raw) ? raw : `https://discord.gg/${raw.replace(/^\/+/, '')}`;
+            localStorage.setItem('priz_axe_discord_invite', normalized);
+            applyAxeDiscordInviteUI();
             renderHomeKitStats();
-            showToast('Ссылка Discord для AXE обновлена');
+            syncWithServer(true);
+            showToast('✅ Ссылка на Discord Axe сохранена!');
         }
 
-        function refreshAllViews() {
-            renderHomeKitStats();
-            renderTierTable();
-            renderLeaderboard();
-            renderCustomHomeKits();
-            renderCustomDiscordLinks();
-            if (document.getElementById('page-profile')?.classList.contains('active')) {
-                renderProfilePage();
+        window.discordStatsCache = JSON.parse(localStorage.getItem('priz_discord_stats_cache') || '{}');
+
+        function saveDiscordStatsCache() {
+            try {
+                localStorage.setItem('priz_discord_stats_cache', JSON.stringify(window.discordStatsCache || {}));
+            } catch (e) {}
+        }
+
+        async function renderHomeKitStats() {
+            const applyKitCounts = (kitKey, membersVal, onlineVal) => {
+                const cap = kitKey.charAt(0).toUpperCase() + kitKey.slice(1);
+                const countEl = document.getElementById(`statCount${cap}`);
+                const onlineEl = document.getElementById(`statDiscord${cap}Online`);
+                if (membersVal !== null && membersVal !== undefined && !Number.isNaN(Number(membersVal))) {
+                    setLiveStatText(countEl, formatMembersRu(membersVal));
+                }
+                if (onlineVal !== null && onlineVal !== undefined && !Number.isNaN(Number(onlineVal))) {
+                    setLiveStatText(onlineEl, `${Number(onlineVal).toLocaleString('ru-RU')}`);
+                }
+            };
+
+            const kitInvites = {
+                beast: DISCORD_KITS_WIDGETS.beast,
+                mace: DISCORD_KITS_WIDGETS.mace,
+                carts: DISCORD_KITS_WIDGETS.carts,
+                axe: extractInviteCode(getSavedAxeInviteUrl())
+            };
+
+            Object.keys(kitInvites).forEach(k => {
+                const cached = window.discordStatsCache && window.discordStatsCache[k];
+                if (cached && (cached.members !== null || cached.online !== null)) {
+                    applyKitCounts(k, cached.members, cached.online);
+                } else if (k === 'axe' && !kitInvites.axe) {
+                    applyKitCounts('axe', 0, 0);
+                }
+            });
+
+            await Promise.all(Object.entries(kitInvites).map(async ([kitKey, inviteCode]) => {
+                if (!inviteCode) return;
+                const stats = await fetchDiscordCountsLive(inviteCode);
+                if (stats && (stats.members !== null || stats.online !== null)) {
+                    window.discordStatsCache[kitKey] = {
+                        members: stats.members,
+                        online: stats.online,
+                        updatedAt: Date.now()
+                    };
+                    saveDiscordStatsCache();
+                    applyKitCounts(kitKey, stats.members, stats.online);
+                }
+            }));
+
+            if (Array.isArray(window.customHomeKits)) {
+                await Promise.all(window.customHomeKits.map(item => fetchCustomInviteStats(item)));
             }
         }
 
-        function initPressWaveAnimation() {
-            const selector = '.nav-icon-btn, .profile-avatar-btn, .btn-action-sm, .btn-purple, .c-tab-btn, .social-hub-btn, .guide-faq-btn, .tier-search-btn';
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        }
+
+        function closeModalOnBg(event, id) {
+            if (event.target && event.target.id === id) {
+                closeModal(id);
+            }
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.innerText = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2800);
+        }
+
+        function loadSavedData() {
+            try {
+                const p = JSON.parse(localStorage.getItem('priz_players_db') || '{}');
+                window.playersData = (p && typeof p === 'object') ? p : {};
+            } catch (e) { window.playersData = {}; }
+
+            try {
+                const v = JSON.parse(localStorage.getItem('priz_views') || '{}');
+                window.playerViews = (v && typeof v === 'object') ? v : {};
+            } catch (e) { window.playerViews = {}; }
+
+            try {
+                const b = JSON.parse(localStorage.getItem('priz_bg_themes') || '{}');
+                window.playerBgTheme = (b && typeof b === 'object') ? b : {};
+            } catch (e) { window.playerBgTheme = {}; }
+
+            try {
+                const s = JSON.parse(localStorage.getItem('priz_skins') || '{}');
+                window.playerSkins = (s && typeof s === 'object') ? s : {};
+            } catch (e) { window.playerSkins = {}; }
+
+            try {
+                const po = JSON.parse(localStorage.getItem('priz_poses') || '{}');
+                window.playerPoses = (po && typeof po === 'object') ? po : {};
+            } catch (e) { window.playerPoses = {}; }
+
+            try {
+                const h = JSON.parse(localStorage.getItem('priz_match_history') || '[]');
+                window.matchHistory = Array.isArray(h) ? h : [];
+            } catch (e) { window.matchHistory = []; }
+
+            try {
+                const al = JSON.parse(localStorage.getItem('priz_admin_login_logs') || '[]');
+                window.adminLoginLogs = Array.isArray(al) ? al : [];
+            } catch (e) { window.adminLoginLogs = []; }
+        }
+    </script>
+
+    <script id="priz-button-hold-wave-script">
+        (function() {
+            const PRESSABLE_SELECTOR = 'button, .btn-action-sm, .btn-purple, .nav-icon-btn, .c-tab-btn, .social-hub-btn, .guide-faq-btn, .profile-avatar-btn';
+            let activePressTarget = null;
+            let holdTimer = null;
+
+            function findPressableTarget(el) {
+                if (!el || !el.closest) return null;
+                const found = el.closest(PRESSABLE_SELECTOR);
+                if (!found || found.disabled) return null;
+                return found;
+            }
+
+            function triggerPressAnimation(el) {
+                if (!el) return;
+                el.classList.remove('priz-ui-holding');
+                el.classList.remove('priz-ui-press-anim');
+                void el.offsetWidth;
+                el.classList.add('priz-ui-press-anim');
+                setTimeout(() => {
+                    el.classList.remove('priz-ui-press-anim');
+                }, 360);
+            }
+
+            function clearHoldState() {
+                if (holdTimer) {
+                    clearTimeout(holdTimer);
+                    holdTimer = null;
+                }
+                if (activePressTarget) {
+                    activePressTarget.classList.remove('priz-ui-holding');
+                    activePressTarget = null;
+                }
+            }
+
             document.addEventListener('pointerdown', (e) => {
-                const btn = e.target.closest(selector);
-                if (!btn) return;
-                btn.classList.remove('priz-ui-press-anim');
-                btn.classList.add('priz-ui-holding');
+                if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+                const target = findPressableTarget(e.target);
+                if (!target) return;
+
+                clearHoldState();
+                activePressTarget = target;
+                holdTimer = setTimeout(() => {
+                    if (activePressTarget === target) {
+                        target.classList.add('priz-ui-holding');
+                    }
+                }, 90);
             }, { passive: true });
 
-            const releasePress = () => {
-                document.querySelectorAll('.priz-ui-holding').forEach(el => {
-                    el.classList.remove('priz-ui-holding');
-                    el.classList.add('priz-ui-press-anim');
-                    setTimeout(() => el.classList.remove('priz-ui-press-anim'), 380);
-                });
-            };
-            window.addEventListener('pointerup', releasePress, { passive: true });
-            window.addEventListener('pointercancel', releasePress, { passive: true });
-        }
-
-        function initNavigationBindings() {
-            document.querySelectorAll('[data-nav-page]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const page = el.getAttribute('data-nav-page');
-                    if (page) switchPage(page);
-                });
-            });
-
-            document.querySelectorAll('[data-nav-kit]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const kit = el.getAttribute('data-nav-kit');
-                    if (kit) switchKit(kit);
-                });
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadLocalStorageData();
-            applyUserSiteBackground();
-            updateAdminOnlyVisibility();
-            updateHeaderAuthUI();
-            syncAxeInviteUI();
-            initPressWaveAnimation();
-            initNavigationBindings();
-            renderCustomHomeKits();
-            renderCustomDiscordLinks();
-            renderHomeKitStats();
-            updatePointsCalculator();
-
-            setInterval(() => {
-                if (document.visibilityState === 'visible') {
-                    renderHomeKitStats();
+            document.addEventListener('pointerup', (e) => {
+                const target = findPressableTarget(e.target) || activePressTarget;
+                clearHoldState();
+                if (target) {
+                    triggerPressAnimation(target);
                 }
-            }, 3000);
-        });
+            }, { passive: true });
+
+            document.addEventListener('pointercancel', clearHoldState, { passive: true });
+            window.addEventListener('blur', clearHoldState);
+        })();
+    </script>
+
+    <script id="priz-nav-pages-and-badges-fix">
+        (function() {
+            document.addEventListener('click', function(e) {
+                const pageBtn = e.target.closest('[data-nav-page]');
+                if (pageBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const page = pageBtn.getAttribute('data-nav-page');
+                    if (page && typeof window.switchPage === 'function') {
+                        window.switchPage(page);
+                    }
+                    return;
+                }
+
+                const kitBtn = e.target.closest('[data-nav-kit]');
+                if (kitBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const kit = kitBtn.getAttribute('data-nav-kit');
+                    if (kit && typeof window.switchKit === 'function') {
+                        window.switchKit(kit);
+                    }
+                }
+            }, true);
+        })();
+    </script>
+
+    <script id="priz-mobile-layout-and-sync-fix">
+        (function() {
+            function ensureMobileViewport() {
+                let vp = document.querySelector('meta[name="viewport"]');
+                if (!vp) {
+                    vp = document.createElement('meta');
+                    vp.name = 'viewport';
+                    document.head.appendChild(vp);
+                }
+                vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0';
+            }
+
+            function syncMobileState() {
+                if (typeof window.renderHomeKitStats === 'function') {
+                    window.renderHomeKitStats();
+                }
+                if (typeof window.renderLeaderboard === 'function') {
+                    window.renderLeaderboard();
+                }
+                if (document.getElementById('page-tier')?.classList.contains('active') && typeof window.renderTierGrid === 'function') {
+                    window.renderTierGrid();
+                }
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                ensureMobileViewport();
+                setTimeout(syncMobileState, 120);
+            });
+            window.addEventListener('resize', () => {
+                ensureMobileViewport();
+            }, { passive: true });
+        })();
+    </script>
+
+    <script id="priz-header-and-top-spacing-fix">
+        (function() {
+            function forceZeroTopGap() {
+                document.documentElement.style.marginTop = '0px';
+                document.documentElement.style.paddingTop = '0px';
+                document.body.style.marginTop = '0px';
+                document.body.style.paddingTop = '0px';
+
+                const selectors = [
+                    '.page-overlay',
+                    '.app-container',
+                    '.page-view',
+                    '.page-view.active',
+                    '#page-tier',
+                    '#page-tier .tier-table-wrapper',
+                    '#page-tier #tierWrapper',
+                    '#page-tier .tier-header-bar',
+                    '#page-tier .tier-grid',
+                    '#page-tier .kit-soon-box',
+                    '#page-leaderboard',
+                    '#page-leaderboard .lb-header-section',
+                    '#page-leaderboard .lb-podium-grid',
+                    '#page-leaderboard .lb-table-card',
+                    '#page-links',
+                    '#page-links .guide-hero-card',
+                    '#page-links .links-grid',
+                    '#page-home',
+                    '#page-home .hero-section',
+                    '#page-home .kit-stats-bar',
+                    '#page-guide',
+                    '#page-guide .guide-hero-card'
+                ];
+                selectors.forEach(sel => {
+                    document.querySelectorAll(sel).forEach(el => {
+                        el.style.marginTop = '0px';
+                        el.style.top = '0px';
+                        if (sel.includes('wrapper') || sel.includes('card') || sel.includes('section')) {
+                            el.style.transform = 'none';
+                        }
+                    });
+                });
+            }
+
+            window.addEventListener('DOMContentLoaded', forceZeroTopGap);
+            window.addEventListener('load', forceZeroTopGap);
+            setInterval(forceZeroTopGap, 1000);
+        })();
     </script>
 </body>
 </html>
