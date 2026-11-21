@@ -2159,22 +2159,64 @@
             });
         }
 
+        function formatMembersRu(n) {
+            const num = Math.max(0, Math.floor(Number(n) || 0));
+            const mod10 = num % 10;
+            const mod100 = num % 100;
+            let word = 'участников';
+            if (mod10 === 1 && mod100 !== 11) word = 'участник';
+            else if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) word = 'участника';
+            return `${num.toLocaleString('ru-RU')} ${word}`;
+        }
+
+        async function fetchDiscordCountsLive(inviteCode) {
+            const code = extractInviteCode(inviteCode);
+            if (!code) return null;
+
+            const endpoints = [
+                `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true`,
+                `https://discord.com/api/v9/invites/${encodeURIComponent(code)}?with_counts=true&with_expiration=true`,
+                `${BACKEND_URL}/api/discord/invite-stats?code=${encodeURIComponent(code)}`
+            ];
+
+            for (const url of endpoints) {
+                try {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 4500);
+                    const res = await fetch(url, {
+                        cache: 'no-store',
+                        signal: controller.signal
+                    });
+                    clearTimeout(timer);
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    const members = data.approximate_member_count ?? data.member_count ?? data.members;
+                    const online = data.approximate_presence_count ?? data.presence_count ?? data.online;
+                    if (members !== undefined || online !== undefined) {
+                        return {
+                            members: members !== undefined ? Number(members) : null,
+                            online: online !== undefined ? Number(online) : null
+                        };
+                    }
+                } catch (e) {}
+            }
+            return null;
+        }
+
         async function fetchCustomInviteStats(item) {
             const code = extractInviteCode(item.invite);
             if (!code) return;
-            try {
-                const res = await fetch(`https://discord.com/api/v9/invites/${encodeURIComponent(code)}?with_counts=true&_t=${Date.now()}`);
-                if (!res.ok) return;
-                const data = await res.json();
-                const countEl = document.getElementById(`customStatCount_${item.id}`);
-                const onlineEl = document.getElementById(`customStatOnline_${item.id}`);
-                if (countEl && data.approximate_member_count !== undefined) {
-                    countEl.innerText = `${Number(data.approximate_member_count).toLocaleString('ru-RU')} участников`;
+            const stats = await fetchDiscordCountsLive(code);
+            const countEl = document.getElementById(`customStatCount_${item.id}`);
+            const onlineEl = document.getElementById(`customStatOnline_${item.id}`);
+            if (stats) {
+                if (countEl && stats.members !== null) {
+                    setLiveStatText(countEl, formatMembersRu(stats.members));
                 }
-                if (onlineEl && data.approximate_presence_count !== undefined) {
-                    onlineEl.innerText = Number(data.approximate_presence_count).toLocaleString('ru-RU');
+                if (onlineEl && stats.online !== null) {
+                    setLiveStatText(onlineEl, Number(stats.online).toLocaleString('ru-RU'));
                 }
-            } catch (e) {}
+            }
         }
 
         function adminAddHomeKitDiscipline() {
@@ -2955,8 +2997,12 @@
 
             setInterval(() => {
                 renderHomeKitStats();
+            }, 10000);
+
+            setInterval(() => {
+                pullLatestFromServer();
                 refreshBotKitTiersStatus();
-            }, 30000);
+            }, 5000);
         });
 
         function findNickByDiscordId(discordId) {
@@ -3090,9 +3136,142 @@
             showToast(`Добро пожаловать на PrizTiers, ${loggedInUser}!`);
         }
 
-        async function syncWithServer() {
+        let lastLocalMutationTs = Number(localStorage.getItem('priz_last_mutation_ts') || 0);
+        let prizBroadcastChannel = null;
+        try {
+            if (typeof BroadcastChannel !== 'undefined') {
+                prizBroadcastChannel = new BroadcastChannel('priztiers_realtime_sync');
+                prizBroadcastChannel.onmessage = (ev) => {
+                    if (ev && ev.data && ev.data.type === 'STATE_UPDATED') {
+                        loadSavedData();
+                        rebuildDiscordBindingsFromPlayers();
+                        applyGlobalVisualState();
+                    }
+                };
+            }
+        } catch (e) {}
+
+        function markLocalStateMutated() {
+            lastLocalMutationTs = Date.now();
+            try {
+                localStorage.setItem('priz_last_mutation_ts', String(lastLocalMutationTs));
+                if (prizBroadcastChannel) {
+                    prizBroadcastChannel.postMessage({ type: 'STATE_UPDATED', ts: lastLocalMutationTs });
+                }
+            } catch (e) {}
+        }
+
+        function applyGlobalVisualState() {
+            renderLeaderboard();
+            if (document.getElementById('page-tier')?.classList.contains('active')) {
+                renderTierGrid();
+            }
+            if (loggedInUser) {
+                updateProfileUI(loggedInUser);
+                renderProfileSkins();
+            }
+            const modalBox = document.getElementById('playerModal');
+            const modalIgn = document.getElementById('modalPlayerIgn')?.innerText?.trim();
+            if (modalBox && modalBox.style.display === 'flex' && modalIgn) {
+                refreshOpenPlayerModal(modalIgn);
+            }
+        }
+
+        function mergeServerStateIntoLocal(serverState, preserveLocalRecent = false) {
+            if (!serverState || typeof serverState !== 'object') return;
+            const isRecentLocal = preserveLocalRecent && (Date.now() - lastLocalMutationTs < 4000);
+
+            if (serverState.players && typeof serverState.players === 'object') {
+                if (!isRecentLocal) {
+                    window.playersData = { ...window.playersData, ...serverState.players };
+                    Object.keys(serverState.players).forEach(nick => {
+                        if (serverState.players[nick] === null) {
+                            delete window.playersData[nick];
+                        }
+                    });
+                } else {
+                    window.playersData = { ...serverState.players, ...window.playersData };
+                }
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            }
+            if (serverState.views && typeof serverState.views === 'object') {
+                window.playerViews = isRecentLocal
+                    ? { ...serverState.views, ...window.playerViews }
+                    : { ...window.playerViews, ...serverState.views };
+                localStorage.setItem('priz_views', JSON.stringify(window.playerViews));
+            }
+            if (serverState.bgThemes && typeof serverState.bgThemes === 'object') {
+                window.playerBgTheme = isRecentLocal
+                    ? { ...serverState.bgThemes, ...window.playerBgTheme }
+                    : { ...window.playerBgTheme, ...serverState.bgThemes };
+                localStorage.setItem('priz_bg_themes', JSON.stringify(window.playerBgTheme));
+            }
+            if (serverState.skins && typeof serverState.skins === 'object') {
+                window.playerSkins = isRecentLocal
+                    ? { ...serverState.skins, ...window.playerSkins }
+                    : { ...window.playerSkins, ...serverState.skins };
+                localStorage.setItem('priz_skins', JSON.stringify(window.playerSkins));
+            }
+            if (serverState.poses && typeof serverState.poses === 'object') {
+                window.playerPoses = isRecentLocal
+                    ? { ...serverState.poses, ...window.playerPoses }
+                    : { ...window.playerPoses, ...serverState.poses };
+                localStorage.setItem('priz_poses', JSON.stringify(window.playerPoses));
+            }
+            if (Array.isArray(serverState.history)) {
+                if (serverState.history.length > 0 || !isRecentLocal) {
+                    const mergedHist = [...(isRecentLocal ? window.matchHistory : []), ...serverState.history];
+                    const seen = new Set();
+                    window.matchHistory = mergedHist.filter(item => {
+                        const sig = `${item.nick}|${item.kit}|${item.newTier}|${item.date}`;
+                        if (seen.has(sig)) return false;
+                        seen.add(sig);
+                        return true;
+                    }).slice(0, 200);
+                    localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
+                }
+            }
+            if (serverState.bindings && typeof serverState.bindings === 'object') {
+                window.discordNickBindings = { ...window.discordNickBindings, ...serverState.bindings };
+                persistDiscordBindings();
+            }
+            if (serverState.axeInvite && typeof serverState.axeInvite === 'string') {
+                const cur = getSavedAxeInviteUrl();
+                if (!cur && serverState.axeInvite) {
+                    localStorage.setItem('priz_axe_discord_invite', serverState.axeInvite);
+                    applyAxeDiscordInviteUI();
+                }
+            }
+            rebuildDiscordBindingsFromPlayers();
+            applyGlobalVisualState();
+        }
+
+        async function pullLatestFromServer() {
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 4000);
+                const res = await fetch(`${BACKEND_URL}/api/sync?_t=${Date.now()}`, {
+                    method: 'GET',
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+                if (res.ok) {
+                    const serverState = await res.json();
+                    mergeServerStateIntoLocal(serverState, true);
+                }
+            } catch (e) {}
+        }
+
+        async function syncWithServer(pushMode = true) {
+            if (pushMode) {
+                markLocalStateMutated();
+            }
             try {
                 const payload = {
+                    action: pushMode ? 'push' : 'pull',
+                    updatedAt: Date.now(),
+                    actor: loggedInUser || null,
                     players: window.playersData,
                     views: window.playerViews,
                     bgThemes: window.playerBgTheme,
@@ -3100,51 +3279,31 @@
                     poses: window.playerPoses,
                     history: window.matchHistory,
                     bindings: window.discordNickBindings,
+                    axeInvite: getSavedAxeInviteUrl(),
                     adminLogs: window.adminLoginLogs
                 };
 
                 const response = await fetch(`${BACKEND_URL}/api/sync`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(payload)
                 });
 
                 if (response.ok) {
                     const serverState = await response.json();
-                    if (serverState.players && Object.keys(serverState.players).length > 0) {
-                        window.playersData = serverState.players;
-                        localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
-                    }
-                    if (serverState.views) {
-                        window.playerViews = serverState.views;
-                        localStorage.setItem('priz_views', JSON.stringify(window.playerViews));
-                    }
-                    if (serverState.bgThemes) {
-                        window.playerBgTheme = serverState.bgThemes;
-                        localStorage.setItem('priz_bg_themes', JSON.stringify(window.playerBgTheme));
-                    }
-                    if (serverState.skins) {
-                        window.playerSkins = serverState.skins;
-                        localStorage.setItem('priz_skins', JSON.stringify(window.playerSkins));
-                    }
-                    if (serverState.poses) {
-                        window.playerPoses = serverState.poses;
-                        localStorage.setItem('priz_poses', JSON.stringify(window.playerPoses));
-                    }
-                    if (serverState.history) {
-                        window.matchHistory = serverState.history;
-                        localStorage.setItem('priz_match_history', JSON.stringify(window.matchHistory));
-                    }
-                    if (serverState.bindings) {
-                        window.discordNickBindings = { ...window.discordNickBindings, ...serverState.bindings };
-                        persistDiscordBindings();
-                    }
-                    rebuildDiscordBindingsFromPlayers();
-                    renderLeaderboard();
-                    if (loggedInUser) updateProfileUI(loggedInUser);
+                    mergeServerStateIntoLocal(serverState, pushMode);
                 }
             } catch (e) {}
         }
+
+        window.addEventListener('storage', (e) => {
+            if (!e || !e.key) return;
+            if (e.key.startsWith('priz_')) {
+                loadSavedData();
+                rebuildDiscordBindingsFromPlayers();
+                applyGlobalVisualState();
+            }
+        });
 
         function checkAuthAndOpenProfile() {
             if (!loggedInUser) {
@@ -4072,15 +4231,66 @@
         }
 
         function getAvatarUrl(nick) {
-            const customSkin = window.playerSkins[nick];
-            if (customSkin && customSkin.startsWith('http')) {
-                return `https://minotar.net/helm/${encodeURIComponent(nick)}/64.png`;
+            const exactKey = Object.keys(window.playerSkins || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+            const customSkin = window.playerSkins[exactKey];
+            if (customSkin && typeof customSkin === 'string' && customSkin.trim()) {
+                const val = customSkin.trim();
+                if (!/^https?:\/\//i.test(val)) {
+                    return `https://minotar.net/helm/${encodeURIComponent(val)}/64.png`;
+                }
             }
             return `https://minotar.net/helm/${encodeURIComponent(nick)}/64.png`;
         }
 
+        function refreshOpenPlayerModal(nick) {
+            const allPlayers = getAllLeaderboardParticipants();
+            const exactKey = Object.keys(allPlayers).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+            const p = allPlayers[exactKey] || { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0' };
+            const score = calculatePlayerScore(p);
+
+            document.getElementById('modalPlayerIgn').innerText = exactKey;
+            document.getElementById('modalPlayerPts').innerText = `${score} очков`;
+
+            const metaParts = [];
+            if (p.title) metaParts.push(p.title);
+            if (p.server) metaParts.push(`Сервер: ${p.server}`);
+            if (p.ping) metaParts.push(`Пинг: ${p.ping}`);
+            document.getElementById('modalPlayerMeta').innerText = metaParts.join(' • ');
+
+            const badgesEl = document.getElementById('modalTierBadges');
+            const tierItems = ['beast', 'mace', 'carts', 'axe', 'smp', 'uhc', 'op', 'spearmace']
+                .filter(k => p[k] && p[k] !== '0')
+                .map(k => `<span class="tier-pill-badge">${k.toUpperCase()}: ${escapeHTML(p[k])}</span>`);
+            badgesEl.innerHTML = tierItems.length ? tierItems.join('') : `<span style="font-size:12px; color:#94a3b8;">Нет активных тиров</span>`;
+
+            const v = getPlayerViewsFormatted(exactKey);
+            document.getElementById('modalViewsDay').innerText = v.day;
+            document.getElementById('modalViewsMonth').innerText = v.month;
+            document.getElementById('modalViewsTotal').innerText = v.total;
+
+            const histEl = document.getElementById('modalPlayerHistoryList');
+            const pHist = (window.matchHistory || []).filter(h => String(h.nick || '').toLowerCase().includes(exactKey.toLowerCase()));
+            histEl.innerHTML = pHist.length
+                ? pHist.slice(0, 8).map(h => `<div>• <strong>${escapeHTML(h.kit)}</strong>: ${escapeHTML(h.oldTier || '0')} → ${escapeHTML(h.newTier)} (${escapeHTML(h.score || '3-0')}) <span style="color:#64748b;">${escapeHTML(h.date || '')}</span></div>`).join('')
+                : 'Тестов пока нет';
+
+            const box = document.getElementById('modalProfileBox');
+            const bgKey = Object.keys(window.playerBgTheme || {}).find(k => normalizeNickKey(k) === normalizeNickKey(exactKey)) || exactKey;
+            const bgTheme = window.playerBgTheme[bgKey] || 'default';
+            box.className = `modal-box bg-${bgTheme}`;
+
+            if (modalSkinViewer) {
+                modalSkinViewer.loadSkin(getSkinTextureSource(exactKey)).catch(() => {
+                    modalSkinViewer.loadSkin('https://minotar.net/skin/Steve').catch(() => {});
+                });
+                const poseKey = Object.keys(window.playerPoses || {}).find(k => normalizeNickKey(k) === normalizeNickKey(exactKey)) || exactKey;
+                applyPoseToViewer(modalSkinViewer, window.playerPoses[poseKey] || 'default');
+            }
+        }
+
         function getSkinTextureSource(nick) {
-            const custom = window.playerSkins[nick];
+            const exactKey = Object.keys(window.playerSkins || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+            const custom = window.playerSkins[exactKey];
             if (custom && typeof custom === 'string' && custom.trim()) {
                 const val = custom.trim();
                 if (/^https?:\/\//i.test(val)) {
@@ -4175,6 +4385,7 @@
 
         function openPlayerProfileModal(nick) {
             incrementPlayerView(nick);
+            syncWithServer(true);
             const allPlayers = getAllLeaderboardParticipants();
             const p = allPlayers[nick] || { beast: '0', mace: '0', carts: '0', smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0' };
             const score = calculatePlayerScore(p);
@@ -4206,7 +4417,8 @@
                 : 'Тестов пока нет';
 
             const box = document.getElementById('modalProfileBox');
-            const bgTheme = window.playerBgTheme[nick] || 'default';
+            const bgKey = Object.keys(window.playerBgTheme || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+            const bgTheme = window.playerBgTheme[bgKey] || 'default';
             box.className = `modal-box bg-${bgTheme}`;
 
             document.getElementById('playerModal').style.display = 'flex';
@@ -4224,7 +4436,8 @@
                     modalSkinViewer.loadSkin(getSkinTextureSource(nick)).catch(() => {
                         modalSkinViewer.loadSkin('https://minotar.net/skin/Steve').catch(() => {});
                     });
-                    applyPoseToViewer(modalSkinViewer, window.playerPoses[nick] || 'default');
+                    const poseKey = Object.keys(window.playerPoses || {}).find(k => normalizeNickKey(k) === normalizeNickKey(nick)) || nick;
+                    applyPoseToViewer(modalSkinViewer, window.playerPoses[poseKey] || 'default');
                 }
             }
         }
@@ -4333,27 +4546,52 @@
                 showToast('Введите ник или ссылку на скин!');
                 return;
             }
+            if (!window.playersData[loggedInUser]) {
+                window.playersData[loggedInUser] = {
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: '', discord_id: sessionAccountId || ''
+                };
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            }
             window.playerSkins[loggedInUser] = val;
             localStorage.setItem('priz_skins', JSON.stringify(window.playerSkins));
-            syncWithServer();
+            syncWithServer(true);
             renderProfileSkins();
+            renderLeaderboard();
             showToast('Скин применён!');
         }
 
         function setPose(pose) {
             if (!loggedInUser) return;
+            if (!window.playersData[loggedInUser]) {
+                window.playersData[loggedInUser] = {
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: '', discord_id: sessionAccountId || ''
+                };
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            }
             window.playerPoses[loggedInUser] = pose;
             localStorage.setItem('priz_poses', JSON.stringify(window.playerPoses));
-            syncWithServer();
+            syncWithServer(true);
             applyPoseToViewer(skinViewer, pose);
             showToast(`Стойка изменена: ${pose}`);
         }
 
         function setBg(bgName) {
             if (!loggedInUser) return;
+            if (!window.playersData[loggedInUser]) {
+                window.playersData[loggedInUser] = {
+                    beast: '0', mace: '0', carts: '0',
+                    smp: '0', uhc: '0', axe: '0', op: '0', spearmace: '0',
+                    title: '', server: '', ping: '', discord_id: sessionAccountId || ''
+                };
+                localStorage.setItem('priz_players_db', JSON.stringify(window.playersData));
+            }
             window.playerBgTheme[loggedInUser] = bgName;
             localStorage.setItem('priz_bg_themes', JSON.stringify(window.playerBgTheme));
-            syncWithServer();
+            syncWithServer(true);
             updateProfileUI(loggedInUser);
             showToast('Фон карточки обновлён');
         }
@@ -4545,56 +4783,63 @@
             localStorage.setItem('priz_axe_discord_invite', normalized);
             applyAxeDiscordInviteUI();
             renderHomeKitStats();
+            syncWithServer(true);
             showToast('✅ Ссылка на Discord Axe сохранена!');
         }
 
+        window.discordStatsCache = JSON.parse(localStorage.getItem('priz_discord_stats_cache') || '{}');
+
+        function saveDiscordStatsCache() {
+            try {
+                localStorage.setItem('priz_discord_stats_cache', JSON.stringify(window.discordStatsCache || {}));
+            } catch (e) {}
+        }
+
         async function renderHomeKitStats() {
-            const fallbackCounts = {
-                beast: { members: 148, online: 24 },
-                mace: { members: 112, online: 19 },
-                carts: { members: 96, online: 15 },
-                axe: { members: 84, online: 12 }
-            };
-
             const applyKitCounts = (kitKey, membersVal, onlineVal) => {
-                const countEl = document.getElementById(`statCount${kitKey.charAt(0).toUpperCase() + kitKey.slice(1)}`);
-                const onlineEl = document.getElementById(`statDiscord${kitKey.charAt(0).toUpperCase() + kitKey.slice(1)}Online`);
-                setLiveStatText(countEl, `${Number(membersVal).toLocaleString('ru-RU')} участников`);
-                setLiveStatText(onlineEl, `${Number(onlineVal).toLocaleString('ru-RU')}`);
+                const cap = kitKey.charAt(0).toUpperCase() + kitKey.slice(1);
+                const countEl = document.getElementById(`statCount${cap}`);
+                const onlineEl = document.getElementById(`statDiscord${cap}Online`);
+                if (membersVal !== null && membersVal !== undefined && !Number.isNaN(Number(membersVal))) {
+                    setLiveStatText(countEl, formatMembersRu(membersVal));
+                }
+                if (onlineVal !== null && onlineVal !== undefined && !Number.isNaN(Number(onlineVal))) {
+                    setLiveStatText(onlineEl, `${Number(onlineVal).toLocaleString('ru-RU')}`);
+                }
             };
 
-            ['beast', 'mace', 'carts', 'axe'].forEach(k => {
-                applyKitCounts(k, fallbackCounts[k].members, fallbackCounts[k].online);
+            const kitInvites = {
+                beast: DISCORD_KITS_WIDGETS.beast,
+                mace: DISCORD_KITS_WIDGETS.mace,
+                carts: DISCORD_KITS_WIDGETS.carts,
+                axe: extractInviteCode(getSavedAxeInviteUrl())
+            };
+
+            Object.keys(kitInvites).forEach(k => {
+                const cached = window.discordStatsCache && window.discordStatsCache[k];
+                if (cached && (cached.members !== null || cached.online !== null)) {
+                    applyKitCounts(k, cached.members, cached.online);
+                } else if (k === 'axe' && !kitInvites.axe) {
+                    applyKitCounts('axe', 0, 0);
+                }
             });
 
-            for (const [kitKey, inviteCode] of Object.entries(DISCORD_KITS_WIDGETS)) {
-                try {
-                    const res = await fetch(`https://discord.com/api/v9/invites/${inviteCode}?with_counts=true&_t=${Date.now()}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data.approximate_member_count !== undefined && data.approximate_presence_count !== undefined) {
-                            applyKitCounts(kitKey, data.approximate_member_count, data.approximate_presence_count);
-                        }
-                    }
-                } catch (e) {}
-            }
-
-            const axeInviteUrl = getSavedAxeInviteUrl();
-            const axeCode = extractInviteCode(axeInviteUrl);
-            if (axeCode) {
-                try {
-                    const res = await fetch(`https://discord.com/api/v9/invites/${encodeURIComponent(axeCode)}?with_counts=true&_t=${Date.now()}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data.approximate_member_count !== undefined && data.approximate_presence_count !== undefined) {
-                            applyKitCounts('axe', data.approximate_member_count, data.approximate_presence_count);
-                        }
-                    }
-                } catch (e) {}
-            }
+            await Promise.all(Object.entries(kitInvites).map(async ([kitKey, inviteCode]) => {
+                if (!inviteCode) return;
+                const stats = await fetchDiscordCountsLive(inviteCode);
+                if (stats && (stats.members !== null || stats.online !== null)) {
+                    window.discordStatsCache[kitKey] = {
+                        members: stats.members,
+                        online: stats.online,
+                        updatedAt: Date.now()
+                    };
+                    saveDiscordStatsCache();
+                    applyKitCounts(kitKey, stats.members, stats.online);
+                }
+            }));
 
             if (Array.isArray(window.customHomeKits)) {
-                window.customHomeKits.forEach(item => fetchCustomInviteStats(item));
+                await Promise.all(window.customHomeKits.map(item => fetchCustomInviteStats(item)));
             }
         }
 
